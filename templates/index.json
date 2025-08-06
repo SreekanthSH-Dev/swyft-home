@@ -6,7 +6,7 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Browse products",
+            "heading": "Our favourites",
             "heading_size": "h1"
           }
         }
@@ -22,6 +22,9 @@
         "padding_top": 28,
         "padding_bottom": 12
       }
+    },
+    "header_image":{
+      "type" : "home-header-slider"
     },
     "collage-0": {
       "type": "collage",
@@ -84,6 +87,7 @@
     }
   },
   "order": [
+    "header_image",
     "rich_text",
     "collage-0",
     "featured-collection"

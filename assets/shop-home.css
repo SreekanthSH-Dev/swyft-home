@@ -1,0 +1,138 @@
+@font-face {
+    font-family: "MADE Sunflower";
+    src: url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.eot");
+    src: url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/e092e7f1f4b833ac1d1d4541ffe284f0.svg#MADE Sunflower")format("svg");
+}
+.announcement-header {
+    background-color: #6093ac!important;
+}
+.announcement-bar__message {
+    text-align: center;
+    padding: 1rem 0;
+    margin: 0;
+    letter-spacing: 0.1rem;
+    color: white;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    min-height: 3.8rem;
+}
+header.header.header--top-left.header--mobile-center.page-width.header--has-menu.header--has-account.header--has-localizations {
+    flex-direction: row;
+    display: flex
+;
+    margin: 0;
+    justify-content: space-between;
+    padding: 0 22px;
+}
+.banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.banner__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner__media::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 100%);
+  pointer-events: none;
+}
+
+
+.banner__content_box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.banner__box {
+  position: absolute;
+  top: 14%;
+  left: 4%;
+
+  border-radius: 8px;
+  color: white;
+  max-width: 68rem;
+}
+
+@font-face {
+  font-family: 'MADESunflower';
+  src: url('https://swyfthome.com/cdn/shop/t/2/assets/MADESunflower.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.banner-heading-title {
+  font-size: 62px;
+  margin: 0 0 1rem;
+  color: white;
+  font-family: 'MADESunflower', sans-serif !important;
+}
+
+
+.banner_text p {
+  margin: 0 0 1rem;
+    font-size: 1.8rem;
+    line-height: calc(1 + .8 / var(--font-body-scale));
+    letter-spacing: .06rem;
+}
+
+.banner__buttons  .banner-home-button {
+  background: #fff;
+  color: #000;
+  padding: 1.1rem 3.3rem;
+  text-decoration: none;
+  border-radius: 25px;
+  display: inline-block;
+}
+
+a.banner-home .banner-home-button {
+    border-radius: 50px;
+    align-items: center;
+    text-align: center;
+    display: inline-grid
+;
+}
+@media screen and (max-width: 749px) {
+
+}
+@media only screen and (max-width: 700px){
+.banner-heading-title{
+    font-size: 48px;
+}
+.banner__media img {
+  width: 100%;
+  height: 450px;
+  display: block;
+  object-fit: cover;
+}
+.banner__box {
+    position: absolute;
+    top: 10%;
+    left: 4%;
+    border-radius: 8px;
+    color: white;
+    max-width: 68rem;
+}
+}
+

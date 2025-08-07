@@ -257,3 +257,7 @@ ul.accordion-menu {
 }
 }
 
+h2.rich-text__heading.rte.inline-richtext.h1.scroll-trigger.animate--slide-in {
+    font-size: 48px;
+    font-family: MADESunflower, sans-serif;
+}

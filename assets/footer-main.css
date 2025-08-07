@@ -153,6 +153,9 @@ button.disclosure__button.localization-form__select.localization-selector.link.l
     width: 90%;
     border: 0;
 }
+footer.footer.color-scheme-4.gradient.section-sections--25262865285429__footer-padding {
+    padding: 0;
+}
 .footer-newsletter form#contact_form input:focus {
     width: 90%;
     border: 0!important;

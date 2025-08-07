@@ -29,6 +29,9 @@
     "icon_home":{
       "type" : "icon-home-info"
     },
+    "image_with_text_banner": {
+      "type": "home-category-content"
+    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
@@ -101,6 +104,7 @@
     "rich_text",
     "featured-collection",
     "rich_text_2",
-    "icon_home"
+    "icon_home",
+    "image_with_text_banner"
   ]
 }

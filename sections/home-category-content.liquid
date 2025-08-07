@@ -83,6 +83,24 @@
                 {{ section.settings.banner_image | image_url: width: 1500 }} 1500w
               "
             >
+            {% else %}
+            <img
+              src="{{ 'homeimg1.webp' | asset_url }}"
+              alt=""
+              width="1500"
+              height="1000"
+              loading="lazy"
+              class="image-fit"
+              sizes="(min-width: 1500px) 700px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+              srcset="
+                {{ section.settings.banner_image | image_url: width: 165 }} 165w,
+                {{ section.settings.banner_image | image_url: width: 360 }} 360w,
+                {{ section.settings.banner_image | image_url: width: 535 }} 535w,
+                {{ section.settings.banner_image | image_url: width: 750 }} 750w,
+                {{ section.settings.banner_image | image_url: width: 1070 }} 1070w,
+                {{ section.settings.banner_image | image_url: width: 1500 }} 1500w
+              "
+            >
           {% endif %}
         </div>
       </div>

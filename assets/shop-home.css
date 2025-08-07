@@ -271,3 +271,29 @@ section.usp-section {
     width: 90%;
     margin: 0 auto;
 }
+.image-with-text__grid.grid.grid--gapless.grid--1-col.image-with-text__grid--reverse.grid--2-col-tablet {
+    flex-direction: row-reverse;
+}
+h2.image-with-text__heading.inline-richtext.h1 {
+  font-family: MADESunflower, sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: #141414;
+}
+.page-width {
+    width: 100% !important;
+    padding: 0;
+}
+
+div#shopify-section-sections--25267975061813__header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+}
+.image-with-text__content.image-with-text__content--top.image-with-text__content--desktop-left.image-with-text__content--mobile-left.image-with-text__content--adapt.content-container.background-transparent {
+    margin: 0 auto;
+    width: 70%;
+}
+div#shopify-section-template--25267975586101__icon_home {
+    padding: 50px 0;
+}

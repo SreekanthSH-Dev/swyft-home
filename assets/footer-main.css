@@ -19,15 +19,31 @@ footer.footer.color-scheme-4.gradient.section-sections--25267974963509__footer-p
 .footer-nav {
   display: flex;
   flex: 2;
-  gap: 40px;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
-
-.footer-menu h4 {
-  font-weight: bold;
-  margin-bottom: 12px;
+.footer-menu-list li a {
+    font-family: BasicSans, sans-serif;
+    text-decoration: none;
+    break-inside: avoid;
+    margin-bottom: 6px;
+    color: rgba(18, 18, 18, 0.75);
+    font-size: 1.5rem;
+    line-height: 26.6px;
 }
 
+.footer-menu h4 , .footer-info h4 {
+  font-weight: 400;
+  margin: 0;
+  color: black;
+  font-family: MADESunflower, sans-serif;
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+.footer-contact p {
+    padding-bottom: 15px;
+    margin: 0;
+}
 .footer-menu ul {
   list-style: none;
   padding: 0;
@@ -107,4 +123,44 @@ button.disclosure__button.localization-form__select.localization-selector.link.l
     display: flex
 ;
     gap: 20px;
+}
+.footer-menu-list {
+  column-count: auto;
+  column-width: 200px; /* or whatever fits your design */
+  max-height: calc(1.7em * 11 + 10px); /* 5 items max per column */
+  column-fill: auto;
+  list-style: none;
+  padding: 0;
+  width: 40%;
+  margin: 0;
+}
+.footer-menu {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 40px;
+}
+
+.footer-menu-list li {
+  break-inside: avoid;
+  margin-bottom: 6px;
+}
+.footer-newsletter form#contact_form {
+
+}
+.footer-newsletter form#contact_form input {
+    width: 90%;
+    border: 0;
+}
+.footer-newsletter form#contact_form input:focus {
+    width: 90%;
+    border: 0!important;
+}
+.footer-newsletter form#contact_form {
+    width: 90%;
+    border: 1px solid;
+    display: flex
+;
+    justify-content: space-between;
 }

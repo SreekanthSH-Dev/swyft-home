@@ -31,23 +31,29 @@
   <footer class="site-footer">
   <div class="footer-top">
     <div class="footer-columns">
-      <div class="footer-nav">
-        {% for block in section.blocks %}
-          {% if block.type == 'link_list' %}
-            <div class="footer-menu">
-              <h4>{{ linklists[block.settings.menu].title }}</h4>
-              <ul>
-                {% for link in linklists[block.settings.menu].links %}
-                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-        {% endfor %}
+<div class="footer-nav">
+  {% assign footer_menus = "footer-1,about-footer" | split: "," %}
+
+  {% for menu_handle in footer_menus %}
+    {% assign menu = linklists[menu_handle] %}
+    {% if menu.links.size > 0 %}
+      <div class="footer-menu">
+        <h4>{{ menu.title }}</h4>
+        <ul class="footer-menu-list">
+          {% for link in menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
 
       <div class="footer-info">
         <div class="footer-contact">
+          <h4>Call us on 0203 488 4726</h4>
           <p><strong>Customer Service lines Open:</strong><br>
           Mon–Fri, 9am–5pm<br>
           Sat, 9am–1pm</p>
@@ -308,6 +314,7 @@
 
 {% schema %}
 {
+  
   "name": "t:sections.footer.name",
   "blocks": [
     {
@@ -527,4 +534,7 @@
     ]
   }
 }
+
+
+
 {% endschema %}

@@ -313,3 +313,7 @@ div#shopify-section-template--25267975586101__icon_home {
 a.button.home--button.button--secondary::after {
     border-radius: 25px !important;
 }
+.image-with-text__media {
+  height: auto;
+  display: block;
+}

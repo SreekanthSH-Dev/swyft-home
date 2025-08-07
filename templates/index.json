@@ -129,6 +129,19 @@
         "button_link_home": "/",
         "image_position": "left"
       }
+    },
+    "home_category_content_yx7jYz": {
+      "type": "home-category-content",
+      "name": "Image with Text Banner",
+      "settings": {
+        "banner_image": "shopify://shop_images/homeimg3.webp",
+        "banner_heading": "Your living room is your playground, so you make the rules.",
+        "banner_text_top": "Model 3",
+        "banner_text": "The Model 03 is a modular collection for those who like to be in control; From two seats to ten, left or right corner, with or without an ottoman, it’s your sofa so you choose how you want it. Just sit back and relax, it's time you built a sofa to fit your home and lifestyle.",
+        "button_label": "View Model 3",
+        "button_link_home": "/",
+        "image_position": "right"
+      }
     }
   },
   "order": [
@@ -138,6 +151,7 @@
     "rich_text_2",
     "icon_home",
     "image_with_text_banner",
-    "home_category_content_TXpYJJ"
+    "home_category_content_TXpYJJ",
+    "home_category_content_yx7jYz"
   ]
 }

@@ -110,10 +110,24 @@
       "settings": {
         "banner_image": "shopify://shop_images/homeimg1.webp",
         "banner_heading": "Hello, Model 2 Sofa Bed",
+        "banner_text_top": "",
         "banner_text": "Our most requested sofa yet. The Model 02 as a sofa bed. We love feedback from our customers so we've worked hard on adding the Model 02 Sofa Bed to our range.",
         "button_label": "Shop Model 02 Sofa beds",
         "button_link_home": "/",
         "image_position": "right"
+      }
+    },
+    "home_category_content_TXpYJJ": {
+      "type": "home-category-content",
+      "name": "Image with Text Banner",
+      "settings": {
+        "banner_image": "shopify://shop_images/homeimg2.webp",
+        "banner_heading": "The Model 05 is loud, curvaceous and bursting with personality.",
+        "banner_text_top": "Model 5",
+        "banner_text": "The Model 05 3 seater is loud, curvaceous and bursting with personality. With the choice of four new bold colours, this collection is guaranteed to make an impact in your home.",
+        "button_label": "Shop Now",
+        "button_link_home": "/",
+        "image_position": "left"
       }
     }
   },
@@ -123,6 +137,7 @@
     "featured-collection",
     "rich_text_2",
     "icon_home",
-    "image_with_text_banner"
+    "image_with_text_banner",
+    "home_category_content_TXpYJJ"
   ]
 }

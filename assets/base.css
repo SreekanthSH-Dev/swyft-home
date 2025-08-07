@@ -2351,10 +2351,11 @@ input[type='checkbox'] {
 }
 
 .header {
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    align-items: center;
+    display: flex
+;
+    justify-content: space-around;
+    min-width: 100% !important;
 }
 
 @media screen and (max-width: 749px) {

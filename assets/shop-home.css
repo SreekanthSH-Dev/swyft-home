@@ -201,6 +201,26 @@ a.banner-home .banner-home-button {
 li.accordion-item {
     border-bottom: 1px solid #b3b3b3;
 }
+.header{
+  margin: 0 !important;
+  padding: 0!important;
+}
+nav.header__inline-menu {
+    margin: 0 !important;
+}
+a.header__icon.header__icon--call.link.focus-inset {
+    border-left: 1px solid #b5b5b5;
+}
+a.header__menu-item span {
+    color: #5a5959;
+    font-size: 15px;
+    font-family: BasicSans, SANS-SERIF;
+}
+.header__menu-item span {
+    color: #5a5959;
+    font-size: 15px;
+    font-family: BasicSans, SANS-SERIF;
+}
 /* responsive */
 @media screen and (max-width: 749px) {
   .header{

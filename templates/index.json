@@ -142,6 +142,44 @@
         "button_link_home": "/",
         "image_position": "right"
       }
+    },
+    "home_category_content_3KPbmE": {
+      "type": "home-category-content",
+      "name": "Image with Text Banner",
+      "settings": {
+        "banner_image": "shopify://shop_images/homeimg4.webp",
+        "banner_heading": "A new way of sleeping has arrived.",
+        "banner_text_top": "Model 4",
+        "banner_text": "The Model 04 is a sofa and sofa bed to be proud of: it’s beautifully designed, can be used as your main sofa, and is as comfortable as any standard double bed.",
+        "button_label": "View Model 4",
+        "button_link_home": "/",
+        "image_position": "left"
+      }
+    },
+    "home_category_content_ByHbgK": {
+      "type": "home-category-content",
+      "name": "Image with Text Banner",
+      "settings": {
+        "banner_image": "shopify://shop_images/homeimg5.webp",
+        "banner_heading": "Model 02 has a big focus on appearance and comfiness.",
+        "banner_text_top": "",
+        "banner_text": "Sat on a solid wood plinth, it demands attention. Its pulled seam and piped detailing is bold yet beautiful. Mid century is back and Model 02 is leading its renaissance. Its versatile design, round bolster cushions and pulled seam detail adds a hint of character to your home.",
+        "button_label": "View Model 2",
+        "button_link_home": "/",
+        "image_position": "right"
+      }
+    },
+    "home_category_content_FERHHp": {
+      "type": "home-category-content",
+      "name": "Image with Text Banner",
+      "settings": {
+        "banner_heading": "A classic mid century sofa which comes out of the box with no fuss.",
+        "banner_text_top": "",
+        "banner_text": "The Model 01 is a convenient living space solution: a modern, comfy, quality-built sofa you can assemble in minutes.",
+        "button_label": "View Model 1",
+        "button_link_home": "/",
+        "image_position": "left"
+      }
     }
   },
   "order": [
@@ -152,6 +190,9 @@
     "icon_home",
     "image_with_text_banner",
     "home_category_content_TXpYJJ",
-    "home_category_content_yx7jYz"
+    "home_category_content_yx7jYz",
+    "home_category_content_3KPbmE",
+    "home_category_content_ByHbgK",
+    "home_category_content_FERHHp"
   ]
 }

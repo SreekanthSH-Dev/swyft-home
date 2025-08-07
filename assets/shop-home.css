@@ -261,3 +261,13 @@ h2.rich-text__heading.rte.inline-richtext.h1.scroll-trigger.animate--slide-in {
     font-size: 48px;
     font-family: MADESunflower, sans-serif;
 }
+.usp-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+section.usp-section {
+    width: 90%;
+    margin: 0 auto;
+}

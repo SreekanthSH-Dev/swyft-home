@@ -26,6 +26,9 @@
     "header_image":{
       "type" : "home-header-slider"
     },
+    "icon_home":{
+      "type" : "icon-home-info"
+    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
@@ -97,6 +100,7 @@
     "header_image",
     "rich_text",
     "featured-collection",
-    "rich_text_2"
+    "rich_text_2",
+    "icon_home"
   ]
 }

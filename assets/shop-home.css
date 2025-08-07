@@ -290,6 +290,7 @@ div#shopify-section-sections--25267975061813__header {
     position: sticky;
     z-index: 20;
     top: 0;
+    max-height: 70px;
 }
 
 .image-with-text__content.image-with-text__content--top.image-with-text__content--desktop-left.image-with-text__content--mobile-left.image-with-text__content--adapt.content-container.background-transparent {

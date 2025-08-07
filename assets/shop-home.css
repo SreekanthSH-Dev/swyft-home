@@ -278,6 +278,7 @@ h2.image-with-text__heading.inline-richtext.h1 {
   font-family: MADESunflower, sans-serif;
   font-size: 48px;
   font-weight: 400;
+  margin: 0;
   color: #141414;
 }
 .page-width {
@@ -290,10 +291,25 @@ div#shopify-section-sections--25267975061813__header {
     z-index: 20;
     top: 0;
 }
+
 .image-with-text__content.image-with-text__content--top.image-with-text__content--desktop-left.image-with-text__content--mobile-left.image-with-text__content--adapt.content-container.background-transparent {
+    margin: auto 0;
     margin: 0 auto;
     width: 70%;
+    align-content: center !important;
+    padding: 10px 0;
+    display: flex
+;
+    justify-content: space-evenly;
+    height: 90%;
+    align-items: start;
+    flex-direction: column;
 }
+
+
 div#shopify-section-template--25267975586101__icon_home {
     padding: 50px 0;
+}
+a.button.home--button.button--secondary::after {
+    border-radius: 25px !important;
 }

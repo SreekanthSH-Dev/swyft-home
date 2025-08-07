@@ -324,3 +324,6 @@ a.button.home--button.button--secondary::after {
 .page-width.utility-bar__grid {
     margin: 0 !important;
 }
+.page-width.utility-bar__grid {
+    margin: 0 auto !important;
+}

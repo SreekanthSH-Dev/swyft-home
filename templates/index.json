@@ -64,44 +64,6 @@
         "padding_bottom": 68
       }
     },
-      "rich_text_3": {
-      "type": "rich-text",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Can't decide? Need a helping hand?",
-            "heading_size": "h1"
-          }
-        },
-        "text1": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Request a swatch box and you'll be one step closer to owning your very own slice of perfection. Our team are also on hand to help with an questions you may have.Call us on 0203 488 4726.</p>"
-          }
-        },
-        "button-home":{
-          "type" : "button",
-          "settings": {
-            "text" : "<p>Order Your Free Sample</p>",
-            "url" : "/"
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "text1",
-        "button-home"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 28,
-        "padding_bottom": 12
-      }
-    },
     "rich_text_2": {
       "type": "rich-text",
       "blocks": {
@@ -218,6 +180,48 @@
         "button_link_home": "/",
         "image_position": "left"
       }
+    },
+    "rich_text_3": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Can't decide? Need a helping hand?",
+            "heading_size": "h1"
+          }
+        },
+        "text1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Request a swatch box and you'll be one step closer to owning your very own slice of perfection. Our team are also on hand to help with an questions you may have.Call us on 0203 488 4726.</p>"
+          }
+        },
+        "button-home": {
+          "type": "button",
+          "settings": {
+            "button_label": "Order Your free samples",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text1",
+        "button-home"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 28,
+        "padding_bottom": 12
+      }
     }
   },
   "order": [
@@ -232,6 +236,6 @@
     "home_category_content_3KPbmE",
     "home_category_content_ByHbgK",
     "home_category_content_FERHHp",
-    "rich_text_3",
+    "rich_text_3"
   ]
 }

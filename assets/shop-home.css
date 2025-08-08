@@ -371,3 +371,11 @@ h2.collection-name-product-home {
 a.product__title:hover{
   text-decoration:none!important;
 }
+label.varient-color-picker {
+    padding: 0 !important;
+    margin: 10px !important;
+}
+img.colour-switch-varient {
+    border-radius: 25px;
+    object-fit: cover;
+}

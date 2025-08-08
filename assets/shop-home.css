@@ -77,18 +77,21 @@ details-modal.header__search.header---search {
 
 .drawer-content {
     width: 80%;
-    left: 65px;
+    right: 0;
     max-width: 300px;
-    top: 77px;
+    top: 70px;
     background: #ffffff;
     position: absolute;
     padding: 1rem;
-    overflow-y: auto;
+    max-height: calc(100vh - 70px); /* set height relative to viewport */
+    overflow-y: auto; /* auto is better for UX */
     transform: translateX(-100%);
     transition: transform 0.3s ease;
 }
 
-
+.drawer-open .close{
+  display: none;
+}
 
 .mobile-drawer.active .drawer-content {
   transform: translateX(0);
@@ -99,10 +102,11 @@ details-modal.header__search.header---search {
 }
 
 .drawer-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  float: right;
+    padding: 6px 10px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    float: right;
 }
 
 .drawer-open {
@@ -112,7 +116,9 @@ details-modal.header__search.header---search {
   border: none;
   padding: 1rem;
 }
-
+    .no-scroll {
+        overflow: hidden;
+    }
 @media screen and (max-width: 1024px) {
   .drawer-open {
     display: inline-block;
@@ -223,6 +229,18 @@ a.header__menu-item span {
 }
 /* responsive */
 @media screen and (max-width: 749px) {
+
+  .image-with-text__media-item.image-with-text__media-item--medium.image-with-text__media-item--top.grid__item {
+      width: 90%;
+      margin: auto 20px;
+  }
+  h2.image-with-text__heading.inline-richtext.h1{
+    font-size: 36px!important;
+  }
+h2.rich-text__heading.rte.inline-richtext.h1.scroll-trigger.animate--slide-in{
+    font-size: 36px !important;
+    margin: 0 20px !Important;
+  }
   .header{
     padding: 0!important;
   }

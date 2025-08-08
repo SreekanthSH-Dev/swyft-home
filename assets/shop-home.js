@@ -7,12 +7,18 @@
 
     openBtn.addEventListener("click", () => {
         console.log('clicked');
+      document.body.classList.add('no-scroll');
       drawer.classList.remove("hidden");
+      openBtn.classList.add("hidden");
+      closeBtn.classList.remove("hidden");
       setTimeout(() => drawer.classList.add("active"), 10);
     });
 
     function closeDrawer() {
       drawer.classList.remove("active");
+      openBtn.classList.remove("hidden");
+            document.body.classList.remove('no-scroll');
+      closeBtn.classList.add("hidden");
       setTimeout(() => drawer.classList.add("hidden"), 300);
     }
 
@@ -28,3 +34,8 @@
     });
   });
 
+document.querySelectorAll('.footer-heading').forEach(heading => {
+  heading.addEventListener('click', () => {
+    heading.parentElement.classList.toggle('active');
+  });
+});

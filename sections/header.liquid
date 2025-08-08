@@ -326,10 +326,11 @@
         {%- endif -%}
       </a>
 
-
+    <div class="mobile-toggle-header">
       <!-- Mobile drawer trigger button -->
       <button class="drawer-open" aria-label="Open Menu">☰</button>
-
+      <button class="drawer-close hidden" aria-label="Open Menu">X</button>
+    </div>
 
       </div>
       
@@ -337,7 +338,6 @@
       <div id="mobile-drawer-header" class="mobile-drawer hidden">
       <div class="drawer-overlay"></div>
       <div class="drawer-content">
-        <button class="drawer-close">✕</button>
         <ul class="accordion-menu">
           {% for link in linklists.main-menu.links %}
             <li class="accordion-item">

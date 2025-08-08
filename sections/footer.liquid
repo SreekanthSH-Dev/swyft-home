@@ -38,7 +38,7 @@
     {% assign menu = linklists[menu_handle] %}
     {% if menu.links.size > 0 %}
       <div class="footer-menu">
-        <h4>{{ menu.title }}</h4>
+        <h4 class="footer-heading">{{ menu.title }}</h4>
         <ul class="footer-menu-list">
           {% for link in menu.links %}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>

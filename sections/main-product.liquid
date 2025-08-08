@@ -100,8 +100,9 @@
                         </h2>
                       </a>
                     </div>
+                    
                   {% endif %}
-                  <h1 class="main-product-title">{{ product.title | escape }}</h1>
+                  <h1 class="main-product-title"> {{ product.title }}</h1>
                   <a href="{{ product.url }}" class="product__title">
                     <h2 class="h3">
                       {{ product.title | escape }}

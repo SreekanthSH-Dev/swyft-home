@@ -383,3 +383,7 @@ label.varient-color-picker {
     height: 30px;
     width: 30px;
 }
+
+footer {
+    padding: 0 !important;
+}

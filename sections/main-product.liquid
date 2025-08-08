@@ -95,13 +95,13 @@
                   {% if product_collections.size > 0 %}
                     <div class="product-collection">
                       <a href="{{ product_collections[0].url }}" class="product__title">
-                        <h2 class="h1">
+                        <h2 class="h1 collection-name-product">
                           {{ product_collections[0].title | escape }}
                         </h2>
                       </a>
                     </div>
                   {% endif %}
-                  <h1>{{ product.title | escape }}</h1>
+                  <h1 class="main-product-title">{{ product.title | escape }}</h1>
                   <a href="{{ product.url }}" class="product__title">
                     <h2 class="h3">
                       {{ product.title | escape }}

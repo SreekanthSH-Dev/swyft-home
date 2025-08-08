@@ -1492,7 +1492,23 @@ a.product__text {
     border: none;
   }
 }
-a.product__title{
+a.product__title
+ {
     text-decoration: auto;
 }
-
+h1.main-product-title {
+    font-size: 1.7rem;
+    color: #000000;
+    font-family: sans-serif;
+}
+h2.collection-name-product{
+  font-size: 44px;
+  font-family: MADESunflower, sans-serif;
+  color: #000000;
+}
+.price__sale {
+    font-weight: 600;
+    font-size: 1.9rem;
+    color: black;
+    font-family: sans-serif;
+}

@@ -353,3 +353,21 @@ a.button.home--button.button--secondary::after {
 .page-width.utility-bar__grid {
     margin: 0 auto !important;
 }
+h2.collection-name-product {
+    font-size: 44px;
+    font-family: MADESunflower, sans-serif;
+    color: #000;
+}
+a.product__title {
+    text-decoration: auto;
+}
+h2.collection-name-product-home {
+    font-size: 2.86rem;
+    font-family: MADESunflower, sans-serif;
+    color: #000;
+    margin: 0;
+    text-transform: capitalize;
+}
+a.product__title:hover{
+  text-decoration:none!important;
+}

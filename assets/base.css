@@ -1223,7 +1223,7 @@ button.shopify-payment-button__button--unbranded {
   transition: box-shadow var(--duration-short) ease;
   -webkit-appearance: none;
   appearance: none;
-  background-color: rgba(var(--color-button), var(--alpha-button-background));
+  background-color: rgb(96, 147, 172);
 }
 
 .button:before,
@@ -1253,7 +1253,7 @@ button.shopify-payment-button__button--unbranded {
   bottom: var(--buttons-border-width);
   left: var(--buttons-border-width);
   z-index: 1;
-  border-radius: var(--buttons-radius);
+  border-radius: 25px;
   box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
       rgba(var(--color-button-text), var(--border-opacity)),
     0 0 0 var(--buttons-border-width) rgba(var(--color-button), var(--alpha-button-background));

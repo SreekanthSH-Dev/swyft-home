@@ -124,7 +124,11 @@ details-modal.header__search.header---search {
     display: inline-block;
   }
 }
-
+div.rich-text__buttons a.button.button--primary::after, div.rich-text__buttons a.button.button--primary::before {
+    color: white;
+    /* background: rgb(96, 147, 172); */
+    border-radius: 25px !important;
+}
 /* Accordion Styles */
 .accordion-header {
   display: flex;

@@ -1492,3 +1492,7 @@ a.product__text {
     border: none;
   }
 }
+a.product__title{
+    text-decoration: auto;
+}
+

@@ -353,3 +353,8 @@ a.button.home--button.button--secondary::after {
 .page-width.utility-bar__grid {
     margin: 0 auto !important;
 }
+a.product__title
+ {
+    text-decoration: auto;
+}
+

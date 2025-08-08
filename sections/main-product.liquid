@@ -89,18 +89,21 @@
             {%- case block.type -%}
               {%- when '@app' -%}
                 {% render block %}
-              {%- when 'text' -%}
-                <p
-                  class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
-                  {{ block.shopify_attributes }}
-                >
-                  {{- block.settings.text -}}
-                </p>
               {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
+                  {% assign product_collections = product.collections %}
+                  {% if product_collections.size > 0 %}
+                    <div class="product-collection">
+                      <a href="{{ product_collections[0].url }}" class="product__title">
+                        <h2 class="h1">
+                          {{ product_collections[0].title | escape }}
+                        </h2>
+                      </a>
+                    </div>
+                  {% endif %}
                   <h1>{{ product.title | escape }}</h1>
                   <a href="{{ product.url }}" class="product__title">
-                    <h2 class="h1">
+                    <h2 class="h3">
                       {{ product.title | escape }}
                     </h2>
                   </a>

@@ -19,25 +19,25 @@
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
 -%}
-
 {%- for value in option.values -%}
-  {%- liquid
-    assign swatch_focal_point = null
-    if value.swatch.image
-      assign image_url = value.swatch.image | image_url: width: 50
-      assign swatch_value = 'url(' | append: image_url | append: ')'
-      assign swatch_focal_point = value.swatch.image.presentation.focal_point
-    elsif value.swatch.color
-      assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
-    else
-      assign swatch_value = null
-    endif
+{%- liquid
+  assign swatch_focal_point = null
+  assign global_color_metaobject = value.variant.metafields.custom.color_ref.value
 
-    assign option_disabled = true
-    if value.available
-      assign option_disabled = false
-    endif
-  -%}
+  if global_color_metaobject != blank and global_color_metaobject.button_image != blank
+    assign image_url = global_color_metaobject.button_image | image_url: width: 50
+    assign swatch_value = 'url(' | append: image_url | append: ')'
+  elsif value.swatch.color
+    assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+  else
+    assign swatch_value = null
+  endif
+
+  assign option_disabled = true
+  if value.available
+    assign option_disabled = false
+  endif
+-%}
 
   {%- capture input_id -%}
     {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
@@ -92,7 +92,11 @@
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
+      {% if global_color_metaobject != blank and global_color_metaobject.button_image != blank %}
+        <img src="{{ global_color_metaobject.button_image | image_url: width: 50 }}" alt="{{ value }}">
+      {% else %}
+        {{ value }}
+      {% endif %}
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}

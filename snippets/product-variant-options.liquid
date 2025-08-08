@@ -22,7 +22,7 @@
 {%- for value in option.values -%}
 {%- liquid
   assign swatch_focal_point = null
-  assign global_color_metaobject = value.variant.metafields.custom.color_ref.value
+  assign global_color_metaobject = value.variant.metafields.swyfthome.color_image
 
   if global_color_metaobject != blank and global_color_metaobject.button_image != blank
     assign image_url = global_color_metaobject.button_image | image_url: width: 50

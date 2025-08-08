@@ -379,3 +379,7 @@ img.colour-switch-varient {
     border-radius: 25px;
     object-fit: cover;
 }
+label.varient-color-picker {
+    height: 30px;
+    width: 30px;
+}

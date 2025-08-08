@@ -30,7 +30,18 @@
       }
     }
   ],
-  "variant": [],
+  "variant": [
+    {
+      "key": "color_image",
+      "namespace": "swyfthome",
+      "name": "color_image",
+      "description": "",
+      "type": {
+        "name": "metaobject_reference",
+        "category": "REFERENCE"
+      }
+    }
+  ],
   "shop": [
     {
       "key": "alpine_sports",

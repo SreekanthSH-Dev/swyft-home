@@ -70,7 +70,7 @@ variant-selects {
   letter-spacing: 0.1rem;
   line-height: 1;
   text-align: center;
-  transition: border var(--duration-short) ease;
+  transition: all var(--duration-short) ease;
   cursor: pointer;
   position: relative;
 }
@@ -93,7 +93,14 @@ variant-selects {
 }
 
 .product-form__input--pill input[type='radio']:checked + label {
-  background-color: rgb(var(--color-foreground));
+  display: flex!important;
+  align-items: center;
+  width: 35px;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  padding: 5px !important;
+  border: 1px solid black!important;
   color: rgb(var(--color-background));
 }
 
@@ -150,3 +157,9 @@ variant-selects {
   }
 }
 /* End custom styles for Swatch display type */
+.product-varient-picker {
+    display: flex
+;
+    flex-wrap: wrap;
+}
+

@@ -14,6 +14,7 @@
     data-section="{{ section.id }}"
     {{ block.shopify_attributes }}
   >
+
     {%- for option in product.options_with_values -%}
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
@@ -29,29 +30,35 @@
       -%}
       {%- if picker_type == 'swatch' -%}
         <fieldset class="js product-form__input product-form__input--swatch">
+
           <legend class="form__label">
             {{ option.name }}:
             <span data-selected-value>
               {{- option.selected_value -}}
             </span>
           </legend>
+          <div class=product-varient-picker>
           {% render 'product-variant-options',
             product: product,
             option: option,
             block: block,
             picker_type: picker_type
           %}
+        </div>
         </fieldset>
       {%- elsif picker_type == 'button' -%}
         <fieldset class="js product-form__input product-form__input--pill">
           <legend class="form__label">{{ option.name }}</legend>
+                    <div class=product-varient-picker>
           {% render 'product-variant-options',
             product: product,
             option: option,
             block: block,
             picker_type: picker_type
           %}
+        </div>
         </fieldset>
+
       {%- else -%}
         <div class="product-form__input product-form__input--dropdown">
           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
@@ -86,6 +93,7 @@
         </div>
       {%- endif -%}
     {%- endfor -%}
+
 
     <script type="application/json" data-selected-variant>
       {{ product.selected_or_first_available_variant | json }}

@@ -1,0 +1,10 @@
+<!-- Button: Now always has visible label -->
+<button 
+  id="product-popup-btn" 
+  class="product-popup-trigger"
+  data-title="{{ product.title }}"
+  data-price="{{ product.price | money }}"
+  data-image="{{ product.featured_image | img_url: '500x' }}"
+>
+  Click here to see all {{ product.variants.size }} fabrics
+</button>

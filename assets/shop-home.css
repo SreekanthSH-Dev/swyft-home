@@ -375,6 +375,9 @@ label.varient-color-picker {
     padding: 0 !important;
     margin: 10px !important;
 }
+.varient-picker-overlay-right img.colour-switch-varient {
+  border-radius: 50px !important;
+}
 img.colour-switch-varient {
     border-radius: 25px;
     object-fit: cover;

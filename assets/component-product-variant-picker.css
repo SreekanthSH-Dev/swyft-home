@@ -23,8 +23,12 @@ variant-selects {
 }
 
 :is(.product-form__input--pill, .product-form__input--swatch) .form__label {
-  margin-bottom: 0.2rem;
+    font-weight: 800;
+    font-family: sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
 }
+
 
 .product-form__input input[type='radio'] {
   clip: rect(0, 0, 0, 0);
@@ -99,7 +103,6 @@ variant-selects {
   justify-content: center;
   align-items: center;
   height: 35px;
-  padding: 5px !important;
   border: 1px solid black!important;
   color: rgb(var(--color-background));
 }

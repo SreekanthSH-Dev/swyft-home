@@ -60,28 +60,29 @@
       additional_props: input_dataset
     %}
   
-  {% elsif picker_type == 'button' %}
-    <input
-      type="radio"
-      id="{{ input_id }}"
-      name="{{ input_name | escape }}"
-      value="{{ value | escape }}"
-      form="{{ product_form_id }}"
-      {% if value.selected %}checked{% endif %}
-      {% if option_disabled %}class="disabled"{% endif %}
-      {{ input_dataset }}
-    >
-    <label class="varient-color-picker" for="{{ input_id }}">
-     
-      {% if color_metaobject != blank and color_metaobject.button_image != blank %}
-        <img class="colour-switch-varient" src="{{ color_metaobject.button_image | image_url: width: 30 }}" width="30" height="30" alt="{{ color_metaobject.name }}">
-      {% else %}
-        <p class="varient-name">
-        {{ value }}
-        </p>
-      {% endif %}
+{% elsif picker_type == 'button' %}
+  <input
+    type="radio"
+    id="{{ input_id }}"
+    name="{{ input_name | escape }}"
+    value="{{ value | escape }}"
+    form="{{ product_form_id }}"
+    {% if value.selected %}checked{% endif %}
+    {% if option_disabled %}class="disabled"{% endif %}
+    {{ input_dataset }}
+    data-variant-id="{{ variant_obj.id }}"
+    data-variant-title="{{ variant_obj.title }}"
+    data-variant-price="{{ variant_obj.price | money }}"
+    data-variant-image="{% if variant_obj.featured_image %}{{ variant_obj.featured_image.src | img_url: '500x' }}{% endif %}"
+  >
+  <label class="varient-color-picker" for="{{ input_id }}">
+    {% if color_metaobject != blank and color_metaobject.button_image != blank %}
+      <img class="colour-switch-varient" src="{{ color_metaobject.button_image | image_url: width: 30 }}" width="30" height="30" alt="{{ color_metaobject.name }}">
+    {% else %}
+      <p class="varient-name">{{ value }}</p>
+    {% endif %}
+  </label>
 
-    </label>
   
   {% elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' %}
     <option

@@ -288,7 +288,7 @@
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
-      <a href="#">      {% render 'cart-drawer' %}</a>
+
 
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
         {% if cart == empty %}
@@ -386,6 +386,7 @@
       </div>
     </div>
     </div>
+        {% render 'cart-drawer' %}
   </header>
 
 </{{ header_tag }}>

@@ -1,0 +1,59 @@
+{% assign sample_product = all_products['swyft-samples'] %}
+
+<div id="free-sample-overlay" class="free-sample-popup-overlay" style="display:none;">
+    <div class="freesample-popup-content">
+        <div class="freesample-popup-head">
+            <div class="freesample-head-left">
+                <h2>Swyft Samples</h2>
+            </div>
+            <div class="freesample-head-left">
+                <button class="free-sample-popup-close" type="button" aria-label="Close" data-close-modal="">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="icon icon-close" viewBox="0 0 18 17">
+                        <path fill="currentColor" d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="freesample-popup-body">
+            <div class="freesample-body-left">
+                <fieldset class="js product-form__input product-form__input--pill">
+                    <legend class="free-sample-swatches">Choose the swatches</legend>
+                    <div class="product-variant-picker">
+                        {% render 'free-sample-popup-content-render',
+                        product: sample_product,
+                        option: option,
+                        block: block,
+                        picker_type: 'button'
+                        %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="grid__item selected-samples__wrapper">
+                    <section class="selected__swatches-wrapper">
+                        <h3 class="subtitle">Select upto 6 free fabric swatches</h3>
+                        <div class="selected__swatches">
+                        <div id="selected-variants-container" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <!-- Selected variant images will appear here -->
+                        {% for i in (1..6) %}
+                            <div id="select-varient-item{{ i }}" class="select-varient-item">+</div>
+                        {% endfor %}
+                        </div>
+                        </div>
+                    </section>
+<section class="form__buttons-wrapper">
+  <free-sample-product-form class="product-form">
+    <div class="product-form__buttons">
+      <button type="button" id="add-to-cart-button" class="button button--full-width button--primary">
+        <span>Add to cart</span>
+      </button>
+    </div>
+  </free-sample-product-form>
+</section>
+
+                </div>
+
+        </div>
+
+    </div>
+</div>

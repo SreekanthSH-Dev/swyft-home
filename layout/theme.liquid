@@ -9,6 +9,7 @@
     {{ 'shop-home.css' | asset_url | stylesheet_tag }}
     {{ 'footer-main.css' | asset_url | stylesheet_tag }}
     {{ 'popup-varient.css' | asset_url | stylesheet_tag }}
+    {{ 'free-sample.css' | asset_url | stylesheet_tag }}
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
@@ -38,6 +39,8 @@
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'shop-home.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'popup-varient.js' | asset_url }}" defer="defer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer="defer"></script>
+    <script src="{{ 'free-sample.js' | asset_url }}" defer="defer"></script>
 
     
     {%- if settings.animations_reveal_on_scroll -%}
@@ -315,8 +318,8 @@
     {% sections 'header-group' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {% render 'sample-fabric-popup' %} 
       {{ content_for_layout }}
-
     </main>
 
     {% sections 'footer-group' %}

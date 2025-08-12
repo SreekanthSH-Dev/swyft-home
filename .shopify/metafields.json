@@ -42,22 +42,12 @@
       }
     },
     {
-      "key": "velvet",
+      "key": "material_image",
       "namespace": "swyft",
-      "name": "velvet",
+      "name": "material_image",
       "description": "",
       "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "linen",
-      "namespace": "swyfthome",
-      "name": "Linen",
-      "description": "",
-      "type": {
-        "name": "list.metaobject_reference",
+        "name": "metaobject_reference",
         "category": "REFERENCE"
       }
     }

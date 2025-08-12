@@ -1,0 +1,154 @@
+.free-sample-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    backdrop-filter: blur(28px);
+    height: 100vh;
+    background: rgb(0 0 0 / 50%);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+.freesample-popup-content{
+    background: #fff;
+    padding: 20px 5px;
+    height: 90%;
+    overflow-y: auto;
+    max-width: 945px;
+    flex-direction: column;
+    display: flex;
+    width: 90%;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+    animation: popupFade 0.3s ease-in-out;
+}
+.freesample-popup-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.free-sample-popup-close {
+    height: 44px;
+    background: transparent;
+    color: #585858;
+    border-radius: 50px;
+    width: 44px;
+    font-size: 22px;
+    cursor: pointer;
+    border: 0.5px solid #d4d4d4;
+    padding: 10px;
+}
+.freesample-head-left h2{
+    position: sticky;
+    font-family: 'MadeSunflower';
+    top: 0rem;
+    z-index: 1;
+    margin: 0;
+    padding: 0 20px;
+    padding-bottom: 1.5rem;
+}
+legend.free-sample-swatches {
+    padding-left: 20px;
+    font-family: sans-serif;
+    text-align: left;
+    font-size: 1.7rem;
+    color: rgb(18 18 18 / 70%);
+}
+.freesample-popup-body {
+    display: flex
+;
+}
+.freesample-body-left {
+    width: 50%;
+}
+
+p.free-sample-name {
+    margin: 0;
+}
+
+/* Hide the default checkbox */
+.free-variant-option input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Style the label to act as the checkbox */
+.free-variant-option .varient-color-picker {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Style for when checkbox is checked */
+.free-variant-option input[type="checkbox"]:checked + .varient-color-picker {
+  background-color: rgba(0,0,0,0.05);
+}
+
+/* Optional: Add a checkmark overlay on the image when checked */
+
+
+/* Style for the color image */
+.free-variant-option .free-sample.colour-switch-varient {
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  transition: transform 0.2s ease;
+  min-height: 60px;
+  width: 60px;
+}
+
+.free-variant-option input[type="checkbox"]:checked + .varient-color-picker .free-sample.colour-switch-varient {
+  transform: scale(1.02);
+    border: 1px solid black;
+}
+
+/* Style for the color name */
+.free-variant-option .free-sample-name {
+  margin-top: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Layout for the variant options */
+.material-assigned-varient {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.freesample-material-option .free-variant-option {
+    width: 80px;
+    height: 100px;
+}
+#selected-variants-container .select-varient-item {
+    min-height: 60px;
+    height: 60px;
+    width: 60px;
+    border: 1px solid;
+}
+p.select-varient-class {
+    margin: 0;
+    position: relative;
+    color: black;
+    top: -10px;
+}
+div#selected-variants-container {
+    margin-bottom: 35px;
+}
+span.empty-slot {
+    font-size: 30px;
+    position: relative;
+    /* top: -25px; */
+}
+fieldset.js.product-form__input.product-form__input--pill {
+    border: none;
+}

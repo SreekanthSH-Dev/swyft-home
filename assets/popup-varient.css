@@ -13,7 +13,7 @@
 }
 .varient-popup-content {
   background: #fff;
-  padding: 20px;
+  padding: 20px 40px;
   height: 90%;
   overflow-y: auto;
   flex-direction: column;
@@ -30,6 +30,7 @@
 }
 .varient-picker-overlay-left{
     width: 30%;
+    text-align: left;
 }
 .varient-picker-overlay-right{
     width: 70%;
@@ -138,14 +139,17 @@ p.colour-switch-varient-name {
 }
 h2#popup-product-title{
     color: black;
+    font-size: 1.5rem;
 }
 h2#popup-product-collection {
+    font-family: 'MADESunflower';
     color: black;
+    margin: 0;
 }
 h2#modal-title {
     font-family: MADESunflower, sans-serif;
     color: black;
-    margin: 10px;
+    margin: 0;
     font-size: 2.8rem;
 }
 

@@ -108,7 +108,7 @@ p.free-sample-name {
 
 .free-variant-option input[type="checkbox"]:checked + .varient-color-picker .free-sample.colour-switch-varient {
   transform: scale(1.02);
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
 /* Style for the color name */

@@ -1,6 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
   const popupOverlay = document.getElementById('product-popup-overlay');
 
+  // Function to update popup title with product name + selected variant
+  function updatePopupTitle(selectedInput) {
+const baseProductTitle = document.querySelector('.base-name')?.textContent.trim() || '';
+    const variantTitle = selectedInput?.dataset.variantTitle || '';
+    const productcatName = document.querySelector('.collection-name-product');
+
+    // Format title
+document.querySelector('#popup-product-title').textContent =
+  variantTitle ? `${baseProductTitle} | ${variantTitle}` : baseProductTitle;
+
+
+    document.querySelector('#popup-product-price').textContent = selectedInput?.dataset.variantPrice || '';
+    document.querySelector('#popup-product-image').src = selectedInput?.dataset.variantImage || '';
+
+    if (productcatName) {
+      document.querySelector('#popup-product-collection').textContent = productcatName.textContent;
+    }
+  }
+
   // Event delegation for the trigger button
   document.addEventListener('click', function (e) {
     const btn = e.target.closest('.product-popup-trigger');
@@ -8,33 +27,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Populate popup
     document.body.classList.add('no-scroll');
-    document.getElementById('popup-product-title').textContent = btn.dataset.title;
-    document.getElementById('popup-product-price').textContent = btn.dataset.price;
-    document.getElementById('popup-product-image').src = btn.dataset.image;
 
-    const productcatName = document.querySelector('.collection-name-product');
-    if (productcatName) {
-      document.getElementById('popup-product-collection').textContent = productcatName.textContent;
+    // Find selected variant on main page
+    const mainSelectedVariant = document.querySelector('.product-form__input input[type="radio"]:checked');
+
+    // Find matching variant input inside popup (if exists)
+    if (mainSelectedVariant) {
+      const popupVariant = popupOverlay.querySelector(`.product-variant-picker input[type="radio"][value="${mainSelectedVariant.value}"]`);
+      if (popupVariant) {
+        popupVariant.checked = true;
+        updatePopupTitle(popupVariant);
+      }
+    } else {
+      // Fallback: just set base product info
+      updatePopupTitle(null);
     }
 
     popupOverlay.style.display = 'flex';
   });
 
   // Confirm selection
-  const confirmBtn = popupOverlay.querySelector('.modal__footer button');
-  confirmBtn.addEventListener('click', () => {
-    const selectedPopupVariant = popupOverlay.querySelector('.product-variant-picker input[type="radio"]:checked');
-    if (selectedPopupVariant) {
-      const variantValue = selectedPopupVariant.value;
-      const mainPageVariant = document.querySelector(`.product-form__input input[type="radio"][value="${variantValue}"]`);
-      if (mainPageVariant) {
-        mainPageVariant.checked = true;
-        mainPageVariant.dispatchEvent(new Event('change', { bubbles: true }));
-      }
+const confirmBtn = popupOverlay.querySelector('.modal__footer button');
+
+
+// Select all radios from both groups
+const variantRadios = document.querySelectorAll(
+  '.variant-options-wrapper input[type="radio"], .variant-material-option input[type="radio"]'
+);
+
+variantRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (radio.checked) {
+      // Uncheck all others across both groups
+      variantRadios.forEach(other => {
+        if (other !== radio) {
+          other.checked = false;
+        }
+      });
     }
-    document.body.classList.remove('no-scroll');
-    popupOverlay.style.display = 'none';
   });
+});
+
+confirmBtn.addEventListener('click', () => {
+  // Find the single checked radio from both groups
+  const selectedPopupVariant = popupOverlay.querySelector(
+    '.variant-options-wrapper input[type="radio"]:checked, .variant-material-option input[type="radio"]:checked'
+  );
+
+  if (selectedPopupVariant) {
+    const variantValue = selectedPopupVariant.value;
+    const mainPageVariant = document.querySelector(
+      `.product-form__input input[type="radio"][value="${variantValue}"]`
+    );
+    if (mainPageVariant) {
+      mainPageVariant.checked = true;
+      mainPageVariant.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  document.body.classList.remove('no-scroll');
+  popupOverlay.style.display = 'none';
+});
+
+
 
   // Close popup
   popupOverlay.addEventListener('click', function (e) {
@@ -47,17 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Variant change inside popup
   document.addEventListener('change', function (e) {
     if (!e.target.matches('.product-variant-picker input[type="radio"]')) return;
-
-    const input = e.target;
-    const productName = document.querySelector('.main-product-title')?.textContent.trim() || '';
-    const productcatName = document.querySelector('.collection-name-product');
-
-    document.querySelector('#popup-product-title').textContent = `${productName} | ${input.dataset.variantTitle}`;
-    document.querySelector('#popup-product-price').textContent = input.dataset.variantPrice;
-    document.querySelector('#popup-product-image').src = input.dataset.variantImage;
-
-    if (productcatName) {
-      document.querySelector('#popup-product-collection').textContent = productcatName.textContent;
-    }
+    updatePopupTitle(e.target);
   });
 });

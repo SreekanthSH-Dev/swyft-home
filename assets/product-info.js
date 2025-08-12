@@ -200,6 +200,9 @@ if (!customElements.get('product-info')) {
             html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
             window.variantStrings.soldOut
           );
+          if (variant) {
+            this.updateProductTitleWithVariant(variant);
+          }
 
           publish(PUB_SUB_EVENTS.variantChange, {
             data: {
@@ -220,6 +223,32 @@ if (!customElements.get('product-info')) {
           input.dispatchEvent(new Event('change', { bubbles: true }));
         });
       }
+updateProductTitleWithVariant(variant) {
+  const titleElement = this.querySelector('.main-product-title');
+  if (!titleElement) return;
+
+  // Find or create separate base and variant spans
+  let baseSpan = titleElement.querySelector('.base-name');
+  let variantSpan = titleElement.querySelector('.variant-name');
+
+  if (!baseSpan) {
+    const baseTitle = titleElement.textContent.split('|')[0].trim();
+    titleElement.textContent = ''; // clear original text
+    baseSpan = document.createElement('span');
+    baseSpan.className = 'base-name';
+    baseSpan.textContent = baseTitle;
+    variantSpan = document.createElement('span');
+    variantSpan.className = 'variant-name';
+    titleElement.appendChild(baseSpan);
+    titleElement.appendChild(variantSpan);
+  }
+
+  // Update the variant part only
+  const variantName = variant.title.includes('Default Title') ? '' : variant.title;
+  variantSpan.textContent = variantName ? ` | ${variantName}` : '';
+}
+
+
 
       updateURL(url, variantId) {
         this.querySelector('share-button')?.updateUrl(

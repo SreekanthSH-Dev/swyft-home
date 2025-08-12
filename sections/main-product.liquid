@@ -90,7 +90,7 @@
             {%- case block.type -%}
               {%- when '@app' -%}
                 {% render block %}
-              {%- when 'title' -%}
+                {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
                   {% assign product_collections = product.collections %}
                   {% if product_collections.size > 0 %}
@@ -101,12 +101,25 @@
                         </h2>
                       </a>
                     </div>
-                    
                   {% endif %}
-                  <h1 class="main-product-title"> {{ product.title }}</h1>
+
+                  {% assign selected_variant = product.selected_or_first_available_variant %}
+                  {% assign base_title = product.title | split: '|' | first | strip %}
+                  {% assign variant_name = selected_variant.title | strip %}
+
+                  <h1 class="main-product-title">
+                      <span class="base-name">{{ base_title }}</span>
+                    {% if variant_name and variant_name != 'Default Title' %}
+                      <span class="variant-name"> | {{ variant_name }}</span>
+                    {% endif %}
+                  </h1>
+
                   <a href="{{ product.url }}" class="product__title">
                     <h2 class="h3">
-                      {{ product.title | escape }}
+                      {{ base_title }}
+                      {% if variant_name and variant_name != 'Default Title' %}
+                        <span class="variant-name"> | {{ variant_name }}</span>
+                      {% endif %}
                     </h2>
                   </a>
                 </div>
@@ -688,6 +701,8 @@
         </section>
       </div>
     </div>
+
+
 
     {% render 'product-media-modal', variant_images: variant_images %}
 

@@ -57,10 +57,36 @@
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+.product-form__input--pill input[type='radio'].disabled:checked + label p, .product-form__input--pill input[type='radio']:disabled:checked + label p {
+    position: absolute;
+    top: 50px;
+}
 .varient-picker-overlay-right .product-variant-picker {
     display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
-
+.product-variant-picker .variant-options-wrapper {
+    display: flex
+;
+}
+.variant-material-option {
+    display: flex;
+    flex-wrap: wrap;
+}
+.material-assigned-varient {
+    display: flex
+;
+}
+p.colour-switch-varient-name {
+    color: black;
+}
+.variant-material-option .material-color-item {
+    min-width: 50%;
+}
+.varient-picker-overlay-right fieldset.js.product-form__input.product-form__input--pill {
+    max-width: 100% !important;
+}
 .varient-picker-overlay-right img.colour-switch-varient {
     min-width: 48px !important;
     border-radius: 50px !important;
@@ -81,8 +107,20 @@
     border: 1px solid black;
     height: 55px;
     padding: 1px;
+    flex-direction: column;
     background-color: transparent;
 }
+ .varient-picker-overlay-right .product-form__input--pill input[type='radio']:checked + label p{
+    position: absolute;
+    top: 50px;
+}
+:is(.product-form__input--pill, .product-form__input--swatch) .form__label-main{
+    font-size: 18px;
+    text-align: left;
+    font-family: MADESunflower, sans-serif;
+    padding-left: 20px;
+}
+
 .product-popup-trigger {
     margin: 5px 0;
     letter-spacing: 0.1rem;

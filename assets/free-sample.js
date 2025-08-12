@@ -79,12 +79,20 @@ document.addEventListener('DOMContentLoaded', function() {
   const addToCartButton = document.getElementById('add-to-cart-button');
   
   addToCartButton.addEventListener('click', function() {
+    // Check if at least one checkbox is selected
+    const checkedBoxes = document.querySelectorAll('input[name="free-sample-option"]:checked');
+    
+    if (checkedBoxes.length === 0) {
+      alert('Please select at least one option before adding to cart');
+      return; // Stop execution if no checkboxes are selected
+    }
+    
     // Show loading state
     this.classList.add('loading');
     this.querySelector('span').textContent = 'Adding...';
     
     // Product variant ID to add
-    const variantId = '10183060685109';
+    const variantId = '51205222629685';
     
     // Shopify AJAX API call
     fetch('/cart/add.js', {
@@ -106,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Product added to cart:', data);
       
       // Option 1: Refresh the page to show updated cart
+      window.location.href = '/cart';
       
       // Option 2: Show success message without redirect
       // this.querySelector('span').textContent = 'Added!';

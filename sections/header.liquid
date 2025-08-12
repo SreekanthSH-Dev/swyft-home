@@ -288,7 +288,8 @@
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
-      {% render 'cart-drawer' %}
+      <a href="#">      {% render 'cart-drawer' %}</a>
+
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
         {% if cart == empty %}
           <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>

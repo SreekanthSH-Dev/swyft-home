@@ -132,7 +132,7 @@ addToCartButton.addEventListener('click', function () {
 });
 
 
-    //  Edit button — now preselects and updates preview with images
+//  Edit button — now preselects and updates preview with images
 document.querySelectorAll('.edit-sample-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();

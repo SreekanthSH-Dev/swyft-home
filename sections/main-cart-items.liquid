@@ -323,6 +323,16 @@
                               </span>
                             </a>
                           </cart-remove-button>
+                          {% if item.variant.id == 51205222629685 %}
+                              <div class="edit-sample-btn-div">
+                                <a href="#"
+                                  class="edit-sample-btn"
+                                  data-line="{{ forloop.index }}"
+                                  data-properties='{{ item.properties | json }}'>
+                                  Edit
+                                </a>
+                              </div>
+                            {% endif %}
                         </div>
                         {%- if has_qty_rules or has_vol_pricing -%}
                           <button

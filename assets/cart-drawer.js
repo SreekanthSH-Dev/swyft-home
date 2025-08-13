@@ -1,3 +1,11 @@
+document.getElementById('cart__drawer__close').addEventListener('click', () => {
+  document.getElementById('cart-drawer-main-section-main').classList.add('hidden');
+  console.log('clicked');
+});
+document.getElementById('cart-icon-bubble').addEventListener('click', () => {
+  document.getElementById('cart-drawer-main-section-main').classList.remove('hidden');
+  console.log('clicked');
+});
 class CartDrawer extends HTMLElement {
   constructor() {
     super();
@@ -135,3 +143,4 @@ class CartDrawerItems extends CartItems {
 }
 
 customElements.define('cart-drawer-items', CartDrawerItems);
+

@@ -12,12 +12,10 @@
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
-  .drawer {
-    visibility: hidden;
-  }
+
 </style>
 
-<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
+<cart-drawer id="cart-drawer-main-section-main" class="hidden drawer{% if cart == empty %} is-empty{% endif %}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
@@ -66,6 +64,7 @@
         <button
           class="drawer__close"
           type="button"
+          id="cart__drawer__close"
           onclick="this.closest('cart-drawer').close()"
           aria-label="{{ 'accessibility.close' | t }}"
         >

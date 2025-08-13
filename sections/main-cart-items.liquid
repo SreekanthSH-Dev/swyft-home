@@ -235,10 +235,14 @@
                     -%}
                     <td class="cart-item__quantity{% if has_qty_rules or has_vol_pricing %} cart-item__quantity--info{% endif %}">
                       <quantity-popover>
+
                         <div class="cart-item__quantity-wrapper quantity-popover-wrapper">
                           <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                             {{ 'products.product.quantity.label' | t }}
                           </label>
+                        {% if item.variant.id == 51205222629685 %}
+                        {%else %}
+
                           <div class="quantity-popover-container{% if has_qty_rules or has_vol_pricing %} quantity-popover-container--hover{% endif %}">
                             {%- if has_qty_rules or has_vol_pricing -%}
                               <button
@@ -305,6 +309,7 @@
                               </button>
                             </quantity-input>
                           </div>
+                                                  {% endif %}
                           <cart-remove-button
                             id="Remove-{{ item.index | plus: 1 }}"
                             data-index="{{ item.index | plus: 1 }}"
@@ -334,6 +339,7 @@
                               </div>
                             {% endif %}
                         </div>
+                        
                         {%- if has_qty_rules or has_vol_pricing -%}
                           <button
                             type="button"

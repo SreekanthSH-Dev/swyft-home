@@ -431,3 +431,6 @@ td.cart-item__quantity.right cart-remove-button {
 .cart-custom-item.cart-item td.cart-item__details {
     min-width: 230px;
 }
+.cart-item__quantity-wrapper.quantity-popover-wrapper {
+    justify-content: space-around;
+}

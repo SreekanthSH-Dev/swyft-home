@@ -26,7 +26,7 @@ $("#HeaderMenu-free-samples").on("click", function(e) {
         $('body').removeClass('no-scroll'); // Restore scrolling
     });
 });
-
+    const FREE_SAMPLE_VARIANT_ID = '51205222629685';
 function preselectFreeSampleFromProps(propsArray, lineIndex = null) {
     // Extract just the value strings ("Ivory | /cdn...")
     const propertyValues = propsArray.map(pair => pair[1]);
@@ -60,14 +60,18 @@ function preselectFreeSampleFromProps(propsArray, lineIndex = null) {
 }
 
 // Edit button click — get properties from button attribute
-document.querySelectorAll('.edit-sample-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const lineIndex = this.getAttribute('data-line');
-        const currentProps = JSON.parse(this.getAttribute('data-properties') || '[]');
-        preselectFreeSampleFromProps(currentProps, lineIndex);
-    });
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.edit-sample-btn');
+    if (!btn) return; // Click wasn't on an edit button
+
+    e.preventDefault();
+
+    const lineIndex = btn.getAttribute('data-line');
+    const currentProps = JSON.parse(btn.getAttribute('data-properties') || '[]');
+
+    preselectFreeSampleFromProps(currentProps, lineIndex);
 });
+
 
 // Main menu button click — fetch from cart
 document.getElementById('HeaderMenu-free-samples').addEventListener('click', function(e) {

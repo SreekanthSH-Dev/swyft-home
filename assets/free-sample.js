@@ -118,34 +118,40 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     //  Edit button — now preselects and updates preview with images
-    document.querySelectorAll('.edit-sample-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const lineIndex = this.getAttribute('data-line');
-            const currentProps = JSON.parse(this.getAttribute('data-properties') || '{}');
+document.querySelectorAll('.edit-sample-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const lineIndex = this.getAttribute('data-line');
+        const currentProps = JSON.parse(this.getAttribute('data-properties') || '[]'); // now an array of arrays
+        console.log('Current properties:', currentProps);
 
-            // Reset and pre-check
-            document.querySelectorAll('input[name="free-sample-option"]').forEach(chk => {
-                chk.checked = false;
-                const variantTitle = chk.getAttribute('data-variant-title');
-                const variantImage = chk.getAttribute('data-variant-image') || '';
-                
-                // Match against stored properties (may contain "Title | image.jpg")
-                if (Object.values(currentProps).some(val => val.includes(variantTitle))) {
-                    chk.checked = true;
-                }
-            });
+        // Extract just the value strings ("Ivory | /cdn...")
+        const propertyValues = currentProps.map(pair => pair[1]);
 
-            // Update preview immediately
-            updateSelectedVariantsDisplay();
+        // Reset and pre-check
+        document.querySelectorAll('input[name="free-sample-option"]').forEach(chk => {
+            chk.checked = false;
 
-            // Store for saving
-            document.querySelector('#add-to-cart-button').setAttribute('data-edit-line', lineIndex);
+            const variantTitle = chk.getAttribute('data-variant-title')?.trim();
+            const variantImage = chk.getAttribute('data-variant-image')?.trim();
 
-            // Open popup
-            document.querySelector('.free-sample-popup-overlay').style.display = 'flex';
-            document.body.classList.add('no-scroll');
+            // Match if the stored value contains BOTH the title and the image path
+            if (propertyValues.some(val => val.includes(variantTitle) && val.includes(variantImage))) {
+                chk.checked = true;
+            }
         });
+
+        // Update preview immediately
+        updateSelectedVariantsDisplay();
+
+        // Store for saving
+        document.querySelector('#add-to-cart-button').setAttribute('data-edit-line', lineIndex);
+
+        // Open popup
+        document.querySelector('.free-sample-popup-overlay').style.display = 'flex';
+        document.body.classList.add('no-scroll');
     });
+});
+
 });

@@ -57,9 +57,13 @@
     },
     "cart" :{
       "type" : "cart-drawer"
+    },
+    "advertisement":{
+      "type":"ad-for-sample"
     }
   },
   "order": [
+    "advertisement",
     "cart",
     "announcement-bar",
     "header",

@@ -1,0 +1,102 @@
+/* Overlay */
+.swatch-popup-overlay {
+    display: flex;
+    z-index: 90000;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: clip auto;
+    background-color: rgba(20, 20, 20, 0.6);
+    animation-timing-function: ease;
+    animation-play-state: running;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-delay: 0s;
+    backdrop-filter: blur(28px)!important;
+    animation-duration: 0.35s;
+    animation-name: klaviyo-fadein;
+}
+
+.swatch-hidden {
+  display: none;
+}
+
+/* Container */
+.swatch-popup-container {
+  background-color: #f9f6f2;
+  border-radius: 24px;
+  max-width: 1000px;
+  width: 700px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 0 30px;
+  position: relative;
+}
+
+/* Close button */
+.swatch-popup-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: #f9f6f2;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+}
+
+/* Content layout */
+.swatch-popup-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.swatch-popup-image {
+    width: 50%;
+  object-fit: contain;
+}
+
+.swatch-popup-text {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.swatch-popup-subtitle {
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+.swatch-popup-title {
+    font-size: 36px;
+    margin: 0;
+    font-family: MadeSunflower;
+    font-weight: 400;
+}
+
+.swatch-popup-btn {
+  background: rgb(96, 147, 172);
+  border-radius: 41px;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 15px 0;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* Animations */
+@keyframes swatch-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

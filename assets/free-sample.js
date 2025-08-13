@@ -18,6 +18,23 @@ $("#HeaderMenu-free-samples").on("click", function(e) {
             preselectFreeSampleFromProps(propsArray, freeSampleItem.index);
         });
 });
+$(".swatch-popup-btn").on("click", function(e) {
+    e.preventDefault();
+
+    fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+            const freeSampleItem = cart.items.find(item => item.variant_id == FREE_SAMPLE_VARIANT_ID);
+            if (!freeSampleItem) {
+                preselectFreeSampleFromProps([], null);
+                return;
+            }
+
+            const propsArray = Object.entries(freeSampleItem.properties || {});
+            preselectFreeSampleFromProps(propsArray, freeSampleItem.index);
+        });
+});
+
 
 
     // Close popup

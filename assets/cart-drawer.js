@@ -1,12 +1,31 @@
+const cartDrawer = document.getElementById('cart-drawer-main-section-main');
+const drawerInner = document.querySelector('.drawer__inner');
+
+// Close button
 document.getElementById('cart__drawer__close').addEventListener('click', () => {
-  document.getElementById('cart-drawer-main-section-main').classList.add('hidden');
-  console.log('clicked');
+  cartDrawer.classList.add('hidden');
+  console.log('close clicked');
 });
 
+// Cart icon open
 document.getElementById('cart-icon-bubble').addEventListener('click', () => {
-  document.getElementById('cart-drawer-main-section-main').classList.remove('hidden');
-  console.log('clicked');
+  cartDrawer.classList.remove('hidden');
+  console.log('cart icon clicked');
 });
+
+// Click outside drawer
+document.addEventListener('click', (event) => {
+  if (!cartDrawer.classList.contains('hidden')) {
+    const isInsideDrawer = drawerInner.contains(event.target);
+    const isCartIcon = event.target.closest('#cart-icon-bubble');
+    
+    if (!isInsideDrawer && !isCartIcon) {
+      cartDrawer.classList.add('hidden');
+      console.log('clicked outside drawer');
+    }
+  }
+});
+
 class CartDrawer extends HTMLElement {
   constructor() {
     super();

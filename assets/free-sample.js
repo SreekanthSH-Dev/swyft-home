@@ -68,54 +68,69 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const addToCartButton = document.getElementById('add-to-cart-button');
-    addToCartButton.addEventListener('click', function() {
-        const checkedBoxes = document.querySelectorAll('input[name="free-sample-option"]:checked');
+addToCartButton.addEventListener('click', function () {
+    const checkedBoxes = document.querySelectorAll('input[name="free-sample-option"]:checked');
 
-        if (checkedBoxes.length === 0) {
-            alert('Please select at least one option before adding to cart');
-            return;
-        }
+    if (checkedBoxes.length === 0) {
+        alert('Please select at least one option before adding to cart');
+        return;
+    }
 
-        this.classList.add('loading');
-        this.querySelector('span').textContent = 'Adding...';
+    this.classList.add('loading');
+    this.querySelector('span').textContent = 'Adding...';
 
-        const properties = {};
-        checkedBoxes.forEach((chk, index) => {
-            const title = chk.getAttribute('data-variant-title');
-            const img = chk.getAttribute('data-variant-image') || '';
-            properties[`Sample ${index + 1}`] = title + (img ? ` | ${img}` : '');
-        });
-
-        const parentVariantId = '51205222629685';
-        const lineToEdit = this.getAttribute('data-edit-line');
-
-        if (lineToEdit) {
-            // Update existing
-            fetch('/cart/change.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    line: parseInt(lineToEdit),
-                    quantity: 1,
-                    id: parentVariantId,
-                    properties
-                })
-            })
-            .then(res => res.json())
-            .then(() => window.location.reload());
-        } else {
-            // Add new
-            fetch('/cart/add.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    items: [{ id: parentVariantId, quantity: 1, properties }]
-                })
-            })
-            .then(res => res.json())
-            .then(() => window.location.href = '/cart');
-        }
+    const properties = {};
+    checkedBoxes.forEach((chk, index) => {
+        const title = chk.getAttribute('data-variant-title');
+        const img = chk.getAttribute('data-variant-image') || '';
+        properties[`Sample ${index + 1}`] = title + (img ? ` | ${img}` : '');
     });
+
+    const parentVariantId = '51205222629685';
+    const lineToEdit = this.getAttribute('data-edit-line');
+
+    // Check cart before adding
+    fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+            const alreadyInCart = cart.items.some(item => item.variant_id == parentVariantId);
+
+            if (alreadyInCart && !lineToEdit) {
+                alert('You can only have one Free Sample product in your cart.');
+                this.classList.remove('loading');
+                this.querySelector('span').textContent = 'Add to Cart';
+                return;
+            }
+
+            if (lineToEdit) {
+                // Update existing
+                fetch('/cart/change.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        line: parseInt(lineToEdit),
+                        quantity: 1,
+                        id: parentVariantId,
+                        properties
+                    })
+                })
+                    .then(res => res.json())
+                    .then(() => window.location.reload());
+            } else {
+                // Add new
+                fetch('/cart/add.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        items: [{ id: parentVariantId, quantity: 1, properties }]
+                    })
+                })
+                    .then(res => res.json())
+                    .then(() => window.location.href = '/cart');
+            }
+        });
+});
+
 
     //  Edit button — now preselects and updates preview with images
 document.querySelectorAll('.edit-sample-btn').forEach(btn => {

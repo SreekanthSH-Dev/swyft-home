@@ -1,15 +1,92 @@
 jQuery(function($) {
     // Open popup
-    $("#HeaderMenu-free-samples").click(function() {
-        $('.free-sample-popup-overlay').css('display', 'flex'); // Use flex
-        $('body').addClass('no-scroll'); // Prevent scrolling
-    });
+    const FREE_SAMPLE_VARIANT_ID = '51205222629685';
+
+$("#HeaderMenu-free-samples").on("click", function(e) {
+    e.preventDefault();
+
+    fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+            const freeSampleItem = cart.items.find(item => item.variant_id == FREE_SAMPLE_VARIANT_ID);
+            if (!freeSampleItem) {
+                preselectFreeSampleFromProps([], null);
+                return;
+            }
+
+            const propsArray = Object.entries(freeSampleItem.properties || {});
+            preselectFreeSampleFromProps(propsArray, freeSampleItem.index);
+        });
+});
+
 
     // Close popup
     $(".free-sample-popup-close").click(function(){
         $('.free-sample-popup-overlay').css('display', 'none'); // Hide
         $('body').removeClass('no-scroll'); // Restore scrolling
     });
+});
+
+function preselectFreeSampleFromProps(propsArray, lineIndex = null) {
+    // Extract just the value strings ("Ivory | /cdn...")
+    const propertyValues = propsArray.map(pair => pair[1]);
+
+    // Reset and pre-check
+    document.querySelectorAll('input[name="free-sample-option"]').forEach(chk => {
+        chk.checked = false;
+
+        const variantTitle = chk.getAttribute('data-variant-title')?.trim();
+        const variantImage = chk.getAttribute('data-variant-image')?.trim();
+
+        // Match if the stored value contains BOTH title and image path
+        if (propertyValues.some(val => val.includes(variantTitle) && val.includes(variantImage))) {
+            chk.checked = true;
+        }
+    });
+
+    // Update preview immediately
+    updateSelectedVariantsDisplay();
+
+    // Store line index (for edit mode)
+    if (lineIndex !== null) {
+        document.querySelector('#add-to-cart-button').setAttribute('data-edit-line', lineIndex);
+    } else {
+        document.querySelector('#add-to-cart-button').removeAttribute('data-edit-line');
+    }
+
+    // Open popup
+    document.querySelector('.free-sample-popup-overlay').style.display = 'flex';
+    document.body.classList.add('no-scroll');
+}
+
+// Edit button click — get properties from button attribute
+document.querySelectorAll('.edit-sample-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lineIndex = this.getAttribute('data-line');
+        const currentProps = JSON.parse(this.getAttribute('data-properties') || '[]');
+        preselectFreeSampleFromProps(currentProps, lineIndex);
+    });
+});
+
+// Main menu button click — fetch from cart
+document.getElementById('HeaderMenu-free-samples').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+            const freeSampleItem = cart.items.find(item => item.variant_id == FREE_SAMPLE_VARIANT_ID);
+            if (!freeSampleItem) {
+                // No free sample in cart — open empty popup
+                preselectFreeSampleFromProps([], null);
+                return;
+            }
+
+            // Convert Shopify properties object to array-of-arrays like edit button expects
+            const propsArray = Object.entries(freeSampleItem.properties || {});
+            preselectFreeSampleFromProps(propsArray, freeSampleItem.index);
+        });
 });
 
 // ✅ Global function so edit button can call it
@@ -87,28 +164,19 @@ addToCartButton.addEventListener('click', function () {
     });
 
     const parentVariantId = '51205222629685';
-    const lineToEdit = this.getAttribute('data-edit-line');
 
-    // Check cart before adding
     fetch('/cart.js')
         .then(res => res.json())
         .then(cart => {
-            const alreadyInCart = cart.items.some(item => item.variant_id == parentVariantId);
+            const freeSampleItem = cart.items.find(item => item.variant_id == parentVariantId);
 
-            if (alreadyInCart && !lineToEdit) {
-                alert('You can only have one Free Sample product in your cart.');
-                this.classList.remove('loading');
-                this.querySelector('span').textContent = 'Add to Cart';
-                return;
-            }
-
-            if (lineToEdit) {
-                // Update existing
+            if (freeSampleItem) {
+                // ✅ Always update existing if in cart
                 fetch('/cart/change.js', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
-                        line: parseInt(lineToEdit),
+                        line: freeSampleItem.index,
                         quantity: 1,
                         id: parentVariantId,
                         properties
@@ -129,44 +197,6 @@ addToCartButton.addEventListener('click', function () {
                     .then(() => window.location.href = '/cart');
             }
         });
-});
-
-
-//  Edit button — now preselects and updates preview with images
-document.querySelectorAll('.edit-sample-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const lineIndex = this.getAttribute('data-line');
-        const currentProps = JSON.parse(this.getAttribute('data-properties') || '[]'); // now an array of arrays
-        console.log('Current properties:', currentProps);
-
-        // Extract just the value strings ("Ivory | /cdn...")
-        const propertyValues = currentProps.map(pair => pair[1]);
-
-        // Reset and pre-check
-        document.querySelectorAll('input[name="free-sample-option"]').forEach(chk => {
-            chk.checked = false;
-
-            const variantTitle = chk.getAttribute('data-variant-title')?.trim();
-            const variantImage = chk.getAttribute('data-variant-image')?.trim();
-
-            // Match if the stored value contains BOTH the title and the image path
-            if (propertyValues.some(val => val.includes(variantTitle) && val.includes(variantImage))) {
-                chk.checked = true;
-            }
-        });
-
-        // Update preview immediately
-        updateSelectedVariantsDisplay();
-
-        // Store for saving
-        document.querySelector('#add-to-cart-button').setAttribute('data-edit-line', lineIndex);
-
-        // Open popup
-        document.querySelector('.free-sample-popup-overlay').style.display = 'flex';
-        document.body.classList.add('no-scroll');
-    });
 });
 
 });

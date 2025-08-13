@@ -15,7 +15,7 @@
 
 </style>
 
-<cart-drawer id="cart-drawer-main-section-main" class="hidden drawer{% if cart == empty %} is-empty{% endif %}">
+<cart-drawer id="cart-drawer-main-section-main" class="hidden drawer{% if cart == empty %} empty{% endif %}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
@@ -37,7 +37,7 @@
                 aria-label="{{ 'accessibility.close' | t }}"
               >
                 <span class="svg-wrapper">
-                  {{- 'icon-close.svg' | inline_asset_content -}}
+                  {% comment %} {{- 'icon-close.svg' | inline_asset_content -}} {% endcomment %}
                 </span>
               </button>
               <a href="{{ routes.all_products_collection_url }}" class="button">
@@ -75,7 +75,7 @@
       </div>
       <cart-drawer-items
         {% if cart == empty %}
-          class=" is-empty"
+          class=" empty"
         {% endif %}
       >
         <form
@@ -117,9 +117,20 @@
 
                   <tbody role="rowgroup">
                     {%- for item in cart.items -%}
+                        {% if item.variant_id == 51205222629685 %}
+                        {%else %}
+                        {%endif %}
                       <tr
                         id="CartDrawer-Item-{{ item.index | plus: 1 }}"
-                        class="cart-item{% if item.parent_relationship.parent != null %} cart-item__nested-line{% endif %}"
+                        class="
+                        {% if item.variant_id == 51205222629685 %}
+                         cart-custom-item cart-item
+                        {%else %}
+                          cart-item
+                        {%endif %}
+                        {% if item.parent_relationship.parent != null %}
+                          cart-item__nested-line
+                        {% endif %}"
                         role="row"
                         {% if item.parent_relationship.parent != null %}
                           aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
@@ -181,13 +192,15 @@
                             <dl>
                               {%- if item.product.has_only_default_variant == false -%}
                                 {%- for option in item.options_with_values -%}
-                                  <div class="product-option">
-                                    <dt>{{ option.name }}:</dt>
-                                    <dd>
-                                      {{ option.value -}}
-                                      {%- unless forloop.last %}, {% endunless %}
-                                    </dd>
-                                  </div>
+                                      {% unless option.name contains 'sample' or option.name contains 'Sample' %}
+                                        <div class="product-option">
+                                          <dt>{{ option.name }}:</dt>
+                                          <dd>
+                                            {{ option.value -}}
+                                            {%- unless forloop.last %}, {% endunless %}
+                                          </dd>
+                                        </div>
+                                      {% endunless %}               
                                 {%- endfor -%}
                               {%- endif -%}
 
@@ -195,21 +208,23 @@
                                 {%- assign property_first_char = property.first | slice: 0 -%}
                                 {%- if property.last != blank and property_first_char != '_' -%}
                                   <div class="product-option">
+                                  {% if property.last contains ' | ' %}
+
+                                  {% else %}
                                     <dt>{{ property.first }}:</dt>
-                                    <dd>
-                                      {%- if property.last contains '/uploads/' -%}
-                                        <a
-                                          href="{{ property.last }}"
-                                          class="link"
-                                          target="_blank"
-                                          aria-describedby="a11y-new-window-message"
-                                        >
-                                          {{ property.last | split: '/' | last }}
-                                        </a>
-                                      {%- else -%}
-                                        {{ property.last }}
-                                      {%- endif -%}
-                                    </dd>
+                                  {%endif %}        
+                                <dd>
+                                  {% if property.last contains ' | ' %}
+                                    {% assign parts = property.last | split: ' | ' %}
+                                    <img src="{{ parts[1] }}" alt="{{ parts[0] }}" width="30" height="30">
+                                  {% elsif property.last contains '/' %}
+                                    <a href="{{ property.last }}" class="link" target="_blank">
+                                      {{ property.last | split: '/' | last }}
+                                    </a>
+                                  {% else %}
+                                    {{ property.last }}
+                                  {% endif %}
+                                </dd>
                                   </div>
                                 {%- endif -%}
                               {%- endfor -%}
@@ -231,8 +246,42 @@
                             {%- endfor -%}
                           </ul>
                         </td>
+                        {% if item.variant_id == 51205222629685 %}
+                          <td class="cart-item__quantity  right" role="cell" headers="CartDrawer-ColumnTotal">
 
+                              <cart-remove-button
+                                id="CartDrawer-Remove-{{ item.index | plus: 1 }}"
+                                data-index="{{ item.index | plus: 1 }}"
+                              >
+                                <button
+                                  type="button"
+                                  class="button button--tertiary cart-remove-button"
+                                  aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+                                  data-variant-id="{{ item.variant.id }}"
+                                  {% if item.instructions and item.instructions.can_remove == false %}
+                                    class="hidden"
+                                  {% endif %}
+                                >
+                                  <span class="svg-wrapper">
+                                    {{- 'icon-remove.svg' | inline_asset_content -}}
+                                  </span>
+                                </button>
+                              </cart-remove-button>
+                            {% if item.variant.id == 51205222629685 %}
+                              <div>
+                                <a href="#"
+                                  class="edit-sample-btn"
+                                  data-line="{{ forloop.index }}"
+                                  data-properties='{{ item.properties | json }}'>
+                                  Edit
+                                </a>
+                              </div>
+                            {% endif %}
+                            </td>
+
+                        {%else %}
                         <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
+                          
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
                             {%- if item.original_line_price != item.final_line_price -%}
@@ -261,6 +310,7 @@
                             {%- endif -%}
                           </div>
                         </td>
+                        {%endif %}
                         {%- liquid
                           assign has_qty_rules = false
                           if item.variant.quantity_rule.increment > 1 or item.variant.quantity_rule.min > 1 or item.variant.quantity_rule.max != null
@@ -272,6 +322,11 @@
                             assign has_vol_pricing = true
                           endif
                         -%}
+
+
+                        {% if item.variant_id == 51205222629685 %}
+
+                        {%else %}
                         <td
                           class="cart-item__quantity {% if has_qty_rules or has_vol_pricing %} cart-item__quantity--info{% endif %}"
                           role="cell"
@@ -322,6 +377,8 @@
                                       disabled
                                     {% endif %}
                                   >
+
+
                                   <button
                                     class="quantity__button"
                                     name="plus"
@@ -343,6 +400,7 @@
                                   </button>
                                 </quantity-input>
                               </div>
+
                               <cart-remove-button
                                 id="CartDrawer-Remove-{{ item.index | plus: 1 }}"
                                 data-index="{{ item.index | plus: 1 }}"
@@ -459,6 +517,7 @@
                             </div>
                           </quantity-popover>
                         </td>
+                      {% endif %}
                       </tr>
                     {%- endfor -%}
                   </tbody>

@@ -2,6 +2,7 @@ document.getElementById('cart__drawer__close').addEventListener('click', () => {
   document.getElementById('cart-drawer-main-section-main').classList.add('hidden');
   console.log('clicked');
 });
+
 document.getElementById('cart-icon-bubble').addEventListener('click', () => {
   document.getElementById('cart-drawer-main-section-main').classList.remove('hidden');
   console.log('clicked');
@@ -23,7 +24,6 @@ class CartDrawer extends HTMLElement {
     cartLink.setAttribute('aria-haspopup', 'dialog');
     cartLink.addEventListener('click', (event) => {
       event.preventDefault();
-      console.log('clicked');
       this.open(cartLink);
     });
     cartLink.addEventListener('keydown', (event) => {
@@ -46,7 +46,7 @@ class CartDrawer extends HTMLElement {
     this.addEventListener(
       'transitionend',
       () => {
-        const containerToTrapFocusOn = this.classList.contains('is-empty')
+        const containerToTrapFocusOn = this.classList.contains('empty')
           ? this.querySelector('.drawer__inner-empty')
           : document.getElementById('CartDrawer');
         const focusElement = this.querySelector('.drawer__inner') || this.querySelector('.drawer__close');
@@ -80,8 +80,8 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
+    this.querySelector('.drawer__inner').classList.contains('empty') &&
+      this.querySelector('.drawer__inner').classList.remove('empty');
     this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector

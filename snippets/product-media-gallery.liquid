@@ -12,6 +12,7 @@
 {% endcomment %}
 
 {% assign product_video_url = product.metafields.swyft.product_video | file_url %}
+{% assign product_quotes_url = product.metafields.swyft.product_quotes | file_url %}
 
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
@@ -65,25 +66,38 @@
       class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"
       role="list"
     >
+      {% comment %} product custom video on order 2 {% endcomment %}
       {% if product_video_url != blank %}
-
+        <li
+          id="Slide-{{ section.id }}-product-video"
+          class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          data-media-id="{{ section.id }}-product-video"
+        >
+          
+          <video
+            class="product-gallery-video-custom"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+          >
+            <source src="{{ product_video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+      </li>
+    {% endif %}
+{% if product_quotes_url != blank %}
   <li
-    id="Slide-{{ section.id }}-product-video"
-    class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
-    data-media-id="{{ section.id }}-product-video"
+    id="{{ section.id }}-product-quotes"
+    class="product__media-item"
+    data-media-type="image"
+    data-media-id="quotes-{{ section.id }}"
   >
-    
-<video
-  class="product-gallery-video-custom"
-  autoplay
-  loop
-  muted
-  playsinline
-  preload="metadata"
->
-        <source src="{{ product_video_url }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+    <img
+      src="{{ product_quotes_url | img_url: 'master' }}"
+      alt="Product Quotes"
+    >
   </li>
 {% endif %}
 
@@ -281,29 +295,52 @@
             </button>
           </li>
         {%- endif -%}
-{% if product_video_url != blank %}
-  <li
-    class="thumbnail-list__item slider__slide"
-    data-media-position="2"
-    data-target="{{ section.id }}-product-video"
-  >
-    <span class="thumbnail__badge" aria-hidden="true">
-      <span class="svg-wrapper">
-        {{- 'icon-play.svg' | inline_asset_content -}}
-      </span>
-    </span>
-    <button
-      class="thumbnail global-media-settings global-media-settings--no-shadow"
-      aria-label="Product video"
-      aria-controls="GalleryViewer-{{ section.id }}"
-    >
+        {% comment %} custom product video courosul {% endcomment %}
+      {% if product_video_url != blank %}
+        <li
+          class="thumbnail-list__item slider__slide"
+          data-media-position="2"
+          data-target="{{ section.id }}-product-video"
+        >
+          <span class="thumbnail__badge" aria-hidden="true">
+            <span class="svg-wrapper">
+              {{- 'icon-play.svg' | inline_asset_content -}}
+            </span>
+          </span>
+          <button
+            class="thumbnail global-media-settings global-media-settings--no-shadow"
+            aria-label="Product video"
+            aria-controls="GalleryViewer-{{ section.id }}"
+          >
 
-      <video class="product-thumbnail-video" muted>
-        <source src="{{ product_video_url }}" type="video/mp4">
-      </video>
-    </button>
-  </li>
-{% endif %}
+            <video class="product-thumbnail-video" muted>
+              <source src="{{ product_video_url }}" type="video/mp4">
+            </video>
+          </button>
+        </li>
+      {% endif %}
+      
+      {% if product_quotes_url != blank %}
+        <li
+          class="thumbnail-list__item slider__slide"
+          data-media-position="3"
+          data-target="{{ section.id }}-product-quotes"
+        >
+          <button
+            class="thumbnail global-media-settings global-media-settings--no-shadow"
+            aria-label="Product quotes"
+            aria-controls="GalleryViewer-{{ section.id }}"
+          >
+            <img
+              src="{{ product_quotes_url | img_url: '300x' }}"
+              alt="Product Quotes"
+              class="product-thumbnail-quotes"
+              loading="lazy"
+            >
+          </button>
+        </li>
+      {% endif %}
+
 
         {%- for media in product.media -%}
           {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}

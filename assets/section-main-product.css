@@ -1515,3 +1515,14 @@ h2.collection-name-product{
 product-info#MainProduct-template--25267976044853__main {
     padding: 0;
 }
+
+
+video.product-thumbnail-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+video.product-gallery-video-custom {
+    width: 100%;
+    height: 100%;
+}

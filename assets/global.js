@@ -1330,3 +1330,22 @@ class CartPerformance {
     );
   }
 }
+document.addEventListener("DOMContentLoaded", function () {
+  const video = document.querySelector(".product-gallery-video-custom");
+
+  if (video) {
+    video.muted = true;
+    video.play().catch(err => console.log("Autoplay prevented:", err));
+
+    // If inside a slider, replay when visible
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(err => console.log("Autoplay prevented:", err));
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(video);
+  }
+});

@@ -11,6 +11,8 @@
   {% render 'product-media-gallery' %}
 {% endcomment %}
 
+{% assign product_video_url = product.metafields.swyft.product_video | file_url %}
+
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
     assign single_media_visible = true
@@ -56,11 +58,36 @@
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
+
+
     <ul
       id="Slider-Gallery-{{ section.id }}"
       class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"
       role="list"
     >
+      {% if product_video_url != blank %}
+
+  <li
+    id="Slide-{{ section.id }}-product-video"
+    class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+    data-media-id="{{ section.id }}-product-video"
+  >
+    
+<video
+  class="product-gallery-video-custom"
+  autoplay
+  loop
+  muted
+  playsinline
+  preload="metadata"
+>
+        <source src="{{ product_video_url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+  </li>
+{% endif %}
+
+
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
         {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
         <li
@@ -197,6 +224,9 @@
           {{- 'icon-caret.svg' | inline_asset_content -}}
         </span>
       </button>
+  
+
+
       <ul
         id="Slider-Thumbnails-{{ section.id }}"
         class="thumbnail-list list-unstyled slider slider--mobile{% if section.settings.gallery_layout == 'thumbnail_slider' %} slider--tablet-up{% endif %}"
@@ -251,6 +281,30 @@
             </button>
           </li>
         {%- endif -%}
+{% if product_video_url != blank %}
+  <li
+    class="thumbnail-list__item slider__slide"
+    data-media-position="2"
+    data-target="{{ section.id }}-product-video"
+  >
+    <span class="thumbnail__badge" aria-hidden="true">
+      <span class="svg-wrapper">
+        {{- 'icon-play.svg' | inline_asset_content -}}
+      </span>
+    </span>
+    <button
+      class="thumbnail global-media-settings global-media-settings--no-shadow"
+      aria-label="Product video"
+      aria-controls="GalleryViewer-{{ section.id }}"
+    >
+
+      <video class="product-thumbnail-video" muted>
+        <source src="{{ product_video_url }}" type="video/mp4">
+      </video>
+    </button>
+  </li>
+{% endif %}
+
         {%- for media in product.media -%}
           {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
             {%- liquid

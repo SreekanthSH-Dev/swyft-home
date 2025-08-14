@@ -24,6 +24,15 @@
   endif
 
   assign media_count = product.media.size
+  
+  # Add custom media to total count
+  if product_video_url != blank and product_video_url contains '.mp4'
+    assign media_count = media_count | plus: 1
+  endif
+  if product_quotes_url != blank and product_quotes_url contains '.webp'
+    assign media_count = media_count | plus: 1
+  endif
+  
   if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
     assign media_count = media_count | minus: variant_images.size | plus: 1
   endif
@@ -43,6 +52,9 @@
   elsif section.settings.media_size == 'small'
     assign media_width = 0.45
   endif
+  
+  # Initialize media position counter
+  assign current_media_position = 0
 -%}
 
 <media-gallery
@@ -60,67 +72,25 @@
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
 
-
     <ul
       id="Slider-Gallery-{{ section.id }}"
       class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"
       role="list"
     >
-      {% comment %} product custom video on order 2 {% endcomment %}
-      {% if product_video_url != blank  and product_video_url contains '.mp4' %}
-        <li
-          id="Slide-{{ section.id }}-product-video"
-          class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
-          data-media-id="{{ section.id }}-product-video"
-        >
-          
-          <video
-            class="product-gallery-video-custom"
-            autoplay
-            loop
-            muted
-            playsinline
-            preload="metadata"
-          >
-            <source src="{{ product_video_url }}" type="video/mp4">
-            {{ product_video_url }}
-          </video>
-      </li>
-    {% endif %}
-    {% comment %} quotes main {% endcomment %}
-{% if product_quotes_url != blank and product_quotes_url contains '.webp'
- %}
-  <li
-    id="{{ section.id }}-product-quotes"
-    class="product__media-item banner"
-    data-media-type="image"
-    data-media-id="quotes-{{ section.id }}"
-    tabindex="-1"
-    role="tabpanel"
-    aria-hidden="true"
-  >
-    <img
-      src="{{ product_quotes_url }}"
-      alt="Product Quotes"
-      class="product__media"
-      loading="lazy"
-    >
-  </li>
-{% endif %}
-
-
+      {% comment %} POSITION 1: Featured Media (ALWAYS FIRST) {% endcomment %}
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
         {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+        {%- assign current_media_position = current_media_position | plus: 1 -%}
         <li
           id="Slide-{{ section.id }}-{{ featured_media.id }}"
           class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
           data-media-id="{{ section.id }}-{{ featured_media.id }}"
+          data-media-position="{{ current_media_position }}"
         >
-          {%- assign media_position = 1 -%}
           {% render 'product-thumbnail',
             media: featured_media,
             media_count: media_count,
-            position: media_position,
+            position: current_media_position,
             desktop_layout: section.settings.gallery_layout,
             mobile_layout: section.settings.mobile_thumbnails,
             loop: section.settings.enable_video_looping,
@@ -133,6 +103,53 @@
           %}
         </li>
       {%- endif -%}
+
+      {% comment %} POSITION 2: Custom Video (ALWAYS SECOND) {% endcomment %}
+      {% if product_video_url != blank and product_video_url contains '.mp4' %}
+        {%- assign current_media_position = current_media_position | plus: 1 -%}
+        <li
+          id="Slide-{{ section.id }}-product-video"
+          class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          data-media-id="{{ section.id }}-product-video"
+          data-media-position="{{ current_media_position }}"
+        >
+          <video
+            class="product-gallery-video-custom"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+          >
+            <source src="{{ product_video_url }}" type="video/mp4">
+            {{ product_video_url }}
+          </video>
+        </li>
+      {% endif %}
+
+      {% comment %} POSITION 3: Custom Quote Image (ALWAYS THIRD) {% endcomment %}
+      {% if product_quotes_url != blank and product_quotes_url contains '.webp' %}
+        {%- assign current_media_position = current_media_position | plus: 1 -%}
+        <li
+          id="Slide-{{ section.id }}-product-quotes"
+          class="product__media-item grid__item slider__slide{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          data-media-type="image"
+          data-media-id="{{ section.id }}-product-quotes"
+          data-media-position="{{ current_media_position }}"
+          tabindex="-1"
+          role="tabpanel"
+          aria-hidden="true"
+        >
+          <img
+            src="{{ product_quotes_url }}"
+            alt="Product Quotes"
+            class="product__media"
+            loading="lazy"
+          >
+        </li>
+      {% endif %}
+
+      {% comment %} POSITIONS 4+: Remaining Product Media {% endcomment %}
       {%- for media in product.media -%}
         {% if media_position >= limit
           or media_position >= 1
@@ -143,22 +160,23 @@
         {% endif %}
 
         {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
+          {%- assign current_media_position = current_media_position | plus: 1 -%}
           <li
             id="Slide-{{ section.id }}-{{ media.id }}"
             class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
             data-media-id="{{ section.id }}-{{ media.id }}"
+            data-media-position="{{ current_media_position }}"
           >
             {%- liquid
-              assign media_position = media_position | default: 0 | plus: 1
               assign lazy_load = false
-              if media_position > 1
+              if current_media_position > 1
                 assign lazy_load = true
               endif
             -%}
             {% render 'product-thumbnail',
               media: media,
               media_count: media_count,
-              position: media_position,
+              position: current_media_position,
               desktop_layout: section.settings.gallery_layout,
               mobile_layout: section.settings.mobile_thumbnails,
               loop: section.settings.enable_video_looping,
@@ -173,12 +191,14 @@
         {%- endunless -%}
       {%- endfor -%}
     </ul>
+
     <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
       <button
         type="button"
         class="slider-button slider-button--prev"
         name="previous"
         aria-label="{{ 'general.slider.previous_slide' | t }}"
+        data-step="1"
       >
         <span class="svg-wrapper">
           {{- 'icon-caret.svg' | inline_asset_content -}}
@@ -195,6 +215,7 @@
         class="slider-button slider-button--next"
         name="next"
         aria-label="{{ 'general.slider.next_slide' | t }}"
+        data-step="1"
       >
         <span class="svg-wrapper">
           {{- 'icon-caret.svg' | inline_asset_content -}}
@@ -202,6 +223,7 @@
       </button>
     </div>
   </slider-component>
+
   {%- if first_3d_model -%}
     <button
       class="button button--full-width product__xr-button"
@@ -218,12 +240,14 @@
       {{ 'products.product.xr_button' | t }}
     </button>
   {%- endif -%}
+
   {%- liquid
     assign is_not_limited_to_single_item = false
     if limit == null or limit > 1
       assign is_not_limited_to_single_item = true
     endif
   -%}
+
   {%- if is_not_limited_to_single_item
     and media_count > 1
     and section.settings.gallery_layout contains 'thumbnail'
@@ -245,8 +269,6 @@
           {{- 'icon-caret.svg' | inline_asset_content -}}
         </span>
       </button>
-  
-
 
       <ul
         id="Slider-Thumbnails-{{ section.id }}"
@@ -259,31 +281,24 @@
           calc((100vw - 8rem) / 3)
         {%- endcapture -%}
 
+        {% comment %} Reset thumbnail position counter {% endcomment %}
+        {%- assign thumb_position = 0 -%}
+
+        {% comment %} THUMBNAIL 1: Featured Media {% endcomment %}
         {%- if featured_media != null -%}
-          {%- liquid
-            capture media_index
-              if featured_media.media_type == 'model'
-                increment model_index
-              elsif featured_media.media_type == 'video' or featured_media.media_type == 'external_video'
-                increment video_index
-              elsif featured_media.media_type == 'image'
-                increment image_index
-              endif
-            endcapture
-            assign media_index = media_index | plus: 1
-          -%}
+          {%- assign thumb_position = thumb_position | plus: 1 -%}
           <li
-            id="Slide-Thumbnails-{{ section.id }}-0"
+            id="Slide-Thumbnails-{{ section.id }}-{{ thumb_position }}"
             class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains featured_media.src %} thumbnail-list_item--variant{% endif %}"
             data-target="{{ section.id }}-{{ featured_media.id }}"
-            data-media-position="{{ media_index }}"
+            data-media-position="{{ thumb_position }}"
           >
             {%- capture thumbnail_id -%}
-              Thumbnail-{{ section.id }}-0
+              Thumbnail-{{ section.id }}-{{ thumb_position }}
             {%- endcapture -%}
             <button
               class="thumbnail global-media-settings global-media-settings--no-shadow"
-              aria-label="{%- if featured_media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: media_index }}{%- elsif featured_media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: media_index }}{%- elsif featured_media.media_type == 'video' or featured_media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: media_index }}{%- endif -%}"
+              aria-label="{%- if featured_media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: thumb_position }}{%- elsif featured_media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: thumb_position }}{%- elsif featured_media.media_type == 'video' or featured_media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: thumb_position }}{%- endif -%}"
               aria-current="true"
               aria-controls="GalleryViewer-{{ section.id }}"
               aria-describedby="{{ thumbnail_id }}"
@@ -302,78 +317,67 @@
             </button>
           </li>
         {%- endif -%}
-        {% comment %} custom product video courosul {% endcomment %}
-      {% if product_video_url != blank  and product_video_url contains '.mp4'%}
-        <li
-          class="thumbnail-list__item slider__slide"
-          data-media-position="2"
-          data-target="{{ section.id }}-product-video"
-        >
-          <span class="thumbnail__badge" aria-hidden="true">
-            <span class="svg-wrapper">
-              {{- 'icon-play.svg' | inline_asset_content -}}
-            </span>
-          </span>
-          <button
-            class="thumbnail global-media-settings global-media-settings--no-shadow"
-            aria-label="Product video"
-            aria-controls="GalleryViewer-{{ section.id }}"
+
+        {% comment %} THUMBNAIL 2: Custom Video {% endcomment %}
+        {% if product_video_url != blank and product_video_url contains '.mp4' %}
+          {%- assign thumb_position = thumb_position | plus: 1 -%}
+          <li
+            class="thumbnail-list__item slider__slide"
+            data-media-position="{{ thumb_position }}"
+            data-target="{{ section.id }}-product-video"
           >
+            <span class="thumbnail__badge" aria-hidden="true">
+              <span class="svg-wrapper">
+                {{- 'icon-play.svg' | inline_asset_content -}}
+              </span>
+            </span>
+            <button
+              class="thumbnail global-media-settings global-media-settings--no-shadow"
+              aria-label="Product video - {{ thumb_position }}"
+              aria-controls="GalleryViewer-{{ section.id }}"
+            >
+              <video class="product-thumbnail-video" muted>
+                <source src="{{ product_video_url }}" type="video/mp4">
+              </video>
+            </button>
+          </li>
+        {% endif %}
 
-            <video class="product-thumbnail-video" muted>
-              <source src="{{ product_video_url }}" type="video/mp4">
-            </video>
-          </button>
-        </li>
-      {% endif %}
-{% assign quotes_id = 'quotes-' | append: section.id %}
+        {% comment %} THUMBNAIL 3: Custom Quote {% endcomment %}
+        {% if product_quotes_url != blank and product_quotes_url contains '.webp' %}
+          {%- assign thumb_position = thumb_position | plus: 1 -%}
+          <li
+            class="thumbnail-list__item slider__slide"
+            data-media-position="{{ thumb_position }}"
+            data-target="{{ section.id }}-product-quotes"
+          >
+            <button
+              class="thumbnail global-media-settings global-media-settings--no-shadow"
+              aria-label="Product quotes - {{ thumb_position }}"
+              aria-controls="GalleryViewer-{{ section.id }}"
+              data-thumbnail-id="{{ section.id }}-product-quotes"
+            >
+              <img
+                src="{{ product_quotes_url }}"
+                alt="Product Quotes"
+                class="product-thumbnail-quotes"
+                loading="lazy"
+                width="30"
+                height="30"
+              />
+            </button>
+          </li>
+        {% endif %}
 
-{% if product_quotes_url != blank and product_quotes_url contains '.webp' %}
-  <li
-    class="thumbnail-list__item slider__slide"
-    data-media-position="3"
-    data-target="{{ quotes_id }}"
-  >
-    <button
-      class="thumbnail global-media-settings global-media-settings--no-shadow"
-      aria-label="Product quotes"
-      aria-controls="{{ quotes_id }}"
-      data-thumbnail-id="{{ quotes_id }}"
-    >
-      <img
-        src="{{ product_quotes_url }}"
-        alt="Product Quotes"
-        class="product-thumbnail-quotes"
-        loading="lazy"
-        width="30"
-        height="30"
-      />
-    </button>
-  </li>
-{% endif %}
-
-
-
-
+        {% comment %} THUMBNAILS 4+: Remaining Product Media {% endcomment %}
         {%- for media in product.media -%}
           {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
-            {%- liquid
-              capture media_index
-                if media.media_type == 'model'
-                  increment model_index
-                elsif media.media_type == 'video' or media.media_type == 'external_video'
-                  increment video_index
-                elsif media.media_type == 'image'
-                  increment image_index
-                endif
-              endcapture
-              assign media_index = media_index | plus: 1
-            -%}
+            {%- assign thumb_position = thumb_position | plus: 1 -%}
             <li
-              id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}"
+              id="Slide-Thumbnails-{{ section.id }}-{{ thumb_position }}"
               class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media.src %} thumbnail-list_item--variant{% endif %}"
               data-target="{{ section.id }}-{{ media.id }}"
-              data-media-position="{{ media_index }}"
+              data-media-position="{{ thumb_position }}"
             >
               {%- if media.media_type == 'model' -%}
                 <span class="thumbnail__badge" aria-hidden="true">
@@ -389,17 +393,11 @@
                 </span>
               {%- endif -%}
               {%- capture thumbnail_id -%}
-                Thumbnail-{{ section.id }}-{{ forloop.index }}
+                Thumbnail-{{ section.id }}-{{ thumb_position }}
               {%- endcapture -%}
               <button
                 class="thumbnail global-media-settings global-media-settings--no-shadow"
-                aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: media_index }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: media_index }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: media_index }}{%- endif -%}"
-                {% if media == product.selected_or_first_available_variant.featured_media
-                  or product.selected_or_first_available_variant.featured_media == null
-                  and forloop.index == 1
-                %}
-                  aria-current="true"
-                {% endif %}
+                aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: thumb_position }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: thumb_position }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: thumb_position }}{%- endif -%}"
                 aria-controls="GalleryViewer-{{ section.id }}"
                 aria-describedby="{{ thumbnail_id }}"
               >
@@ -419,6 +417,7 @@
           {%- endunless -%}
         {%- endfor -%}
       </ul>
+
       <button
         type="button"
         class="slider-button slider-button--next{% if media_count <= 3 %} small-hide{% endif %}{% if media_count <= 4 %} medium-hide large-up-hide{% endif %}"

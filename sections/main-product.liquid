@@ -210,6 +210,12 @@
                   {%- endif -%}
                 </p>
               {%- when 'description' -%}
+
+                <div class="color-varient-wrapper">
+                    <dt id="variant-title">Colour</dt>
+                    <dd  id="variant-name">{{ variant_name }}</dd>
+                </div>
+
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
                     {{ product.description }}

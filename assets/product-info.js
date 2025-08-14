@@ -225,15 +225,20 @@ if (!customElements.get('product-info')) {
       }
 updateProductTitleWithVariant(variant) {
   const titleElement = this.querySelector('.main-product-title');
-  if (!titleElement) return;
+  const variantNameElement = document.getElementById('variant-name'); // Fix: Removed incorrect '#'
+  
+  if (!titleElement || !variantNameElement) return;
 
-  // Find or create separate base and variant spans
+  // Update the variant name (color) in the description
+  variantNameElement.textContent = variant.option1 || variant.title; // Use option1 (color) or fallback to title
+
+  // Handle the product title formatting (if needed)
   let baseSpan = titleElement.querySelector('.base-name');
   let variantSpan = titleElement.querySelector('.variant-name');
-
+  
   if (!baseSpan) {
     const baseTitle = titleElement.textContent.split('|')[0].trim();
-    titleElement.textContent = ''; // clear original text
+    titleElement.textContent = ''; // Clear original text
     baseSpan = document.createElement('span');
     baseSpan.className = 'base-name';
     baseSpan.textContent = baseTitle;
@@ -243,7 +248,7 @@ updateProductTitleWithVariant(variant) {
     titleElement.appendChild(variantSpan);
   }
 
-  // Update the variant part only
+  // Update the variant part in the title (if not default)
   const variantName = variant.title.includes('Default Title') ? '' : variant.title;
   variantSpan.textContent = variantName ? ` | ${variantName}` : '';
 }

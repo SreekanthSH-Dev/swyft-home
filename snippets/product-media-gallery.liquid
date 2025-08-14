@@ -67,7 +67,7 @@
       role="list"
     >
       {% comment %} product custom video on order 2 {% endcomment %}
-      {% if product_video_url != blank %}
+      {% if product_video_url != blank  and product_video_url contains '.mp4' %}
         <li
           id="Slide-{{ section.id }}-product-video"
           class="product__media-item grid__item slider__slide product__media-item--full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
@@ -83,7 +83,7 @@
             preload="metadata"
           >
             <source src="{{ product_video_url }}" type="video/mp4">
-            Your browser does not support the video tag.
+            {{ product_video_url }}
           </video>
       </li>
     {% endif %}
@@ -296,7 +296,7 @@
           </li>
         {%- endif -%}
         {% comment %} custom product video courosul {% endcomment %}
-      {% if product_video_url != blank %}
+      {% if product_video_url != blank  and product_video_url contains '.mp4'%}
         <li
           class="thumbnail-list__item slider__slide"
           data-media-position="2"
@@ -319,7 +319,7 @@
           </button>
         </li>
       {% endif %}
-      
+
       {% if product_quotes_url != blank %}
         <li
           class="thumbnail-list__item slider__slide"

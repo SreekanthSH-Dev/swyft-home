@@ -87,16 +87,22 @@
           </video>
       </li>
     {% endif %}
+
 {% if product_quotes_url != blank %}
   <li
     id="{{ section.id }}-product-quotes"
-    class="product__media-item"
+    class="product__media-item banner"
     data-media-type="image"
     data-media-id="quotes-{{ section.id }}"
+    tabindex="-1"
+    role="tabpanel"
+    aria-hidden="true"
   >
     <img
-      src="{{ product_quotes_url | img_url: 'master' }}"
+      src="{{ product_quotes_url }}"
       alt="Product Quotes"
+      class="product__media"
+      loading="lazy"
     >
   </li>
 {% endif %}
@@ -319,27 +325,33 @@
           </button>
         </li>
       {% endif %}
+{% assign quotes_id = 'quotes-' | append: section.id %}
 
-      {% if product_quotes_url != blank %}
-        <li
-          class="thumbnail-list__item slider__slide"
-          data-media-position="3"
-          data-target="{{ section.id }}-product-quotes"
-        >
-          <button
-            class="thumbnail global-media-settings global-media-settings--no-shadow"
-            aria-label="Product quotes"
-            aria-controls="GalleryViewer-{{ section.id }}"
-          >
-            <img
-              src="{{ product_quotes_url | img_url: '300x' }}"
-              alt="Product Quotes"
-              class="product-thumbnail-quotes"
-              loading="lazy"
-            >
-          </button>
-        </li>
-      {% endif %}
+{% if product_quotes_url != blank %}
+  <li
+    class="thumbnail-list__item slider__slide"
+    data-media-position="3"
+    data-target="{{ quotes_id }}"
+  >
+    <button
+      class="thumbnail global-media-settings global-media-settings--no-shadow"
+      aria-label="Product quotes"
+      aria-controls="{{ quotes_id }}"
+      data-thumbnail-id="{{ quotes_id }}"
+    >
+      <img
+        src="{{ product_quotes_url }}"
+        alt="Product Quotes"
+        class="product-thumbnail-quotes"
+        loading="lazy"
+        width="30"
+        height="30"
+      />
+    </button>
+  </li>
+{% endif %}
+
+
 
 
         {%- for media in product.media -%}

@@ -88,13 +88,7 @@
       </li>
     {% endif %}
 
-{% if product_quotes_url != blank and (
-  product_quotes_url contains '.webp' or
-  product_quotes_url contains '.jpg' or
-  product_quotes_url contains '.jpeg' or
-  product_quotes_url contains '.png' or
-  product_quotes_url contains '.gif'
-) %}
+{% if product_quotes_url != blank %}
   <li
     id="{{ section.id }}-product-quotes"
     class="product__media-item banner"
@@ -333,13 +327,7 @@
       {% endif %}
 {% assign quotes_id = 'quotes-' | append: section.id %}
 
-{% if product_quotes_url != blank and (
-  product_quotes_url contains '.webp' or
-  product_quotes_url contains '.jpg' or
-  product_quotes_url contains '.jpeg' or
-  product_quotes_url contains '.png' or
-  product_quotes_url contains '.gif'
-) %}
+{% if product_quotes_url != blank %}
   <li
     class="thumbnail-list__item slider__slide"
     data-media-position="3"

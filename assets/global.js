@@ -1362,18 +1362,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to play video if inside active item
   const handleActiveChange = () => {
     const activeMediaItem = document.querySelector(".product__media-item.is-active");
-    const mobileactiveMediaItem = document.querySelector(".product__media-item.scroll-trigger--offscreen")
     if (activeMediaItem && activeMediaItem.contains(video)) {
       console.log('played');
       video.muted = true;
       video.currentTime = 0;   // reset to start
       video.play().catch(err => console.log("Autoplay prevented:", err));
-    } else if (mobileactiveMediaItem && mobileactiveMediaItem.contains(video)) {
-      console.log('played');
-      video.muted = true;
-      video.currentTime = 0;   // reset to start
-      video.play().catch(err => console.log("Autoplay prevented:", err));
-    } else {
+    }
+     else {
       video.pause();
       video.currentTime = 0;   // also reset when leaving, optional
       console.log('paused');
@@ -1440,6 +1435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setActiveSlide(currentIndex);
   });
 });
+
 document.querySelectorAll('.product-gallery-video-custom').forEach(video => {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {

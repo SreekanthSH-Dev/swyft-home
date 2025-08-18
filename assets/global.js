@@ -1354,9 +1354,14 @@ class CartPerformance {
   }
 }
 
+// product video autoplay function for mobile and desktop
+
 document.addEventListener("DOMContentLoaded", function () {
   const video = document.querySelector(".product-gallery-video-custom");
-
+  const slides = document.querySelectorAll(".slider__slide");
+  const nextBtn = document.querySelector(".slider-button--next");
+  const prevBtn = document.querySelector(".slider-button--prev");
+  const gallery = document.querySelector(".product__media-list,.product__media-wrapper");
   if (!video) return;
 
   // Function to play video if inside active item
@@ -1366,21 +1371,18 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log('played');
       video.muted = true;
       video.currentTime = 0;   // reset to start
-      video.play().catch(err => console.log("Autoplay prevented:", err));
+      video.play().catch(err => console.log("Autoplay prevented:555", err));
     }
      else {
       video.pause();
       video.currentTime = 0;   // also reset when leaving, optional
       console.log('paused');
     }
-
   };
-
   // Run once on load
-  handleActiveChange();
-
+      handleActiveChange();
   // Watch for changes in the gallery
-  const gallery = document.querySelector(".product__media-list, .product__media-wrapper");
+
   if (gallery) {
     const observer = new MutationObserver(handleActiveChange);
     observer.observe(gallery, { attributes: true, subtree: true, attributeFilter: ["class"] });
@@ -1396,32 +1398,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }, { threshold: 0.5 });
 
   intersectionObserver.observe(video);
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const slides = document.querySelectorAll(".slider__slide");
-  const nextBtn = document.querySelector(".slider-button--next");
-  const prevBtn = document.querySelector(".slider-button--prev");
-
   let currentIndex = 0;
 
   function setActiveSlide(index) {
     slides.forEach((slide, i) => {
       slide.classList.toggle("is-active", i === index);
-
-      const video = slide.querySelector("video");
-      if (video) {
-        if (i === index) {
-          video.play().catch(err => console.log("Autoplay prevented:", err));
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      }
     });
   }
-
   // init
   setActiveSlide(currentIndex);
 
@@ -1436,6 +1419,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
 document.querySelectorAll('.product-gallery-video-custom').forEach(video => {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -1443,7 +1427,7 @@ document.querySelectorAll('.product-gallery-video-custom').forEach(video => {
         // Video is visible on screen
         video.muted = true;
         video.currentTime = 0; // restart from beginning
-        video.play().catch(err => console.log("Autoplay prevented:", err));
+        video.play().catch(err => console.log("Autoplay prevented last:", err));
         console.log('scroll play');
       } else {
         // Video is off screen

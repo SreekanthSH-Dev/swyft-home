@@ -29,6 +29,7 @@
 
 .price:not(.price--show-badge) .price-item--last:last-of-type {
   margin: 0;
+  color: rgb(206, 65, 39);
 }
 
 @media screen and (min-width: 750px) {
@@ -97,4 +98,7 @@
   line-height: calc(1 + 0.2 / var(--font-body-scale));
   margin-top: 0.2rem;
   color: rgba(var(--color-foreground), 0.7);
+}
+.price__container {
+    font-size: 17.6px;
 }

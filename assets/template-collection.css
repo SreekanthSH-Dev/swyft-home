@@ -100,3 +100,7 @@
 .collection.page-width {
     max-width: 100%;
 }
+.card__content .card__badge span.badge.badge--bottom-left{
+    border-radius: 25px !important;
+    background: #000000;
+}

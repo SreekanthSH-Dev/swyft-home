@@ -1373,11 +1373,7 @@ document.addEventListener("DOMContentLoaded", function () {
       video.currentTime = 0;   // reset to start
       video.play().catch(err => console.log("Autoplay prevented:555", err));
     }
-     else {
-      video.pause();
-      video.currentTime = 0;   // also reset when leaving, optional
-      console.log('paused');
-    }
+
   };
   // Run once on load
       handleActiveChange();

@@ -1529,3 +1529,18 @@ video.product-gallery-video-custom {
 button.slider-button.small-hide.medium-hide.large-up-hide {
     display: block !important;
 }
+h2.image-with-text__heading.inline-richtext.h3{
+    font-family: madeSunflower;
+    font-size: 28px;
+    color: black;
+}
+.image-with-text__content.product.image-with-text__content--top.image-with-text__content--desktop-left.image-with-text__content--mobile-left.image-with-text__content--adapt.content-container.background-transparent {
+    display: flex;
+    justify-content: center;
+}
+.image-with-text__text.rte.body p {
+    font-size: 17px;
+    font-family: sans-serif;
+    font-weight: 400;
+}
+

@@ -167,3 +167,11 @@ footer.footer.color-scheme-4.gradient.section-sections--25262865285429__footer-p
 ;
     justify-content: space-between;
 }
+@media (max-width: 768px) {
+.footer-info{
+  padding: 20px 20px;
+}
+.footer-columns{
+  gap: 0;
+}
+}

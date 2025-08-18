@@ -173,3 +173,35 @@ button.overlay-conform-varient {
 button.overlay-conform-varient:hover{
     cursor: pointer;
 }
+@media (max-width: 768px) {
+  /* CSS rules for screens up to 768px */
+.varient-popup-main-content{
+    flex-direction: column;
+    overflow-y: scroll;
+}
+h2#popup-product-collection{
+    margin-top: 250px;
+}
+.varient-picker-overlay-left{
+    width: 100%;
+}
+.varient-picker-overlay-right{
+    width: 100%;
+    padding: 0;
+}
+.varient-popup-content{
+    width: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+ #popup-product-image {
+        position: absolute;
+        width: calc(100% - 4rem);
+        height: auto;
+        overflow: visible;
+        z-index: 3;
+}
+section#ProductInfo-template--25331653706037__main {
+    padding: 0 20px;
+}
+}

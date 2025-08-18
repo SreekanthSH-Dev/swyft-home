@@ -1,0 +1,124 @@
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+<!-- VARIANT BUTTONS -->
+<div class="variant-options-wrapper">
+  {%- for value in option.values -%}
+    {%- liquid
+      assign variant_obj = product.variants | where: "title", value | first
+      assign color_metaobject = variant_obj.metafields.swyfthome.color_image.value
+      assign material_obj = variant_obj.metafields.swyft.material_image.value
+
+      assign option_disabled = true
+      if value.available
+        assign option_disabled = false
+      endif
+
+      assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
+      assign input_name = option.name | append: '-' | append: option.position
+      assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" data-option-value-id="' | append: value.id | append: '"'
+    -%}
+
+    {% if picker_type == 'button' %}
+      <div class="variant-option">
+        <input
+          type="radio"
+          id="{{ input_id }}"
+          name="{{ input_name | escape }}"
+          value="{{ value | escape }}"
+          form="{{ product_form_id }}"
+          {% if value.selected %}checked{% endif %}
+          {% if option_disabled %}class="disabled"{% endif %}
+          {{ input_dataset }}
+          data-variant-id="{{ variant_obj.id }}"
+          data-variant-title="{{ variant_obj.title }}"
+          data-variant-price="{{ variant_obj.price | money }}"
+          data-variant-image="{% if variant_obj.featured_image %}{{ variant_obj.featured_image.src | img_url: '500x' }}{% endif %}"
+        >
+        
+        <label class="varient-color-picker" for="{{ input_id }}">
+          {% if color_metaobject and color_metaobject.button_image != blank %}
+            <img class="colour-switch-varient"
+                src="{{ color_metaobject.button_image | image_url: width: 30 }}"
+                width="30"
+                height="30"
+                alt="{{ color_metaobject.name }}">
+            <p class="colour-switch-varient-name">{{ color_metaobject.name }}</p>
+
+          {% else %}
+            <p class="varient-name">{{ value }}</p>
+          {% endif %}
+        </label>
+      </div>
+    {% endif %}
+  {%- endfor -%}
+</div>
+
+<!-- MATERIALS LIST -->
+{%- assign material_names = "" -%}
+
+{%- for variant in product.variants -%}
+  {%- assign mat = variant.metafields.swyft.material_image.value -%}
+  {% if mat %}
+    {% unless material_names contains mat.name %}
+      {% assign material_names = material_names | append: mat.name | append: "||" %}
+    {% endunless %}
+  {% endif %}
+{%- endfor -%}
+
+<div class="variant-material-option">
+  {%- assign unique_materials = material_names | split: "||" -%}
+  {%- for material_name in unique_materials -%}
+    {% if material_name != "" %}
+      <div class="material-color-item" data-material-name="{{ material_name }}">
+        <div class="material-heading-popup">
+            <legend class="form__label-main">{{ material_name }}</legend>
+        </div>
+        <div class="material-assigned-varient">
+          {%- for variant in product.variants -%}
+            {%- assign mat = variant.metafields.swyft.material_image.value -%}
+            {% if mat and mat.name == material_name %}
+              {%- assign color_metaobject = variant.metafields.swyfthome.color_image.value -%}
+
+              {%- liquid
+                assign input_id = section.id | append: '-material-' | append: variant.id
+                assign input_name = 'material-option'
+              -%}
+
+              <div class="variant-option">
+                <input
+                  type="radio"
+                  id="{{ input_id }}"
+                  name="{{ input_name }}"
+                  value="{{ variant.title | escape }}"
+                  form="{{ product_form_id }}"
+                  data-variant-id="{{ variant.id }}"
+                  data-variant-title="{{ variant.title }}"
+                  data-variant-price="{{ variant.price | money }}"
+                  data-variant-image="{% if variant.featured_image %}{{ variant.featured_image.src | img_url: '500x' }}{% endif %}"
+                >
+
+                <label class="varient-color-picker" for="{{ input_id }}">
+                  {% if color_metaobject and color_metaobject.button_image != blank %}
+                    <img class="colour-switch-varient"
+                        src="{{ color_metaobject.button_image | image_url: width: 30 }}"
+                        width="30"
+                        height="30"
+                        alt="{{ color_metaobject.name }}">
+                        <p class="colour-switch-varient-name">{{ color_metaobject.name }}</p>
+
+                  {% else %}
+                    <p class="varient-name">{{ variant.title }}</p>
+                  {% endif %}
+                </label>
+
+
+            </div>
+            {% endif %}
+          {%- endfor -%}
+        </div>
+        </div>
+    {% endif %}
+  {%- endfor -%}
+</div>

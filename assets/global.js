@@ -1440,3 +1440,23 @@ document.addEventListener("DOMContentLoaded", () => {
     setActiveSlide(currentIndex);
   });
 });
+document.querySelectorAll('.product-gallery-video-custom').forEach(video => {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Video is visible on screen
+        video.muted = true;
+        video.currentTime = 0; // restart from beginning
+        video.play().catch(err => console.log("Autoplay prevented:", err));
+        console.log('scroll play');
+      } else {
+        // Video is off screen
+        video.pause();
+        video.currentTime = 0; // reset so next time it starts fresh
+        console.log('scroll pause');
+      }
+    });
+  }, { threshold: 0.6 }); // adjust % of video visible (0.6 = 60%) to count as "in view"
+
+  observer.observe(video);
+});

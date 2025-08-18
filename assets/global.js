@@ -824,6 +824,7 @@ class SliderComponent extends HTMLElement {
   }
 }
 
+
 customElements.define('slider-component', SliderComponent);
 
 class SlideshowComponent extends SliderComponent {
@@ -884,6 +885,28 @@ class SlideshowComponent extends SliderComponent {
       this.reducedMotion.matches || this.announcementBarArrowButtonWasClicked ? this.pause() : this.play();
     }
   }
+setSlideVisibility() {
+  console.log("Slides detected:", this.sliderItemsToShow.length, " Current page:", this.currentPage);
+
+  this.sliderItemsToShow.forEach((item, index) => {
+    const linkElements = item.querySelectorAll('a');
+
+    if (index === this.currentPage - 1) {
+      console.log("Active:", item);
+      item.classList.add("is-active");
+      item.setAttribute("aria-hidden", "false");
+      item.removeAttribute("tabindex");
+      linkElements.forEach((btn) => btn.removeAttribute("tabindex"));
+    } else {
+      item.classList.remove("is-active");
+      item.setAttribute("aria-hidden", "true");
+      item.setAttribute("tabindex", "-1");
+      linkElements.forEach((btn) => btn.setAttribute("tabindex", "-1"));
+    }
+  });
+
+  this.wasClicked = false;
+}
 
   onButtonClick(event) {
     super.onButtonClick(event);
@@ -1330,22 +1353,90 @@ class CartPerformance {
     );
   }
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   const video = document.querySelector(".product-gallery-video-custom");
 
-  if (video) {
-    video.muted = true;
-    video.play().catch(err => console.log("Autoplay prevented:", err));
+  if (!video) return;
 
-    // If inside a slider, replay when visible
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          video.play().catch(err => console.log("Autoplay prevented:", err));
-        }
-      });
-    }, { threshold: 0.5 });
+  // Function to play video if inside active item
+  const handleActiveChange = () => {
+    const activeMediaItem = document.querySelector(".product__media-item.is-active");
+    const mobileactiveMediaItem = document.querySelector(".product__media-item.scroll-trigger--offscreen")
+    if (activeMediaItem && activeMediaItem.contains(video)) {
+      console.log('played');
+      video.muted = true;
+      video.currentTime = 0;   // reset to start
+      video.play().catch(err => console.log("Autoplay prevented:", err));
+    } else if (mobileactiveMediaItem && mobileactiveMediaItem.contains(video)) {
+      console.log('played');
+      video.muted = true;
+      video.currentTime = 0;   // reset to start
+      video.play().catch(err => console.log("Autoplay prevented:", err));
+    } else {
+      video.pause();
+      video.currentTime = 0;   // also reset when leaving, optional
+      console.log('paused');
+    }
 
-    observer.observe(video);
+  };
+
+  // Run once on load
+  handleActiveChange();
+
+  // Watch for changes in the gallery
+  const gallery = document.querySelector(".product__media-list, .product__media-wrapper");
+  if (gallery) {
+    const observer = new MutationObserver(handleActiveChange);
+    observer.observe(gallery, { attributes: true, subtree: true, attributeFilter: ["class"] });
   }
+
+  // Extra: ensure video resumes when visible on scroll
+  const intersectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        handleActiveChange();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  intersectionObserver.observe(video);
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = document.querySelectorAll(".slider__slide");
+  const nextBtn = document.querySelector(".slider-button--next");
+  const prevBtn = document.querySelector(".slider-button--prev");
+
+  let currentIndex = 0;
+
+  function setActiveSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("is-active", i === index);
+
+      const video = slide.querySelector("video");
+      if (video) {
+        if (i === index) {
+          video.play().catch(err => console.log("Autoplay prevented:", err));
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    });
+  }
+
+  // init
+  setActiveSlide(currentIndex);
+
+  nextBtn?.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    setActiveSlide(currentIndex);
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    setActiveSlide(currentIndex);
+  });
 });

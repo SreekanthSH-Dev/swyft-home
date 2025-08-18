@@ -106,11 +106,12 @@
                   {% assign selected_variant = product.selected_or_first_available_variant %}
                   {% assign base_title = product.title | split: '|' | first | strip %}
                   {% assign variant_name = selected_variant.title | strip %}
+                  {% assign material_name = selected_variant.metafields.swyft.material_image.value %}
 
                   <h1 class="main-product-title">
                       <span class="base-name">{{ base_title }}</span>
                     {% if variant_name and variant_name != 'Default Title' %}
-                      <span class="variant-name"> | {{ variant_name }}</span>
+                      <span class="variant-name"> | {{ variant_name }} </span>
                     {% endif %}
                   </h1>
 
@@ -213,7 +214,11 @@
 
                 <div class="color-varient-wrapper">
                     <dt id="variant-title">Colour</dt>
-                    <dd  id="variant-name">{{ variant_name }}</dd>
+                    <dd  id="variant-name">{{ variant_name }}</dd>          
+                </div>
+                <div class="material-varient-wrapper">
+                    <dt id="material-title">Material</dt>
+                    <dd  id="material-name">{{material_name.name}}</dd>          
                 </div>
 
                 {%- if product.description != blank -%}

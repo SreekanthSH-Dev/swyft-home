@@ -202,6 +202,7 @@ if (!customElements.get('product-info')) {
           );
           if (variant) {
             this.updateProductTitleWithVariant(variant);
+            this.updatematerialforproduct(variant);
           }
 
           publish(PUB_SUB_EVENTS.variantChange, {
@@ -223,6 +224,27 @@ if (!customElements.get('product-info')) {
           input.dispatchEvent(new Event('change', { bubbles: true }));
         });
       }
+updatematerialforproduct(variant) {
+  const materialElement = document.getElementById('material-name');
+  if (!materialElement) return;
+
+  let materialText = "—"; // fallback
+
+  // Case 1: metafield is a metaobject (object with .name)
+  if (variant?.metafields?.swyft?.material_image?.value?.name) {
+    materialText = variant.metafields.swyft.material_image.value.name;
+  } 
+  // Case 2: metafield is a plain text (string)
+  else if (variant?.metafields?.swyft?.material_image?.value) {
+    materialText = variant.metafields.swyft.material_image.value;
+  }
+
+  // Update DOM
+  materialElement.textContent = materialText;
+}
+
+
+
 updateProductTitleWithVariant(variant) {
   const titleElement = this.querySelector('.main-product-title');
   const variantNameElement = document.getElementById('variant-name'); // Fix: Removed incorrect '#'

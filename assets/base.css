@@ -3599,6 +3599,8 @@ details-disclosure > details {
   }
 }
 .color-varient-wrapper {
-    display: flex
-;
+    display: flex;
+}
+.material-varient-wrapper {
+    display: flex;
 }

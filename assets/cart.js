@@ -292,3 +292,4 @@ if (!customElements.get('cart-note')) {
     }
   );
 }
+

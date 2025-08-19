@@ -637,9 +637,7 @@ a.variant__pill {
   color: black;
   padding: 0;
 }
-button#ProductSubmitButton-template--25331653116213__main-collection-product-grid::after {
-    border-radius: 25px !important;
-}
+
 a.product-card-swatch.more {
     font-family: sans-serif;
     color: rgba(18, 18, 18, 0.75);
@@ -665,4 +663,7 @@ button#ProductSubmitButton-template--25262865645877__main-collection-product-gri
     width: fit-content;
     color: black;
     padding: 0;
+}
+button#ProductSubmitButton-template--25262865645877__main-collection-product-grid::after{
+  border-radius: 25px!important;
 }

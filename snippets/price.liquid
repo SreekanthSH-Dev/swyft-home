@@ -3,6 +3,7 @@
 
   Accepts:
   - product: {Object} Product Liquid object (optional)
+  - variant: {Object} Variant Liquid object to use for price (optional)
   - placeholder: {Boolean} Renders a placeholder price (optional)
   - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
   - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
@@ -13,7 +14,9 @@
   {% render 'price', product: product %}
 {% endcomment %}
 {%- liquid
-  if use_variant
+  if variant
+    assign target = variant
+  elsif use_variant
     assign target = product.selected_or_first_available_variant
   elsif placeholder
     assign target = null
@@ -110,8 +113,8 @@
         </span>
         
       </div>
-      {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
-        {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}
+      {%- if target.unit_price_measurement -%}
+        {% render 'unit-price', price: target.unit_price, measurement: target.unit_price_measurement %}
       {%- endif -%}
     </div>
     {%- if show_badges -%}

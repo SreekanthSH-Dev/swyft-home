@@ -593,3 +593,47 @@
     clip-path: polygon(var(--shape--blob-5));
   }
 }
+
+.card-variant-swatches .product-varient-picker {
+    grid-row-start: 3;
+    justify-self: left;
+    padding: .1rem 1rem .5rem;
+    z-index: 9999;
+    display: flex;
+    grid-gap: .2rem 1rem;
+    z-index: 1;
+    position: relative;
+    flex-wrap: wrap;
+}
+.variant__pills {
+    grid-row-start: 3;
+    justify-self: left;
+    padding: .1rem 1rem .5rem;
+    display: flex;
+    grid-gap: .2rem 1rem;
+    z-index: 1;
+    position: relative;
+    flex-wrap: wrap;
+}
+.variant__pill span {
+    display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgb(var(--color-background));
+}
+.variant__pill span:hover{
+  transform: scale(1.1);
+}
+a.variant__pill {
+    text-decoration: none;
+}
+.product-form__buttons{
+  display: flex;
+  justify-content: end;
+}
+.card-product-add-to-cart .product-form__buttons button#ProductSubmitButton-template--25331653116213__main-collection-product-grid{
+ background-color: transparent !important;
+  width: fit-content;
+  color: black;
+}

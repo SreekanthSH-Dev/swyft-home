@@ -331,20 +331,22 @@
               {% endif %}
             {%- endif -%}
             {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
-                {% for option in card_product.options_with_values %}
-                    <fieldset class="js product-form__input product-form__input--pill">
-                        <legend class="form__label-main">{{ option.name }}</legend>
-                        <div class="product-variant-picker">
-                            {% render 'product-variant-picker-card',
-                            product: product,
-                            option: option,
-                            block: block,
-                            picker_type: 'button'
-                            %}
-                        </div>
-                    </fieldset>
-                {% endfor %}
           </div>
+          <div class="card-variant-swatches">
+          {% for option in card_product.options_with_values %}
+              <fieldset class="js product-form__input product-form__input--pill">
+                  <div class="product-varient-picker">
+                      {% render 'product-variant-picker-card',
+                      product: card_product,
+                      option: option,
+                      block: block,
+                      picker_type: 'button'
+                      %}
+                  </div>
+              </fieldset>
+          {% endfor %}
+          </div>
+          <div class="card-product-add-to-cart">
               {%- render 'buy-buttons',
                   product: card_product,
                   variant: current_variant,  
@@ -352,6 +354,7 @@
                   section_id: section.id,
                   show_pickup_availability: true
               -%}
+          </div>
         </div>
         {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
         {% if quick_add == 'standard' %}

@@ -655,4 +655,14 @@ a.product-card-swatch.more {
     margin: 0;
     margin-top: 10px;
 }
-
+.card__information {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+button#ProductSubmitButton-template--25262865645877__main-collection-product-grid{
+      background-color: transparent !important;
+    width: fit-content;
+    color: black;
+    padding: 0;
+}

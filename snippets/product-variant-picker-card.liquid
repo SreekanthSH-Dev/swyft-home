@@ -3,25 +3,21 @@
     assign variant_obj = product.variants | where: "title", value | first
     assign color_metaobject = variant_obj.metafields.swyfthome.color_image.value
   -%}
-
-  <a href="{{ product.url }}?variant={{ variant_obj.id }}"
-     class="variant__pill"
-     aria-label="{{ variant_obj.title }}">
-     
-     <span class="variant__pill__label"
-           {% if color_metaobject and color_metaobject.button_image == blank %}
-             style="background-color:#b7b0ab"
-           {% endif %}>
-       
-       {%- if color_metaobject and color_metaobject.button_image != blank -%}
-         <img class="colour-switch-varient"
-              src="{{ color_metaobject.button_image | image_url: width: 25 }}"
-              width="25"
-              height="25"
-              alt="{{ color_metaobject.name }}">
-       {%- else -%}
-         {{ value }}
-       {%- endif -%}
-     </span>
-  </a>
+  {%- if color_metaobject and color_metaobject.button_image != blank -%}
+    <a href="{{ product.url }}?variant={{ variant_obj.id }}"
+      class="variant__pill"
+      aria-label="{{ variant_obj.title }}">
+      
+      <span class="variant__pill__label"
+            {% if color_metaobject and color_metaobject.button_image == blank %}
+              style="background-color:#b7b0ab"
+            {% endif %}>   
+          <img class="colour-switch-varient"
+                src="{{ color_metaobject.button_image | image_url: width: 25 }}"
+                width="25"
+                height="25"
+                alt="{{ color_metaobject.name }}">
+      </span>
+    </a>
+{% endif %}
 {%- endfor -%}

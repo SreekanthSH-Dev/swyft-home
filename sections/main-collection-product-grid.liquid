@@ -154,78 +154,186 @@
               "
             >
               {% assign skip_card_product_styles = false %}
+              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
               {% assign card_index = 0 %}
-              {%- comment -%} Pass 1: all available variants across products (product order preserved) {%- endcomment -%}
-              {%- for product in collection.products -%}
-                {%- for variant in product.variants -%}
-                  {%- if variant.available -%}
-                    {%- assign card_index = card_index | plus: 1 -%}
-                    {% assign lazy_load = false %}
-                    {%- if card_index > 2 -%}
-                      {%- assign lazy_load = true -%}
-                    {%- endif -%}
 
-                    <li
-                      class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                      {% if settings.animations_reveal_on_scroll %}
-                        data-cascade
-                        style="--animation-order: {{ card_index }};"
-                      {% endif %}
-                    >
-                      {% render 'card-product',
-                        card_product: product,
-                        variant: variant,
-                        media_aspect_ratio: section.settings.image_ratio,
-                        image_shape: section.settings.image_shape,
-                        show_secondary_image: section.settings.show_secondary_image,
-                        show_vendor: section.settings.show_vendor,
-                        show_rating: section.settings.show_rating,
-                        lazy_load: lazy_load,
-                        skip_styles: skip_card_product_styles,
-                        quick_add: section.settings.quick_add,
-                        section_id: section.id
-                      %}
-                    </li>
-                    {%- assign skip_card_product_styles = true -%}
-                  {%- endif -%}
+              {% if sort_by == 'price-ascending' or sort_by == 'price-descending' %}
+                {%- comment -%} Build sortable lists: paddedPrice::variantId {%- endcomment -%}
+                {% assign instock_lines = '' %}
+                {% assign outstock_lines = '' %}
+                {%- for product in collection.products -%}
+                  {%- for variant in product.variants -%}
+                    {% assign padded_price = '000000000000' | append: variant.price | slice: -12, 12 %}
+                    {% if variant.available %}
+                      {% assign instock_lines = instock_lines | append: padded_price | append: '::' | append: variant.id | append: '||' %}
+                    {% else %}
+                      {% assign outstock_lines = outstock_lines | append: padded_price | append: '::' | append: variant.id | append: '||' %}
+                    {% endif %}
+                  {%- endfor -%}
                 {%- endfor -%}
-              {%- endfor -%}
 
-              {%- comment -%} Pass 2: all unavailable variants across products (product order preserved) {%- endcomment -%}
-              {%- for product in collection.products -%}
-                {%- for variant in product.variants -%}
-                  {%- unless variant.available -%}
-                    {%- assign card_index = card_index | plus: 1 -%}
-                    {% assign lazy_load = false %}
-                    {%- if card_index > 2 -%}
-                      {%- assign lazy_load = true -%}
-                    {%- endif -%}
+                {% assign instock_items = instock_lines | split: '||' %}
+                {% assign outstock_items = outstock_lines | split: '||' %}
 
-                    <li
-                      class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                      {% if settings.animations_reveal_on_scroll %}
-                        data-cascade
-                        style="--animation-order: {{ card_index }};"
-                      {% endif %}
-                    >
-                      {% render 'card-product',
-                        card_product: product,
-                        variant: variant,
-                        media_aspect_ratio: section.settings.image_ratio,
-                        image_shape: section.settings.image_shape,
-                        show_secondary_image: section.settings.show_secondary_image,
-                        show_vendor: section.settings.show_vendor,
-                        show_rating: section.settings.show_rating,
-                        lazy_load: lazy_load,
-                        skip_styles: skip_card_product_styles,
-                        quick_add: section.settings.quick_add,
-                        section_id: section.id
-                      %}
-                    </li>
-                    {%- assign skip_card_product_styles = true -%}
-                  {%- endunless -%}
+                {% assign instock_sorted = instock_items | sort %}
+                {% assign outstock_sorted = outstock_items | sort %}
+                {% if sort_by == 'price-descending' %}
+                  {% assign instock_sorted = instock_sorted | reverse %}
+                  {% assign outstock_sorted = outstock_sorted | reverse %}
+                {% endif %}
+
+                {%- comment -%} Render in-stock first {%- endcomment -%}
+                {%- for item in instock_sorted -%}
+                  {% if item contains '::' %}
+                    {% assign parts = item | split: '::' %}
+                    {% assign v_id = parts[1] %}
+                    {%- for product in collection.products -%}
+                      {%- for variant in product.variants -%}
+                        {% assign variant_id_str = variant.id | append: '' %}
+                        {% if variant_id_str == v_id %}
+                          {%- assign card_index = card_index | plus: 1 -%}
+                          {% assign lazy_load = false %}
+                          {%- if card_index > 2 -%}
+                            {%- assign lazy_load = true -%}
+                          {%- endif -%}
+                          <li
+                            class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                            {% if settings.animations_reveal_on_scroll %}
+                              data-cascade
+                              style="--animation-order: {{ card_index }};"
+                            {% endif %}
+                          >
+                            {% render 'card-product',
+                              card_product: product,
+                              variant: variant,
+                              media_aspect_ratio: section.settings.image_ratio,
+                              image_shape: section.settings.image_shape,
+                              show_secondary_image: section.settings.show_secondary_image,
+                              show_vendor: section.settings.show_vendor,
+                              show_rating: section.settings.show_rating,
+                              lazy_load: lazy_load,
+                              skip_styles: skip_card_product_styles,
+                              quick_add: section.settings.quick_add,
+                              section_id: section.id
+                            %}
+                          </li>
+                        {% endif %}
+                      {%- endfor -%}
+                    {%- endfor -%}
+                  {% endif %}
                 {%- endfor -%}
-              {%- endfor -%}
+
+                {%- comment -%} Then out-of-stock {%- endcomment -%}
+                {%- for item in outstock_sorted -%}
+                  {% if item contains '::' %}
+                    {% assign parts = item | split: '::' %}
+                    {% assign v_id = parts[1] %}
+                    {%- for product in collection.products -%}
+                      {%- for variant in product.variants -%}
+                        {% assign variant_id_str = variant.id | append: '' %}
+                        {% if variant_id_str == v_id %}
+                          {%- assign card_index = card_index | plus: 1 -%}
+                          {% assign lazy_load = false %}
+                          {%- if card_index > 2 -%}
+                            {%- assign lazy_load = true -%}
+                          {%- endif -%}
+                          <li
+                            class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                            {% if settings.animations_reveal_on_scroll %}
+                              data-cascade
+                              style="--animation-order: {{ card_index }};"
+                            {% endif %}
+                          >
+                            {% render 'card-product',
+                              card_product: product,
+                              variant: variant,
+                              media_aspect_ratio: section.settings.image_ratio,
+                              image_shape: section.settings.image_shape,
+                              show_secondary_image: section.settings.show_secondary_image,
+                              show_vendor: section.settings.show_vendor,
+                              show_rating: section.settings.show_rating,
+                              lazy_load: lazy_load,
+                              skip_styles: skip_card_product_styles,
+                              quick_add: section.settings.quick_add,
+                              section_id: section.id
+                            %}
+                          </li>
+                        {% endif %}
+                      {%- endfor -%}
+                    {%- endfor -%}
+                  {% endif %}
+                {%- endfor -%}
+
+              {% else %}
+                {%- comment -%} Non-price sorts: keep availability-first, product-order rendering {%- endcomment -%}
+                {% assign card_index = 0 %}
+                {%- for product in collection.products -%}
+                  {%- for variant in product.variants -%}
+                    {%- if variant.available -%}
+                      {%- assign card_index = card_index | plus: 1 -%}
+                      {% assign lazy_load = false %}
+                      {%- if card_index > 2 -%}
+                        {%- assign lazy_load = true -%}
+                      {%- endif -%}
+                      <li
+                        class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                        {% if settings.animations_reveal_on_scroll %}
+                          data-cascade
+                          style="--animation-order: {{ card_index }};"
+                        {% endif %}
+                      >
+                        {% render 'card-product',
+                          card_product: product,
+                          variant: variant,
+                          media_aspect_ratio: section.settings.image_ratio,
+                          image_shape: section.settings.image_shape,
+                          show_secondary_image: section.settings.show_secondary_image,
+                          show_vendor: section.settings.show_vendor,
+                          show_rating: section.settings.show_rating,
+                          lazy_load: lazy_load,
+                          skip_styles: skip_card_product_styles,
+                          quick_add: section.settings.quick_add,
+                          section_id: section.id
+                        %}
+                      </li>
+                      {%- assign skip_card_product_styles = true -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endfor -%}
+                {%- for product in collection.products -%}
+                  {%- for variant in product.variants -%}
+                    {%- unless variant.available -%}
+                      {%- assign card_index = card_index | plus: 1 -%}
+                      {% assign lazy_load = false %}
+                      {%- if card_index > 2 -%}
+                        {%- assign lazy_load = true -%}
+                      {%- endif -%}
+                      <li
+                        class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                        {% if settings.animations_reveal_on_scroll %}
+                          data-cascade
+                          style="--animation-order: {{ card_index }};"
+                        {% endif %}
+                      >
+                        {% render 'card-product',
+                          card_product: product,
+                          variant: variant,
+                          media_aspect_ratio: section.settings.image_ratio,
+                          image_shape: section.settings.image_shape,
+                          show_secondary_image: section.settings.show_secondary_image,
+                          show_vendor: section.settings.show_vendor,
+                          show_rating: section.settings.show_rating,
+                          lazy_load: lazy_load,
+                          skip_styles: skip_card_product_styles,
+                          quick_add: section.settings.quick_add,
+                          section_id: section.id
+                        %}
+                      </li>
+                      {%- assign skip_card_product_styles = true -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                {%- endfor -%}
+              {% endif %}
 
             </ul>
 

@@ -154,13 +154,14 @@
               "
             >
               {% assign skip_card_product_styles = false %}
+              {% assign card_index = 0 %}
+              {%- comment -%} Pass 1: all available variants across products (product order preserved) {%- endcomment -%}
               {%- for product in collection.products -%}
-                {% assign variant_index = 0 %}
                 {%- for variant in product.variants -%}
                   {%- if variant.available -%}
-                    {% assign variant_index = variant_index | plus: 1 %}
+                    {%- assign card_index = card_index | plus: 1 -%}
                     {% assign lazy_load = false %}
-                    {%- if variant_index > 2 -%}
+                    {%- if card_index > 2 -%}
                       {%- assign lazy_load = true -%}
                     {%- endif -%}
 
@@ -168,7 +169,7 @@
                       class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                       {% if settings.animations_reveal_on_scroll %}
                         data-cascade
-                        style="--animation-order: {{ variant_index }};"
+                        style="--animation-order: {{ card_index }};"
                       {% endif %}
                     >
                       {% render 'card-product',
@@ -188,12 +189,15 @@
                     {%- assign skip_card_product_styles = true -%}
                   {%- endif -%}
                 {%- endfor -%}
+              {%- endfor -%}
 
+              {%- comment -%} Pass 2: all unavailable variants across products (product order preserved) {%- endcomment -%}
+              {%- for product in collection.products -%}
                 {%- for variant in product.variants -%}
                   {%- unless variant.available -%}
-                    {% assign variant_index = variant_index | plus: 1 %}
+                    {%- assign card_index = card_index | plus: 1 -%}
                     {% assign lazy_load = false %}
-                    {%- if variant_index > 2 -%}
+                    {%- if card_index > 2 -%}
                       {%- assign lazy_load = true -%}
                     {%- endif -%}
 
@@ -201,7 +205,7 @@
                       class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                       {% if settings.animations_reveal_on_scroll %}
                         data-cascade
-                        style="--animation-order: {{ variant_index }};"
+                        style="--animation-order: {{ card_index }};"
                       {% endif %}
                     >
                       {% render 'card-product',

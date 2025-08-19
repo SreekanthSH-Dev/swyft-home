@@ -471,6 +471,7 @@
               class="quick-add-bulk"
               data-index="{{ card_product.selected_or_first_available_variant.id }}"
             >
+              
               {% if current_variant.available == false %}
                 <button
                   id="{{ product_form_id }}-submit"

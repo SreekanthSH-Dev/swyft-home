@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeButton = document.querySelector(".swatch-popup-close");
     const popupcloseandopen = document.querySelector(".swatch-popup-btn");
     const OVERLAY_KEY = "swatchOverlayLastShown";
-    const SHOW_INTERVAL_MINUTES = 10;
+    const SHOW_INTERVAL_MINUTES = 30;
 
     function shouldShowOverlay() {
         const lastShown = localStorage.getItem(OVERLAY_KEY);

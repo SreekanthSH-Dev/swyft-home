@@ -597,7 +597,6 @@
 .card-variant-swatches .product-varient-picker {
     grid-row-start: 3;
     justify-self: left;
-    padding: .1rem 1rem .5rem;
     z-index: 9999;
     display: flex;
     grid-gap: .2rem 1rem;
@@ -636,4 +635,24 @@ a.variant__pill {
  background-color: transparent !important;
   width: fit-content;
   color: black;
+  padding: 0;
 }
+button#ProductSubmitButton-template--25331653116213__main-collection-product-grid::after {
+    border-radius: 25px !important;
+}
+a.product-card-swatch.more {
+    font-family: sans-serif;
+    color: rgba(18, 18, 18, 0.75);
+    margin-top: 5px;
+    font-size: 1.54rem;
+    grid-row-start: 4;
+    /* padding: 0 1.3rem 1rem; */
+    position: relative;
+    text-decoration: none;
+}
+.card-variant-swatches fieldset.js.product-form__input.product-form__input--pill {
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+}
+

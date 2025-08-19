@@ -423,9 +423,9 @@
                   <input
                     type="hidden"
                     name="id"
-                    value="{{ card_product.selected_or_first_available_variant.id }}"
+                    value="{{ current_variant.id }}"
                     class="product-variant-id"
-                    {% if card_product.selected_or_first_available_variant.available == false %}
+                    {% if current_variant.available == false %}
                       disabled
                     {% endif %}
                   >
@@ -438,12 +438,12 @@
                     aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
                     aria-live="polite"
                     data-sold-out-message="true"
-                    {% if card_product.selected_or_first_available_variant.available == false %}
+                    {% if current_variant.available == false %}
                       disabled
                     {% endif %}
                   >
                     <span>
-                      {%- if card_product.selected_or_first_available_variant.available -%}
+                      {%- if current_variant.available -%}
                         {{ 'products.product.add_to_cart' | t }}
                       {%- else -%}
                         {{ 'products.product.sold_out' | t }}
@@ -471,7 +471,7 @@
               class="quick-add-bulk"
               data-index="{{ card_product.selected_or_first_available_variant.id }}"
             >
-              {% if card_product.selected_or_first_available_variant.available == false %}
+              {% if current_variant.available == false %}
                 <button
                   id="{{ product_form_id }}-submit"
                   type="submit"
@@ -487,7 +487,7 @@
                   </span>
                 </button>
               {% else %}
-                {% render 'quantity-input', variant: card_product.selected_or_first_available_variant, min: 0 %}
+                {% render 'quantity-input', variant: current_variant, min: 0 %}
               {% endif %}
             </quick-add-bulk>
           {% else %}

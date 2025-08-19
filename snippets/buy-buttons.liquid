@@ -22,6 +22,7 @@
       if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
         assign show_dynamic_checkout = true
       endif
+      assign active_variant = variant | default: product.selected_or_first_available_variant
     -%}
 
     <product-form
@@ -46,16 +47,15 @@
         <input
           type="hidden"
           name="id"
-          value="{{ product.selected_or_first_available_variant.id }}"
-          {% if product.selected_or_first_available_variant.available == false
+          value="{{ active_variant.id }}"
+          {% if active_variant.available == false
             or quantity_rule_soldout
-            or product.selected_or_first_available_variant == null
+            or active_variant == null
           %}
             disabled
           {% endif %}
           class="product-variant-id"
         >
-<input type="hidden" name="id" value="{{ variant.id }}">
 
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
@@ -64,27 +64,27 @@
         <div class="product-form__buttons">
           {%- liquid
             assign check_against_inventory = true
-            if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+            if active_variant.inventory_management != 'shopify' or active_variant.inventory_policy == 'continue'
               assign check_against_inventory = false
             endif
-            if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+            if active_variant.quantity_rule.min > active_variant.inventory_quantity and check_against_inventory
               assign quantity_rule_soldout = true
             endif
           -%}
-            {% if product.selected_or_first_available_variant.available == false
+            {% if active_variant.available == false
               or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
+              or active_variant == null
             %}
 
           {% else %}
             <button
-              id="ProductSubmitButton-{{ section_id }} ""
+              id="ProductSubmitButton-{{ section_id }}"
               type="submit"
               name="add"
               class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
             >
               <span>
-                {%- if product.selected_or_first_available_variant == null -%}
+                {%- if active_variant == null -%}
                   {{ 'products.product.unavailable' | t }}
                 {%- else -%}
                   {{ 'products.product.add_to_cart' | t }}
@@ -92,15 +92,18 @@
               </span>
               {%- render 'loading-spinner' -%}
             </button>
+            {%- if show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
           {% endif %}
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
         </div>
       {%- endform -%}
-      {% if product.selected_or_first_available_variant.available == false
+      {% if active_variant.available == false
         or quantity_rule_soldout
-        or product.selected_or_first_available_variant == null
+        or active_variant == null
       %}
         <button class="quick-add__submit button button--full-width button--secondary notify-button-product-card">
           Notify when available
@@ -125,17 +128,17 @@
   {%- if show_pickup_availability -%}
     {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
 
-    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+    {%- assign pick_up_availabilities = active_variant.store_availabilities
       | where: 'pick_up_enabled', true
     -%}
 
     <pickup-availability
       class="product__pickup-availabilities quick-add-hidden"
-      {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
+      {% if active_variant.available and pick_up_availabilities.size > 0 %}
         available
       {% endif %}
       data-root-url="{{ routes.root_url }}"
-      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+      data-variant-id="{{ active_variant.id }}"
       data-has-only-default-variant="{{ product.has_only_default_variant }}"
       data-product-page-color-scheme="gradient color-{{ section.settings.color_scheme }}"
     >

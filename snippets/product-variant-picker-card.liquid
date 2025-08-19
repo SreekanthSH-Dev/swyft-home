@@ -6,6 +6,8 @@
   {%- if color_metaobject and color_metaobject.button_image != blank -%}
     <a href="{{ product.url }}?variant={{ variant_obj.id }}"
       class="variant__pill"
+      data-variant-id="{{ variant_obj.id }}"
+      data-variant-image="{{ variant_obj.featured_image | img_url: '600x600' }}"
       aria-label="{{ variant_obj.title }}">
       
       <span class="variant__pill__label"

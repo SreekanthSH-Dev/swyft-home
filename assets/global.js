@@ -1436,3 +1436,39 @@ document.querySelectorAll('.product-gallery-video-custom').forEach(video => {
 
   observer.observe(video);
 });
+document.querySelectorAll('.variant__pill').forEach(link => {
+  link.addEventListener('mouseenter', function () {
+    const newImage = this.getAttribute('data-variant-image'); // your variant image URL
+    const productCard = this.closest('.card');
+    const imgTag = productCard.querySelector('img.motion-reduce'); // card image
+
+    if (imgTag && newImage) {
+      // Update src and srcset for proper responsive behavior
+      imgTag.src = `${newImage}&width=533`;
+      imgTag.srcset = `
+        ${newImage}&width=165 165w,
+        ${newImage}&width=360 360w,
+        ${newImage}&width=533 533w,
+        ${newImage} 713w
+      `;
+    }
+  });
+
+  // Optional: Reset on mouseleave to original image
+  link.addEventListener('mouseleave', function () {
+    const productCard = this.closest('.card');
+    const imgTag = productCard.querySelector('img.motion-reduce');
+    if (imgTag) {
+      const original = imgTag.getAttribute('data-original'); // store original once
+      if (original) {
+        imgTag.src = `${original}&width=533`;
+        imgTag.srcset = `
+          ${original}&width=165 165w,
+          ${original}&width=360 360w,
+          ${original}&width=533 533w,
+          ${original} 713w
+        `;
+      }
+    }
+  });
+});

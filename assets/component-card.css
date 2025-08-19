@@ -635,7 +635,7 @@ a.variant__pill {
  background-color: transparent !important;
   width: fit-content;
   color: black;
-  padding: 0;
+  padding: 0 20px;
 }
 
 a.product-card-swatch.more {
@@ -666,4 +666,8 @@ button#ProductSubmitButton-template--25262865645877__main-collection-product-gri
 }
 button#ProductSubmitButton-template--25262865645877__main-collection-product-grid::after{
   border-radius: 25px!important;
+}
+
+button#ProductSubmitButton-template--25331653116213__main-collection-product-grid::after {
+    border-radius: 25px !important;
 }

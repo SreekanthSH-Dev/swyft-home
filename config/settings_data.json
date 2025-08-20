@@ -144,7 +144,7 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#efecec",
+          "background": "#ffffff",
           "background_gradient": "",
           "text": "#252525",
           "button": "#2c332f",
@@ -156,7 +156,7 @@
       "scheme-2": {
         "settings": {
           "background": "#ffffff",
-          "background_gradient": "",
+          "background_gradient": "linear-gradient(61deg, rgba(52, 133, 236, 1) 13%, rgba(170, 248, 219, 1) 86%)",
           "text": "#252525",
           "button": "#252525",
           "button_label": "#ffffff",

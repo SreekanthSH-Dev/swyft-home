@@ -31,7 +31,7 @@
         "show_rating": false,
         "quick_add": "add-to-cart",
         "enable_filtering": true,
-        "filter_type": "drawer",
+        "filter_type": "horizontal",
         "enable_sorting": true,
         "padding_top": 20,
         "padding_bottom": 68

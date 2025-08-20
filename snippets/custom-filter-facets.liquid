@@ -7,7 +7,7 @@
 {% endcomment %}
 
 <!-- Quick filter buttons -->
-<div class="facets-buttons" style="display:flex; flex-wrap:wrap;">
+<div class="facets-buttons" style="display:flex; flex-wrap:wrap; justify-content:center">
   <button type="button" class=" filter-toggle-btn" data-filter-type="type" onclick="toggleFilterGroup('type')">Type</button>
   <button type="button" class=" filter-toggle-btn" data-filter-type="material" onclick="toggleFilterGroup('material')">Fabric</button>
   <button type="button" class=" filter-toggle-btn" data-filter-type="color" onclick="toggleFilterGroup('color')">Colour</button>
@@ -90,7 +90,7 @@
                     {% if mo_img %}{% break %}{% endif %}
                   {% endif %}
                 {% endfor %}
-                <a href="{{ value.url_to_add }}" class="quick-swatch-item{% if value.active %} is-active{% endif %}" style="text-decoration:none; color:inherit;">
+                <a href="?{{ value.param_name }}={{ value.value | url_encode }}" class="quick-swatch-item{% if value.active %} is-active{% endif %}" style="text-decoration:none; color:inherit;">
                   <div style="text-align:center;" class="filter-for {{filter.label}}">
                     {% if mo_img %}
                       <img src="{{ mo_img | image_url: width: 300 }}" 

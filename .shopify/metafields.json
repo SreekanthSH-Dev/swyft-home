@@ -71,16 +71,6 @@
       }
     },
     {
-      "key": "type",
-      "namespace": "swyft",
-      "name": "type",
-      "description": "",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
       "key": "size",
       "namespace": "swyft",
       "name": "Size",
@@ -127,6 +117,16 @@
       "description": "List of complementary products",
       "type": {
         "name": "list.product_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "type",
+      "namespace": "swyft",
+      "name": "type",
+      "description": "",
+      "type": {
+        "name": "metaobject_reference",
         "category": "REFERENCE"
       }
     }

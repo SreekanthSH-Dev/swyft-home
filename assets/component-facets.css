@@ -1289,7 +1289,7 @@ button.filter-toggle-btn{
 .filter-label-custom {
   text-align: center;
 }
-img.quick-swatch-image.Size {
+img.quick-swatch-image.Size,img.quick-swatch-image.type {
   border-radius: 0 !important;
   background: transparent !important;
   border: none;

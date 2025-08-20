@@ -1,0 +1,184 @@
+{% comment %}
+  Renders facets (filtering and sorting)
+  Accepts:
+  - results: {Object} Collection or Search object
+  Usage:
+  {% render 'custom-filter-facets', results: results %}
+{% endcomment %}
+
+<!-- Quick filter buttons -->
+<div class="facets-buttons" style="display:flex; flex-wrap:wrap;">
+  <button type="button" class=" filter-toggle-btn" data-filter-type="type" onclick="toggleFilterGroup('type')">Type</button>
+  <button type="button" class=" filter-toggle-btn" data-filter-type="material" onclick="toggleFilterGroup('material')">Fabric</button>
+  <button type="button" class=" filter-toggle-btn" data-filter-type="color" onclick="toggleFilterGroup('color')">Colour</button>
+  <button type="button" class=" filter-toggle-btn" data-filter-type="size" onclick="toggleFilterGroup('size')">Size</button>
+</div>
+
+<!-- Quick swatch filters -->
+<form id="CustomFilterForm">
+  <div class="quick-swatch-filters" style="margin-bottom: 16px;">
+    {% assign target_params = 'filter.p.m.swyft.type,filter.v.m.swyft.material_image,filter.v.m.swyfthome.color_image,filter.p.m.swyft.size' | split: ',' %}
+    
+    {% for filter in results.filters %}
+      {% if target_params contains filter.param_name %}
+        {% assign filter_type = '' %}
+        {% if filter.param_name contains 'swyft.type' %}
+          {% assign filter_type = 'type' %}
+        {% elsif filter.param_name contains 'swyft.material_image' %}
+          {% assign filter_type = 'material' %}
+        {% elsif filter.param_name contains 'swyfthome.color_image' %}
+          {% assign filter_type = 'color' %}
+        {% elsif filter.param_name contains 'swyft.size' %}
+          {% assign filter_type = 'size' %}
+        {% endif %}
+        
+        <div class="quick-swatch-group filter-group-{{ filter_type }}" style="margin-bottom: 12px; display: none;">
+          <div style="font-weight:600; margin-bottom:8px;" class="filter-label-custom">
+          Please Select Your 
+          {%if filter.label=="material_image"%}  
+            Fabric
+            {%elsif filter.label=="color_image"%}  
+            Color
+            {%else%}
+            {{ filter.label }}
+          {%endif%}
+
+
+          </div>
+          <div class="custom-filter-flex-div" style="display:flex;  justify-content: center;">
+            {%assign filter--label =  filter.label %}
+            {% for value in filter.values %}
+              {% if value.count > 0 %}
+                {% assign mo_img = nil %}
+                {% assign mo_name = nil %}
+                
+                {% comment %} Find image for this filter value {% endcomment %}
+                {% for product in results.products %}
+                  {% if filter.param_name contains 'swyft.type' %}
+                    {% assign meta_ref = product.metafields.swyft.type.reference | default: product.metafields.swyft.type.value %}
+                    {% if meta_ref and meta_ref.name == value.label %}
+                      {% assign mo_img = meta_ref.button_image | default: meta_ref.image %}
+                      {% assign mo_name = meta_ref.name %}
+                      {% break %}
+                    {% endif %}
+                  {% elsif filter.param_name contains 'swyft.size' %}
+                    {% assign meta_ref = product.metafields.swyft.size.reference | default: product.metafields.swyft.size.value %}
+                    {% if meta_ref and meta_ref.name == value.label %}
+                      {% assign mo_img = meta_ref.button_image | default: meta_ref.image %}
+                      {% assign mo_name = meta_ref.name %}
+                      {% break %}
+                    {% endif %}
+                  {% elsif filter.param_name contains 'swyfthome.color_image' %}
+                    {% for variant in product.variants %}
+                      {% assign meta_ref = variant.metafields.swyfthome.color_image.reference | default: variant.metafields.swyfthome.color_image.value %}
+                      {% if meta_ref and meta_ref.name == value.label %}
+                        {% assign mo_img = meta_ref.button_image | default: meta_ref.image | default: meta_ref.color_image %}
+                        {% assign mo_name = meta_ref.name %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    {% if mo_img %}{% break %}{% endif %}
+                  {% elsif filter.param_name contains 'swyft.material_image' %}
+                    {% for variant in product.variants %}
+                      {% assign meta_ref = variant.metafields.swyft.material_image.reference | default: variant.metafields.swyft.material_image.value %}
+                      {% if meta_ref and meta_ref.name == value.label %}
+                        {% assign mo_img = meta_ref.button_image | default: meta_ref.image | default: meta_ref.material_image %}
+                        {% assign mo_name = meta_ref.name %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    {% if mo_img %}{% break %}{% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                <a href="{{ value.url_to_add }}" class="quick-swatch-item{% if value.active %} is-active{% endif %}" style="text-decoration:none; color:inherit;">
+                  <div style="text-align:center;" class="filter-for {{filter.label}}">
+                    {% if mo_img %}
+                      <img src="{{ mo_img | image_url: width: 60 }}" 
+                           alt="{{ mo_name | default: value.label | escape }}"
+                           width="50" 
+                           height="50" 
+                           class="quick-swatch-image {{filter--label}}" 
+                           style="display:block; margin:0 auto;" />
+
+                           {% else %}
+                      <span style="display:inline-block; border:1px solid #ccc; background:#f3f3f3;"></span>
+                    {% endif %}
+                    <div style="font-size:12px; margin-top:4px;{% if value.active %} font-weight:600;{% endif %}">
+                      <span class="filter-types-name">{{ value.label | escape }}</span>
+                    </div>
+                  </div>
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</form>
+
+<script>
+  // Function to toggle filter groups
+  function toggleFilterGroup(filterType) {
+    // Get the target group and active button
+    const targetGroup = document.querySelector(`.filter-group-${filterType}`);
+    const activeButton = document.querySelector(`.filter-toggle-btn[data-filter-type="${filterType}"]`);
+    
+    // Check if the clicked button is already active
+    const isAlreadyActive = activeButton.classList.contains('active');
+    
+    // Hide all filter groups first
+    document.querySelectorAll('.quick-swatch-group').forEach(group => {
+      group.style.display = 'none';
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.filter-toggle-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // If the button was not already active, show the target group and activate the button
+    if (!isAlreadyActive && targetGroup) {
+      targetGroup.style.display = 'block';
+      activeButton.classList.add('active');
+    }
+    // If it was already active, just hide it (already done above) and don't activate the button
+  }
+  
+  // Function to open specific filter in sidebar (original functionality)
+  function openFilter(e, paramName) {
+    try {
+      // Find the filter details element
+      const details = document.querySelector(`details[id*="${paramName}"]`);
+      if (details) {
+        // Open the filter
+        details.open = true;
+        
+        // Scroll to the filter
+        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Prevent default behavior
+        if (e) e.preventDefault();
+      }
+    } catch (err) {
+      console.warn('openFilter error', err);
+    }
+  }
+  
+  // Initialize: Show the first filter group by default
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   // Show first filter group
+  //   const firstGroup = document.querySelector('.quick-swatch-group');
+  //   if (firstGroup) {
+  //     firstGroup.style.display = 'block';
+  //   }
+    
+  //   // Activate first button
+  //   const firstButton = document.querySelector('.filter-toggle-btn');
+  //   if (firstButton) {
+  //     firstButton.classList.add('active');
+  //   }
+  // });
+</script>
+

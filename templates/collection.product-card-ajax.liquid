@@ -1,0 +1,6 @@
+{% for product in collections.all.products %}
+    {% if product.handle == request.params.handle %}
+      {% render 'product-card-ajax', product: product %}
+    {% endif %}
+  {% endfor %}
+  

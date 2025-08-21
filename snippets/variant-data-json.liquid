@@ -1,0 +1,32 @@
+<script>
+    window.variantData = {
+      "all-collections":{
+      {% for collection in collections %}
+        "{{ collection.handle }}": {
+          {% for product in collection.products %}
+            "{{ product.handle }}": {
+              {% for variant in product.variants %}
+                {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
+                {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
+                {% assign type_value = product.metafields.swyft.type.value %}
+                {% assign size_value = product.metafields.swyft.size.value %}
+                "{{ variant.id }}": {
+                  "data-variant-id": "{{ variant.id }}",
+                  "data-color": "{{ color_metaobject.name }}",
+                  "data-material": "{{ material_metaobject.name }}",
+                  "data-type": "{{ type_value.name }}",
+                  "data-size" : "{{size_value.name}}"
+                }{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    }
+    };
+    console.log(window.variantData)
+  </script>
+  <script>
+
+    </script>
+    

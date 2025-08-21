@@ -1304,3 +1304,7 @@ img.quick-swatch-image.Size,img.quick-swatch-image.type {
   gap: 30px !important;
   justify-content: center;
 }
+
+a.clear-all-btn {
+  text-decoration: underline;
+}

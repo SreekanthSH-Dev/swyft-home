@@ -117,7 +117,7 @@ function filterProducts(params) {
   
     // Update the result count
     const resultCountEl = document.getElementById('result-count');
-    resultCountEl.textContent = `${visibleCount} result${visibleCount !== 1 ? 's' : ''}`;
+    resultCountEl.textContent = `${visibleCount} product${visibleCount !== 1 ? 's' : ''}`;
     
     // Update Clear All button
     updateClearAllButton();
@@ -152,7 +152,7 @@ function filterProducts(params) {
   });
   
   function updateClearAllButton() {
-    const filterActions = document.getElementById('filter-actions');
+    const filterActions = document.getElementById('result-remove');
     const params = new URLSearchParams(window.location.search);
     
     // Check if any filter param exists
@@ -162,27 +162,33 @@ function filterProducts(params) {
     filterActions.innerHTML = '';
   
     if (hasFilter) {
-      const btn = document.createElement('button');
-      btn.textContent = 'Clear All';
-      btn.className = 'clear-all-btn';
-      btn.style.cursor = 'pointer';
-      btn.addEventListener('click', () => {
-        // Remove all filter params
-        params.forEach((value, key) => {
-          if (key.startsWith('filter.')) params.delete(key);
+        const btn = document.createElement('a');
+        btn.textContent = 'Clear Filters';
+        btn.className = 'clear-all-btn';
+        btn.style.cursor = 'pointer';
+        btn.addEventListener('click', () => {
+          // Remove all filter params
+          params.forEach((value, key) => {
+            if (key.startsWith('filter.')) params.delete(key);
+          });
+      
+          // Build the URL
+          const newQuery = params.toString();
+          const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
+      
+          // Update URL without reload
+          window.history.pushState({}, '', newUrl);
+      
+          // Re-run filtering with no params
+          filterProducts(params.toString());
+      
+          // Remove the button after clearing
+          updateClearAllButton();
         });
-        // Update URL without reload
-        window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-        
-        // Re-run filtering with no params
-        filterProducts(params.toString());
-        
-        // Remove the button after clearing
-        updateClearAllButton();
-      });
-  
-      filterActions.appendChild(btn);
-    }
+      
+        filterActions.appendChild(btn);
+      }
+      
   }
   document.addEventListener('DOMContentLoaded', function() {
     // Run on initial load

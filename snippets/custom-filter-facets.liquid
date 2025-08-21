@@ -5,6 +5,8 @@
   Usage:
   {% render 'custom-filter-facets', results: results %}
 {% endcomment %}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'custom-filter-product.js' | asset_url }}" defer="defer"></script>
 
 <!-- Quick filter buttons -->
 <div class="facets-buttons" style="display:flex; flex-wrap:wrap; justify-content:center">
@@ -90,7 +92,7 @@
                     {% if mo_img %}{% break %}{% endif %}
                   {% endif %}
                 {% endfor %}
-                <a href="?{{ value.param_name }}={{ value.value | url_encode }}" class="quick-swatch-item{% if value.active %} is-active{% endif %}" style="text-decoration:none; color:inherit;">
+                <a href="?{{ value.param_name }}={{ value.label | url_encode }}" class="quick-swatch-item{% if value.active %} is-active{% endif %}" style="text-decoration:none; color:inherit;">
                   <div style="text-align:center;" class="filter-for {{filter.label}}">
                     {% if mo_img %}
                       <img src="{{ mo_img | image_url: width: 300 }}" 
@@ -109,73 +111,15 @@
               {% endif %}
             {% endfor %}
           </div>
+
         </div>
       {% endif %}
     {% endfor %}
   </div>
+  <div id="filter-actions" style="margin-bottom: 1rem;"></div>
+  <div id="filter-actions" style="margin-bottom: 1rem;">
+    <span id="result-count"></span>
+  </div>
+  
 </form>
-
-<script>
-  // Function to toggle filter groups
-  function toggleFilterGroup(filterType) {
-    // Get the target group and active button
-    const targetGroup = document.querySelector(`.filter-group-${filterType}`);
-    const activeButton = document.querySelector(`.filter-toggle-btn[data-filter-type="${filterType}"]`);
-    
-    // Check if the clicked button is already active
-    const isAlreadyActive = activeButton.classList.contains('active');
-    
-    // Hide all filter groups first
-    document.querySelectorAll('.quick-swatch-group').forEach(group => {
-      group.style.display = 'none';
-    });
-    
-    // Remove active class from all buttons
-    document.querySelectorAll('.filter-toggle-btn').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    
-    // If the button was not already active, show the target group and activate the button
-    if (!isAlreadyActive && targetGroup) {
-      targetGroup.style.display = 'block';
-      activeButton.classList.add('active');
-    }
-    // If it was already active, just hide it (already done above) and don't activate the button
-  }
-  
-  // Function to open specific filter in sidebar (original functionality)
-  function openFilter(e, paramName) {
-    try {
-      // Find the filter details element
-      const details = document.querySelector(`details[id*="${paramName}"]`);
-      if (details) {
-        // Open the filter
-        details.open = true;
-        
-        // Scroll to the filter
-        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        
-        // Prevent default behavior
-        if (e) e.preventDefault();
-      }
-    } catch (err) {
-      console.warn('openFilter error', err);
-    }
-  }
-  
-  // Initialize: Show the first filter group by default
-  // document.addEventListener('DOMContentLoaded', function() {
-  //   // Show first filter group
-  //   const firstGroup = document.querySelector('.quick-swatch-group');
-  //   if (firstGroup) {
-  //     firstGroup.style.display = 'block';
-  //   }
-    
-  //   // Activate first button
-  //   const firstButton = document.querySelector('.filter-toggle-btn');
-  //   if (firstButton) {
-  //     firstButton.classList.add('active');
-  //   }
-  // });
-</script>
 

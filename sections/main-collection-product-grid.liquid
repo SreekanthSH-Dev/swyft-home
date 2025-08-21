@@ -204,6 +204,10 @@
                               data-cascade
                               style="--animation-order: {{ card_index }};"
                             {% endif %}
+                            data-variant-id="{{ variant.id }}"
+                            data-color="{{ variant.metafields.swyfthome.color_image.value }}"
+                            data-material="{{ variant.metafields.swyft.material_image.value }}"
+                            data-type="{{ product.metafields.swyft.type.value }}"
                           >
                             {% render 'card-product',
                               card_product: product,
@@ -245,6 +249,10 @@
                               data-cascade
                               style="--animation-order: {{ card_index }};"
                             {% endif %}
+                            data-variant-id="{{ variant.id }}"
+                            data-color="{{ variant.metafields.swyfthome.color_image.value }}"
+                            data-material="{{ variant.metafields.swyft.material_image.value }}"
+                            data-type="{{ product.metafields.swyft.type.value }}"
                           >
                             {% render 'card-product',
                               card_product: product,
@@ -277,13 +285,25 @@
                       {%- if card_index > 2 -%}
                         {%- assign lazy_load = true -%}
                       {%- endif -%}
+
+                      {% comment %} Metaobject values for filtering {% endcomment %}
+                      {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
+                      {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
+                      {% assign type_value = product.metafields.swyft.type.value %}
+                      {% assign size_value = product.metafields.swyft.size.value %}
+                      {% comment %} real card item we used on site {% endcomment %}
                       <li
                         class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                         {% if settings.animations_reveal_on_scroll %}
                           data-cascade
                           style="--animation-order: {{ card_index }};"
                         {% endif %}
-                      >
+                        data-variant-id="{{ variant.id }}"
+                        data-color="{{color_metaobject.name}}"
+                        data-material="{{material_metaobject.name}}"
+                        data-type="{{type_value.name}}"
+                        data-size="{{size_value.name}}"
+                      >     
                         {% render 'card-product',
                           card_product: product,
                           variant: variant,
@@ -310,12 +330,21 @@
                       {%- if card_index > 2 -%}
                         {%- assign lazy_load = true -%}
                       {%- endif -%}
+                      {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
+                      {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
+                      {% assign type_value = product.metafields.swyft.type.value %}
+                      {% assign size_value = product.metafields.swyft.size.value %}
                       <li
                         class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                         {% if settings.animations_reveal_on_scroll %}
                           data-cascade
                           style="--animation-order: {{ card_index }};"
                         {% endif %}
+                        data-variant-id="{{ variant.id }}"
+                      data-color="{{color_metaobject.name}}"
+                      data-material="{{material_metaobject.name}}"
+                      data-type="{{type_value.name}}"
+                      data-size="{{size_value.name}}"
                       >
                         {% render 'card-product',
                           card_product: product,

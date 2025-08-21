@@ -135,7 +135,7 @@
     {
       "key": "color_image",
       "namespace": "swyfthome",
-      "name": "color_image",
+      "name": "color",
       "description": "",
       "type": {
         "name": "metaobject_reference",
@@ -145,7 +145,7 @@
     {
       "key": "material_image",
       "namespace": "swyft",
-      "name": "material_image",
+      "name": "fabric",
       "description": "",
       "type": {
         "name": "metaobject_reference",

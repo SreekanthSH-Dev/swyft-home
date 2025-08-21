@@ -49,7 +49,7 @@ let originalGridHTML = ''; // store original grid HTML
 
 // Store the original grid content when page loads
 function storeOriginalGrid() {
-  const grid = document.querySelector('ul#product-grid[data-id="template--25331653116213__main-collection-product-grid"]');
+  const grid = document.querySelector('ul#product-grid');
   if (grid && !originalGridHTML) {
     originalGridHTML = grid.innerHTML;
     console.log("📦 Original grid HTML stored");
@@ -58,7 +58,7 @@ function storeOriginalGrid() {
 
 // Restore the original grid content
 function restoreOriginalGrid() {
-  const grid = document.querySelector('ul#product-grid[data-id="template--25331653116213__main-collection-product-grid"]');
+  const grid = document.querySelector('ul#product-grid');
   if (grid && originalGridHTML) {
     grid.innerHTML = originalGridHTML;
     console.log("🔄 Original grid restored");
@@ -127,7 +127,7 @@ async function filterProducts(params) {
 
   console.log("✅ Total Matches:", matchedVariants);
 
-  const grid = document.querySelector('ul#product-grid[data-id="template--25331653116213__main-collection-product-grid"]');
+  const grid = document.querySelector('ul#product-grid');
   grid.innerHTML = ""; // clear before appending
 
   if (matchedVariants.length === 0) {

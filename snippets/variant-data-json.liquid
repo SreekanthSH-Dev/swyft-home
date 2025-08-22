@@ -7,24 +7,37 @@
 
             {%assign variant_obj = product.variants | where: "title"%}
             {%assign color_metaobject_all = variant_obj.metafields.swyfthome.color_image.value%}
-            "{{ product.handle }}": {
+"{{ product.handle }}": {
+  "swatches": {
+    {% assign swatch_list = "" %}
+    {% for variant in product.variants %}
+      {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
+      {% if color_metaobject %}
+        {% unless swatch_list contains color_metaobject.name %}
+          "{{ color_metaobject.name | escape }}": "{{ color_metaobject.button_image | img_url: '25x' }}"
+          {% assign swatch_list = swatch_list | append: color_metaobject.name | append: "," %}
+          {% unless forloop.last %},{% endunless %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  },
+  {% for variant in product.variants %}
+    {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
+    {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
+    {% assign type_value = product.metafields.swyft.type.value %}
+    {% assign size_value = product.metafields.swyft.size.value %}
 
-              {% for variant in product.variants %}
-                {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
-                {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
-                {% assign type_value = product.metafields.swyft.type.value %}
-                {% assign size_value = product.metafields.swyft.size.value %}
-
-                "{{ variant.id }}": {
-                  "data-color-img" : "{{color_metaobject_all.button_image}}",
-                  "data-variant-id": "{{ variant.id }}",
-                  "data-color": "{{ color_metaobject.name }}",
-                  "data-material": "{{ material_metaobject.name }}",
-                  "data-type": "{{ type_value.name }}",
-                  "data-size" : "{{size_value.name}}"
-                }{% unless forloop.last %},{% endunless %}
-              {% endfor %}
-            }{% unless forloop.last %},{% endunless %}
+    "{{ variant.id }}": {
+      "data-color-img" : "{{ color_metaobject.preview_image.src }}",
+      "data-variant-id": "{{ variant.id }}",
+      "data-color": "{{ color_metaobject.name }}",
+      "data-material": "{{ material_metaobject.name }}",
+      "data-type": "{{ type_value.name }}",
+      "data-size" : "{{ size_value.name }}"
+    }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+}
+{% unless forloop.last %},{% endunless %}
           {% endfor %}
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}

@@ -95,28 +95,38 @@ async function filterProducts(params) {
   for (const [collectionHandle, products] of Object.entries(window.variantData["all-collections"])) {
     for (const [productHandle, variants] of Object.entries(products)) {
       for (const [variantId, variantData] of Object.entries(variants)) {
+        // Skip the 'swatches' property
+        if (variantId === 'swatches') continue;
+        
         let match = true;
-
-        if (paramObj['filter.v.m.swyfthome.color_image'] &&
-            variantData["data-color"].toLowerCase() !== paramObj['filter.v.m.swyfthome.color_image']) {
+  
+        const filterColor    = paramObj['filter.v.m.swyfthome.color_image']?.toLowerCase();
+        const filterMaterial = paramObj['filter.v.m.swyft.material_image']?.toLowerCase();
+        const filterType     = paramObj['filter.p.m.swyft.type']?.toLowerCase();
+        const filterSize     = paramObj['filter.p.m.swyft.size']?.toLowerCase();
+  
+        const color    = (variantData["data-color"] || "").toLowerCase();
+        const material = (variantData["data-material"] || "").toLowerCase();
+        const type     = (variantData["data-type"] || "").toLowerCase();
+        const size     = (variantData["data-size"] || "").toLowerCase();
+  
+        if (filterColor && color !== filterColor) {
           match = false;
         }
-        if (paramObj['filter.v.m.swyft.material_image'] &&
-            variantData["data-material"].toLowerCase() !== paramObj['filter.v.m.swyft.material_image']) {
+        if (filterMaterial && material !== filterMaterial) {
           match = false;
         }
-        if (paramObj['filter.p.m.swyft.type'] &&
-            variantData["data-type"].toLowerCase() !== paramObj['filter.p.m.swyft.type']) {
+        if (filterType && type !== filterType) {
           match = false;
         }
-        if (paramObj['filter.p.m.swyft.size'] &&
-            variantData["data-size"].toLowerCase() !== paramObj['filter.p.m.swyft.size']) {
+        if (filterSize && size !== filterSize) {
           match = false;
         }
-
+  
         if (match) {
           matchedVariants.push({
             product: productHandle,
+            collection: collectionHandle,
             variantId,
             variantData: variantData
           });
@@ -124,7 +134,7 @@ async function filterProducts(params) {
       }
     }
   }
-
+  
   console.log("✅ Total Matches:", matchedVariants);
 
   const grid = document.querySelector('ul#product-grid');
@@ -149,7 +159,6 @@ async function filterProducts(params) {
       console.error("❌ Error fetching product:", productHandle, err);
     }
   }
-  
 
   // Now create LI elements using your exact card structure
   for (const match of matchedVariants) {
@@ -180,8 +189,9 @@ async function filterProducts(params) {
       const salePrice = `€${(variant.price / 100).toFixed(0)}`;
       const isOnSale = variant.compare_at_price && variant.compare_at_price > variant.price;
 
-      // Generate color variants HTML
-      const colorVariantsHTML = generateColorVariants(productData, variant.id);
+      // Generate color variants HTML - pass the collection handle
+      const colorVariantsHTML = generateColorVariants(productData, variant.id, match.collection);
+
       // Create the LI element with your exact structure
       const li = document.createElement('li');
       li.className = 'grid__item scroll-trigger animate--slide-in';
@@ -229,7 +239,7 @@ async function filterProducts(params) {
             </div>
             <div class="card__content">
               <div class="card__information">
-                <a href="/collections/${productData}" class="product__title">
+                <a href="/collections/${match.collection}" class="product__title">
                   <h2 class="h1 collection-name-product-home">
                     ${productData.product_type || 'Model 1'}
                   </h2>
@@ -319,23 +329,43 @@ async function filterProducts(params) {
   }
 }
 
-// Helper function to generate color variant swatches
-function generateColorVariants(productData, currentVariantId) {
+// Fixed helper function to generate color variant swatches
+function generateColorVariants(productData, currentVariantId, collectionHandle) {
   if (!productData.variants || productData.variants.length <= 1) {
     return '';
   }
 
   let variantsHTML = '';
-  const maxSwatches = 5; // Show max 5 swatches
+  const maxSwatches = 6; // Show max 5 swatches
   let swatchCount = 0;
+
+  // Get swatches from window.variantData using the collection handle and product handle
+  const productSwatches = window.variantData?.["all-collections"]?.[collectionHandle]?.[productData.handle]?.swatches || {};
+  
+  console.log("Product swatches for", productData.handle, ":", productSwatches);
 
   for (const variant of productData.variants) {
     if (swatchCount >= maxSwatches) break;
     
     const isActive = variant.id.toString() === currentVariantId.toString();
     const colorName = variant.option1 || 'Default';
-    const colorImage = getColorSwatchImage(colorName);
     
+    // Try to find the swatch image - match by color name (case insensitive)
+    let colorImage = '/cdn/shop/files/default-color.webp?width=25';
+    
+    // Look for exact match first
+    if (productSwatches[colorName]) {
+      colorImage = productSwatches[colorName];
+    } else {
+      // Try case-insensitive match
+      const matchingKey = Object.keys(productSwatches).find(key => 
+        key.toLowerCase() === colorName.toLowerCase()
+      );
+      if (matchingKey) {
+        colorImage = productSwatches[matchingKey];
+      }
+    }
+
     variantsHTML += `
       <a href="/products/${productData.handle}?variant=${variant.id}" 
          class="variant__pill ${isActive ? 'active' : ''}" 
@@ -350,28 +380,14 @@ function generateColorVariants(productData, currentVariantId) {
                alt="${colorName}">
         </span>
       </a>
-      <h3 class="product-card-swatch more"></h3>
     `;
     
     swatchCount++;
   }
-
+  
+  console.log("Generated variants HTML:", variantsHTML);
   return variantsHTML;
 }
-// need to change this
-// Helper function to get color swatch image
-function getColorSwatchImage(colorName) {
-  const colorMap = {
-    'pumice': '/cdn/shop/files/Pumice.webp?v=1754654294&width=25',
-    'vine': '/cdn/shop/files/Vine.webp?v=1754642586&width=25',
-    'standen': '/cdn/shop/files/standan.avif?v=1755761088&width=25',
-    'indigo': '/cdn/shop/files/Indigo.webp?v=1754989931&width=25',
-    'shadow': '/cdn/shop/files/Ivory.webp?v=1754989932&width=25'
-  };
-  
-  return colorMap[colorName.toLowerCase()] || '/cdn/shop/files/default-color.webp?width=25';
-}
-
 function updateClearAllButton() {
   const filterActions = document.getElementById('result-remove');
   const params = new URLSearchParams(window.location.search);

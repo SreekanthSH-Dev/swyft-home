@@ -52,7 +52,6 @@ function storeOriginalGrid() {
   const grid = document.querySelector('ul#product-grid');
   if (grid && !originalGridHTML) {
     originalGridHTML = grid.innerHTML;
-    console.log("📦 Original grid HTML stored");
   }
 }
 
@@ -61,7 +60,6 @@ function restoreOriginalGrid() {
   const grid = document.querySelector('ul#product-grid');
   if (grid && originalGridHTML) {
     grid.innerHTML = originalGridHTML;
-    console.log("🔄 Original grid restored");
   }
 }
 
@@ -84,7 +82,6 @@ async function filterProducts(params) {
 
   // If no params, restore the original grid content
   if (Object.keys(paramObj).length === 0) {
-    console.log("ℹ️ No filters applied, restoring original grid");
     restoreOriginalGrid();
     return;
   }
@@ -138,6 +135,7 @@ async function filterProducts(params) {
   console.log("✅ Total Matches:", matchedVariants);
 
   const grid = document.querySelector('ul#product-grid');
+
   grid.innerHTML = ""; // clear before appending
 
   if (matchedVariants.length === 0) {
@@ -274,7 +272,7 @@ async function filterProducts(params) {
                     </div>
                   </div>
                 </div>
-              </div>
+
               <div class="card-variant-swatches">
                 <fieldset class="js product-form__input product-form__input--pill">
                   <div class="product-varient-picker">
@@ -295,12 +293,13 @@ async function filterProducts(params) {
                       </span>
                       <span class="product-form__error-message"></span>
                     </div>
+                                  </div>
                     <form method="post" action="/cart/add" class="form" enctype="multipart/form-data" novalidate="novalidate" data-type="add-to-cart-form">
                       <input type="hidden" name="form_type" value="product">
                       <input type="hidden" name="utf8" value="✓">
                       <input type="hidden" name="id" value="${match.variantId}" class="product-variant-id">
                       <div class="product-form__buttons">
-                        <button type="submit" name="add" class="product-form__submit button button--full-width button--primary">
+                        <button type="submit" name="add" class="product-form__submit button ">
                           <span>Add to cart</span>
                           <div class="loading__spinner hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" class="spinner" viewBox="0 0 66 66">
@@ -315,7 +314,6 @@ async function filterProducts(params) {
                 </div>
               </div>
             </div>
-            ${isOnSale ? '<div class="card__badge bottom left"><span class="badge badge--bottom-left color-scheme-5">Sale</span></div>' : ''}
           </div>
         </div>
       `;
@@ -341,7 +339,6 @@ function generateColorVariants(productData, currentVariantId, collectionHandle) 
   // Get swatches from window.variantData using the collection handle and product handle
   const productSwatches = window.variantData?.["all-collections"]?.[collectionHandle]?.[productData.handle]?.swatches || {};
   
-  console.log("Product swatches for", productData.handle, ":", productSwatches);
 
   for (const variant of productData.variants) {
     if (swatchCount >= maxSwatches) break;
@@ -384,7 +381,6 @@ function generateColorVariants(productData, currentVariantId, collectionHandle) 
     swatchCount++;
   }
   
-  console.log("Generated variants HTML:", variantsHTML);
   return variantsHTML;
 }
 function updateClearAllButton() {
@@ -433,7 +429,6 @@ function updateClearAllButton() {
 
 // Main DOMContentLoaded event listener
 document.addEventListener("DOMContentLoaded", function() {
-  console.log("DOM loaded, initializing filters...");
   
   // Store original grid content first
   storeOriginalGrid();
@@ -497,4 +492,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update the URL without reloading
     window.history.replaceState({}, document.title, url.pathname + url.search);
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const url = window.location.origin + window.location.pathname;
+  window.history.replaceState({}, document.title, url);
+        // Restore original grid content instead of re-filtering
+        restoreOriginalGrid();
+        console.log('restored')
+        // Remove the button after clearing
+        updateClearAllButton();
 });

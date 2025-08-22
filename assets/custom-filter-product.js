@@ -149,6 +149,7 @@ async function filterProducts(params) {
       console.error("❌ Error fetching product:", productHandle, err);
     }
   }
+  
 
   // Now create LI elements using your exact card structure
   for (const match of matchedVariants) {

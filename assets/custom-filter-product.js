@@ -279,7 +279,6 @@ async function filterProducts(params) {
                 <fieldset class="js product-form__input product-form__input--pill">
                   <div class="product-varient-picker">
                     ${colorVariantsHTML}
-                    <a href="" class="product-card-swatch more">More colours available</a>
                   </div>
                 </fieldset>
               </div>
@@ -487,4 +486,15 @@ document.addEventListener("DOMContentLoaded", function() {
     popstate: true,
     clearButton: true
   };
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const url = new URL(window.location.href);
+
+  // Example: remove a specific param like "variant" or "color"
+  if (url.searchParams.has("filter")) {
+    url.searchParams.delete("filter");
+
+    // Update the URL without reloading
+    window.history.replaceState({}, document.title, url.pathname + url.search);
+  }
 });

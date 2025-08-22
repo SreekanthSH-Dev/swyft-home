@@ -495,10 +495,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const url = window.location.origin + window.location.pathname;
-  window.history.replaceState({}, document.title, url);
+  restoreOriginalGrid();
+
+  const newQuery = newParams.toString();
+  const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
+
+  // Update URL without reload
+  window.history.pushState({}, '', newUrl);
         // Restore original grid content instead of re-filtering
-        restoreOriginalGrid();
         console.log('restored')
         // Remove the button after clearing
         updateClearAllButton();

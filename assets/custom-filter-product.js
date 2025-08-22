@@ -181,7 +181,6 @@ async function filterProducts(params) {
 
       // Generate color variants HTML
       const colorVariantsHTML = generateColorVariants(productData, variant.id);
-
       // Create the LI element with your exact structure
       const li = document.createElement('li');
       li.className = 'grid__item scroll-trigger animate--slide-in';
@@ -358,7 +357,7 @@ function generateColorVariants(productData, currentVariantId) {
 
   return variantsHTML;
 }
-
+// need to change this
 // Helper function to get color swatch image
 function getColorSwatchImage(colorName) {
   const colorMap = {

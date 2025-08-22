@@ -39,13 +39,13 @@
     assign input_name = option.name | append: '-' | append: option.position
     assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" data-option-value-id="' | append: value.id | append: '"'
 
-    assign label_unavailable = '<span class="visually-hidden label-unavailable">' | append: 'products.product.variant_sold_out_or_unavailable' | t | append: '</span>'
   -%}
+  
 
   {% if picker_type == 'swatch' %}
     {% capture help_text %}
       <span class="visually-hidden">{{ value | escape }}</span>
-      {{ label_unavailable }}
+      {% comment %} {{ label_unavailable }} {% endcomment %}
     {% endcapture %}
     {% render 'swatch-input',
       id: input_id,

@@ -4,13 +4,19 @@
       {% for collection in collections %}
         "{{ collection.handle }}": {
           {% for product in collection.products %}
+
+            {%assign variant_obj = product.variants | where: "title"%}
+            {%assign color_metaobject_all = variant_obj.metafields.swyfthome.color_image.value%}
             "{{ product.handle }}": {
+
               {% for variant in product.variants %}
                 {% assign color_metaobject = variant.metafields.swyfthome.color_image.value %}
                 {% assign material_metaobject = variant.metafields.swyft.material_image.value %}
                 {% assign type_value = product.metafields.swyft.type.value %}
                 {% assign size_value = product.metafields.swyft.size.value %}
+
                 "{{ variant.id }}": {
+                  "data-color-img" : "{{color_metaobject_all.button_image}}",
                   "data-variant-id": "{{ variant.id }}",
                   "data-color": "{{ color_metaobject.name }}",
                   "data-material": "{{ material_metaobject.name }}",

@@ -494,16 +494,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  restoreOriginalGrid();
-
-  const newQuery = newParams.toString();
-  const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
-
-  // Update URL without reload
-  window.history.pushState({}, '', newUrl);
-        // Restore original grid content instead of re-filtering
-        console.log('restored')
-        // Remove the button after clearing
-        updateClearAllButton();
-});

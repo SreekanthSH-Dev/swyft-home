@@ -12,8 +12,8 @@
 <div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
 <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
   
-  {%- if section.settings.show_collection_image and collection.image -%}
     <div class="collection-hero__image-container media gradient">
+
       <img
         srcset="
           {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
@@ -31,7 +31,6 @@
         height="{{ collection.image.height }}"
       >
     </div>
-  {%- endif -%}
 
   <!-- Text and Description on the left side of the image -->
   <div class="collection-hero__text-wrapper">

@@ -66,15 +66,15 @@
     "1758708456f5ace04c": {
       "type": "apps",
       "blocks": {
-        "multilevel_megamenu_builder_multilevel_menu_t3WrFq": {
-          "type": "shopify://apps/multilevel-megamenu-builder/blocks/multilevel-menu/01997a8c-c6e5-7630-b9a8-488fbcc330c0",
+        "multilevel_megamenu_builder_multilevel_menu_jzxVLi": {
+          "type": "shopify://apps/multilevel-megamenu-builder/blocks/multilevel-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
           "settings": {
             "menu_handle": "head1"
           }
         }
       },
       "block_order": [
-        "multilevel_megamenu_builder_multilevel_menu_t3WrFq"
+        "multilevel_megamenu_builder_multilevel_menu_jzxVLi"
       ],
       "settings": {
         "include_margins": true

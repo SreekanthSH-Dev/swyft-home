@@ -27,6 +27,13 @@
           "type": "price",
           "settings": {}
         },
+        "announcement_bar_star_rating_ejX4QJ": {
+          "type": "shopify://apps/announcement-bar/blocks/star_rating/01997a69-63e8-7740-ab3a-eaf3def9a98c",
+          "settings": {
+            "product": "{{product}}",
+            "colour": "#ff0000"
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -60,6 +67,7 @@
         "text",
         "title",
         "price",
+        "announcement_bar_star_rating_ejX4QJ",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
@@ -107,13 +115,22 @@
         "product_banner_heading": "Sofa in a box",
         "product_banner_text_top": "",
         "product_banner_text": "Spend less time waiting and more time enjoying your new item. Get fast delivery in as little as 24 hours or choose a delivery date that suits your schedule. Learn more about Delivery & Returns.",
+        "button_label": "Shop Model 02 Sofa beds",
+        "button_link_home": "/",
         "image_position": "right"
+      }
+    },
+    "1758695453a9acaf30": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
       }
     }
   },
   "order": [
     "main",
     "related-products",
-    "image_with_text_banner"
+    "image_with_text_banner",
+    "1758695453a9acaf30"
   ]
 }

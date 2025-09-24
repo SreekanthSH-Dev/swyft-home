@@ -49,7 +49,7 @@
         "logo_position": "top-center",
         "mobile-number-header": "tel:02034884726",
         "mobile_logo_position": "center",
-        "menu": "main-menu",
+        "menu": "",
         "menu_type_desktop": "dropdown",
         "sticky_header_type": "none",
         "show_line_separator": false,

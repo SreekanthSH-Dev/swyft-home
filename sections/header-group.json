@@ -63,35 +63,24 @@
         "padding_bottom": 20
       }
     },
-    "1758708456f5ace04c": {
+    "175888111656273a4a": {
       "type": "apps",
       "blocks": {
-        "multilevel_megamenu_builder_premium_mega_menu_etzRXb": {
+        "multilevel_megamenu_builder_premium_mega_menu_ggEJpW": {
           "type": "shopify://apps/multilevel-megamenu-builder/blocks/premium-mega-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
           "settings": {
-            "menu_handle": "head1",
+            "menu_handle": "header-main",
             "menu_bg": "#ffffff",
-            "menu_text": "#1f2937",
-            "menu_alignment": "left",
-            "column_gap": 24,
-            "mega_columns": 3
-          }
-        },
-        "multilevel_megamenu_builder_premium_mega_menu_8GKDqL": {
-          "type": "shopify://apps/multilevel-megamenu-builder/blocks/premium-mega-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
-          "settings": {
-            "menu_handle": "head1",
-            "menu_bg": "#ffffff",
-            "menu_text": "#1f2937",
-            "menu_alignment": "left",
-            "column_gap": 24,
-            "mega_columns": 3
+            "menu_text": "#333333",
+            "menu_hover_bg": "#f5f5f5",
+            "menu_hover_text": "#000000",
+            "dropdown_bg": "#ffffff",
+            "menu_alignment": "left"
           }
         }
       },
       "block_order": [
-        "multilevel_megamenu_builder_premium_mega_menu_etzRXb",
-        "multilevel_megamenu_builder_premium_mega_menu_8GKDqL"
+        "multilevel_megamenu_builder_premium_mega_menu_ggEJpW"
       ],
       "settings": {
         "include_margins": true
@@ -103,6 +92,6 @@
     "cart",
     "announcement-bar",
     "header",
-    "1758708456f5ace04c"
+    "175888111656273a4a"
   ]
 }

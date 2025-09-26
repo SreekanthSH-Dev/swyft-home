@@ -75,7 +75,7 @@
             "menu_hover_bg": "#f5f5f5",
             "menu_hover_text": "#000000",
             "dropdown_bg": "#ffffff",
-            "menu_alignment": "left"
+            "menu_gap": 54
           }
         }
       },

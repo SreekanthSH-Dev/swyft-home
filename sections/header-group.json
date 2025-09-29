@@ -69,7 +69,7 @@
         "multilevel_megamenu_builder_premium_mega_menu_ggEJpW": {
           "type": "shopify://apps/multilevel-megamenu-builder/blocks/premium-mega-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
           "settings": {
-            "menu_handle": "head1",
+            "menu_handle": "header-main",
             "menu_layout": "horizontal",
             "menu_style": "default",
             "animation_style": "slide",

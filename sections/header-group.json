@@ -102,7 +102,7 @@
             "menu_handle": "head1",
             "menu_layout": "horizontal",
             "menu_style": "default",
-            "animation_style": "fade",
+            "animation_style": "slide",
             "menu_bg": "#ffffff",
             "menu_text": "#333333",
             "menu_hover_bg": "#f5f5f5",

@@ -45,6 +45,36 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "multilevel_megamenu_builder_premium_mega_menu_dJnLHj": {
+          "type": "shopify://apps/multilevel-megamenu-builder/blocks/premium-mega-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
+          "settings": {
+            "menu_handle": "main-menu",
+            "menu_layout": "horizontal",
+            "menu_style": "default",
+            "animation_style": "fade",
+            "menu_bg": "#ffffff",
+            "menu_text": "#333333",
+            "menu_hover_bg": "#f5f5f5",
+            "menu_hover_text": "#000000",
+            "dropdown_bg": "#ffffff",
+            "font_size": 16,
+            "font_weight": "600",
+            "menu_gap": 24,
+            "menu_padding": 16,
+            "link_padding": 10,
+            "dropdown_padding": 8,
+            "dropdown_link_padding": 10,
+            "dropdown_width": 250,
+            "menu_radius": 8,
+            "link_radius": 6,
+            "dropdown_radius": 6
+          }
+        }
+      },
+      "block_order": [
+        "multilevel_megamenu_builder_premium_mega_menu_dJnLHj"
+      ],
       "settings": {
         "logo_position": "top-center",
         "mobile-number-header": "tel:02034884726",
@@ -69,13 +99,26 @@
         "multilevel_megamenu_builder_premium_mega_menu_ggEJpW": {
           "type": "shopify://apps/multilevel-megamenu-builder/blocks/premium-mega-menu/01997ad7-8b23-7800-acbc-9baf8b7b521b",
           "settings": {
-            "menu_handle": "header-main",
+            "menu_handle": "head1",
+            "menu_layout": "horizontal",
+            "menu_style": "default",
+            "animation_style": "fade",
             "menu_bg": "#ffffff",
             "menu_text": "#333333",
             "menu_hover_bg": "#f5f5f5",
             "menu_hover_text": "#000000",
             "dropdown_bg": "#ffffff",
-            "menu_gap": 54
+            "font_size": 16,
+            "font_weight": "600",
+            "menu_gap": 34,
+            "menu_padding": 16,
+            "link_padding": 10,
+            "dropdown_padding": 8,
+            "dropdown_link_padding": 10,
+            "dropdown_width": 400,
+            "menu_radius": 8,
+            "link_radius": 6,
+            "dropdown_radius": 6
           }
         }
       },

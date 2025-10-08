@@ -3,18 +3,38 @@ let map;
 let markers = [];
 let infoWindows = [];
 
-// Initialize Google Map
-function initMap() {
+// Initialize Google Map - Make it available globally BEFORE Maps loads
+window.createStoreMap = async function() {
   console.log('Initializing map...');
   
   if (!window.storeLocations || window.storeLocations.length === 0) {
     console.error('No store locations found');
+    document.getElementById('store-map').innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">No stores available</div>';
     return;
   }
 
   console.log('Store locations:', window.storeLocations);
 
-  // Calculate center based on all store locations
+  // Validate store locations have valid coordinates
+  const validStores = window.storeLocations.filter(store => {
+    const isValid = !isNaN(store.lat) && !isNaN(store.lng) && 
+      store.lat !== null && store.lng !== null &&
+      store.lat !== 0 && store.lng !== 0;
+    if (!isValid) {
+      console.warn('Invalid coordinates for store:', store.name, store.lat, store.lng);
+    }
+    return isValid;
+  });
+
+  if (validStores.length === 0) {
+    console.error('No stores with valid coordinates found');
+    document.getElementById('store-map').innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666; padding: 20px; text-align: center;">No stores with valid coordinates found. Please check metaobject data.</div>';
+    return;
+  }
+
+  console.log('Valid stores with coordinates:', validStores.length);
+
+  // Calculate center based on valid store locations
   const bounds = new google.maps.LatLngBounds();
   
   // Create map centered on UK
@@ -34,31 +54,40 @@ function initMap() {
     ]
   });
 
-  // Add markers for all stores
-  addMarkers();
+  console.log('Map created successfully');
+
+  // Add markers for all valid stores
+  addMarkers(validStores);
   
   // Fit map to show all markers
-  window.storeLocations.forEach(store => {
+  validStores.forEach(store => {
     bounds.extend(new google.maps.LatLng(store.lat, store.lng));
   });
   
-  if (window.storeLocations.length > 0) {
+  if (validStores.length > 0) {
     map.fitBounds(bounds);
+    console.log('Map bounds set to fit all markers');
   }
 
   // Update count on initial load
   updateStoreCount();
-}
+};
 
 // Add markers to map
-function addMarkers() {
+function addMarkers(stores = window.storeLocations) {
   // Clear existing markers and info windows
   markers.forEach(marker => marker.setMap(null));
   infoWindows.forEach(infoWindow => infoWindow.close());
   markers = [];
   infoWindows = [];
 
-  window.storeLocations.forEach((store, index) => {
+  stores.forEach((store, index) => {
+    // Skip if coordinates are invalid
+    if (isNaN(store.lat) || isNaN(store.lng)) {
+      console.warn('Skipping marker for store with invalid coordinates:', store.name);
+      return;
+    }
+
     // Create marker
     const marker = new google.maps.Marker({
       position: { lat: store.lat, lng: store.lng },
@@ -152,7 +181,9 @@ function performSearch() {
   });
   
   // Update markers on map based on visible cards
-  updateMapMarkers();
+  if (map) {
+    updateMapMarkers();
+  }
   
   // Update count
   const resultsDiv = document.getElementById('results-count');
@@ -164,6 +195,8 @@ function performSearch() {
 
 // Update map markers based on visible store cards
 function updateMapMarkers() {
+  if (!map) return;
+
   const visibleStoreIds = [];
   document.querySelectorAll('.store-card:not(.hidden)').forEach(card => {
     visibleStoreIds.push(parseInt(card.getAttribute('data-store-id')));
@@ -184,7 +217,7 @@ function updateMapMarkers() {
     const bounds = new google.maps.LatLngBounds();
     visibleStoreIds.forEach(id => {
       const store = window.storeLocations.find(s => s.id === id);
-      if (store) {
+      if (store && !isNaN(store.lat) && !isNaN(store.lng)) {
         bounds.extend(new google.maps.LatLng(store.lat, store.lng));
       }
     });
@@ -194,6 +227,7 @@ function updateMapMarkers() {
 
 // Setup search functionality
 function setupSearch() {
+  console.log('setupped')
   const searchInput = document.getElementById('store-search');
   const findBtn = document.getElementById('find-stores-btn');
   
@@ -221,7 +255,7 @@ function setupStoreCardClicks() {
       const storeId = parseInt(card.getAttribute('data-store-id'));
       const store = window.storeLocations.find(s => s.id === storeId);
       
-      if (store && map) {
+      if (store && map && !isNaN(store.lat) && !isNaN(store.lng)) {
         // Highlight card
         highlightStoreCard(storeId);
         
@@ -281,6 +315,12 @@ function filterByDistance(userLat, userLng, maxDistance) {
   cards.forEach(card => {
     const lat = parseFloat(card.getAttribute('data-lat'));
     const lng = parseFloat(card.getAttribute('data-lng'));
+    
+    if (isNaN(lat) || isNaN(lng)) {
+      card.classList.add('hidden');
+      return;
+    }
+    
     const distance = calculateDistance(userLat, userLng, lat, lng);
     
     if (distance <= maxDistance) {
@@ -292,7 +332,9 @@ function filterByDistance(userLat, userLng, maxDistance) {
   });
 
   // Update markers
-  updateMapMarkers();
+  if (map) {
+    updateMapMarkers();
+  }
   
   // Update count
   const resultsDiv = document.getElementById('results-count');
@@ -309,12 +351,57 @@ if (document.readyState === 'loading') {
   init();
 }
 
+// Add this debug function to identify the map loading issue
+// Add this debug function to identify the map loading issue
+function debugMapLoading() {
+  console.log('=== MAP DEBUGGING ===');
+  
+  // Check if API key is present - removed Liquid syntax
+  const apiKey = window.googleMapsApiKey || '';
+  console.log('1. API Key present:', !!apiKey, '(length:', apiKey?.length + ')');
+  
+  // Check if store data is loaded
+  console.log('2. Store locations loaded:', window.storeLocations?.length || 0, 'stores');
+  if (window.storeLocations) {
+    window.storeLocations.forEach(store => {
+      console.log(`   Store "${store.name}": lat=${store.lat}, lng=${store.lng}`);
+    });
+  }
+  
+  // Check if initMap is defined
+  console.log('3. initMap function defined:', typeof window.initMap === 'function');
+  
+  // Check if map container exists
+  const mapContainer = document.getElementById('store-map');
+  console.log('4. Map container found:', !!mapContainer);
+  if (mapContainer) {
+    console.log('   Container dimensions:', mapContainer.offsetWidth + 'x' + mapContainer.offsetHeight);
+    console.log('   Container styles:', window.getComputedStyle(mapContainer).display, window.getComputedStyle(mapContainer).visibility);
+  }
+  
+  // Check if Google Maps library is loaded
+  console.log('5. Google Maps loaded:', typeof google !== 'undefined');
+  if (typeof google !== 'undefined') {
+    console.log('   Google Maps version available');
+    console.log('   google.maps.Map:', typeof google.maps.Map);
+  }
+  
+  // Check for any console errors
+  console.log('6. Checking for common issues:');
+  console.log('   - API key format:', apiKey?.startsWith('AIza'));
+  console.log('   - Store coordinates valid:', window.storeLocations?.every(store => 
+    store && !isNaN(store.lat) && !isNaN(store.lng)
+  ));
+  
+  console.log('=== END DEBUG ===');
+}
+
+
+// Also add this to your init function
 function init() {
   console.log('Initializing store locator...');
+  debugMapLoading(); // Add this line
   setupSearch();
   setupStoreCardClicks();
   setupDistanceFilter();
 }
-
-// Make initMap available globally for Google Maps callback
-window.initMap = initMap;

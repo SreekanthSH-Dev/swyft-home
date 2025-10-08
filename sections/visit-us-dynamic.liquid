@@ -131,40 +131,61 @@
   </div>
 </section>
 
-{%- comment -%} Pass store data to JavaScript {%- endcomment -%}
 <script>
-  window.storeLocations = [
-    {%- for store in store_locations -%}
-    {
-      id: {{ forloop.index }},
-      name: {{ store.store_name.value | json }},
-      address: {{ store.address.value | json }},
-      city: {{ store.city.value | json }},
-      postcode: {{ store.postcode.value | json }},
-      lat: parseFloat({{ store.latitude.value | json }}),
-      lng: parseFloat({{ store.longitude.value | json }}),
-      phone: {{ store.phone.value | json }},
-      hours: {
-        monday: {{ store.monday_hours.value | json }},
-        tuesday: {{ store.tuesday_hours.value | json }},
-        wednesday: {{ store.wednesday_hours.value | json }},
-        thursday: {{ store.thursday_hours.value | json }},
-        friday: {{ store.friday_hours.value | json }},
-        saturday: {{ store.saturday_hours.value | json }},
-        sunday: {{ store.sunday_hours.value | json }}
-      },
-      models: {{ store.models.value | json }}
-    }{% unless forloop.last %},{% endunless %}
-    {%- endfor -%}
-  ];
+// 1. First, load store data
+window.storeLocations = [
+  {%- for store in store_locations -%}
+  {
+    id: {{ forloop.index }},
+    name: {{ store.store_name.value | json }},
+    address: {{ store.address.value | json }},
+    city: {{ store.city.value | json }},
+    postcode: {{ store.postcode.value | json }},
+    lat: parseFloat({{ store.latitude.value | json }}),
+    lng: parseFloat({{ store.longitude.value | json }}),
+    phone: {{ store.phone.value | json }},
+    hours: {
+      monday: {{ store.monday_hours.value | json }},
+      tuesday: {{ store.tuesday_hours.value | json }},
+      wednesday: {{ store.wednesday_hours.value | json }},
+      thursday: {{ store.thursday_hours.value | json }},
+      friday: {{ store.friday_hours.value | json }},
+      saturday: {{ store.saturday_hours.value | json }},
+      sunday: {{ store.sunday_hours.value | json }}
+    },
+    models: {{ store.models.value | json }}
+  }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+];
+
+// 2. Define the map function immediately
+window.initializeStoreMap = function() {
+  console.log('Google Maps is ready! initializeStoreMap called');
+  
+  // Check if our main function exists in the external file
+  if (window.createStoreMap) {
+    window.createStoreMap();
+  } else {
+    console.log('Waiting for external JS to load...');
+    setTimeout(window.initializeStoreMap, 100);
+  }
+};
+
+// 3. Load your external JavaScript file FIRST
+const yourScript = document.createElement('script');
+yourScript.src = "{{ 'visit-us-dynamic.js' | asset_url }}";
+yourScript.onload = function() {
+  console.log('External JS loaded, now loading Google Maps');
+  
+  // 4. Load Google Maps AFTER your JS is loaded
+  const gmapScript = document.createElement('script');
+  gmapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD4KCFKvz7PdOStQ-b63ogGuksrslAuA74&callback=initializeStoreMap';
+  gmapScript.async = true;
+  document.head.appendChild(gmapScript);
+};
+document.head.appendChild(yourScript);
 </script>
 
-{%- comment -%} Google Maps API {%- endcomment -%}
-<script>
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-    ({key: "{{ section.settings.google_maps_api_key }}", v: "weekly", callback: "initMap"});
-</script>
-<script src="{{ 'visit-us-dynamic.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

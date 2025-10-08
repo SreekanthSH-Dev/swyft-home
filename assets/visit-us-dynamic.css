@@ -356,3 +356,12 @@
     min-height: 400px;
   }
 }
+.map-container-wrapper, 
+.map-container, 
+#store-map {
+  height: 500px !important;
+  width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  min-height: 500px !important;
+}

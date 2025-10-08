@@ -76,14 +76,14 @@ function addMarkers(stores = window.storeLocations) {
 
     // Create custom icon (similar to your Google Maps icon)
     const customIcon = L.divIcon({
-      html: `<div style="background: #E57373; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      html: `<div  border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="fill">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#E57373"/>
                 </svg>
       </div>`,
       className: 'custom-marker',
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      iconSize: [48, 48],
+      iconAnchor: [24, 24]
     });
 
     // Create marker
@@ -98,6 +98,43 @@ function addMarkers(stores = window.storeLocations) {
         <h3>${store.name}</h3>
         <p>${store.address}<br>${store.city}, ${store.postcode}</p>
         ${store.phone ? `<a href="tel:${store.phone}" class="info-phone">📞 ${store.phone}</a>` : ''}
+                <div class="store-hours-preview">
+                  <strong>Opening Times</strong>
+                  <table class="hours-table-compact">
+                    <tr>
+                      <td>monday</td>
+                      <td>${ store.hours.monday}</td>
+                    </tr>
+                    <tr>
+                      <td>tuesday</td>
+                      <td>${ store.hours.tuesday}</td>
+                    </tr>
+                    <tr>
+                      <td>wednesday</td>
+                      <td>${ store.hours.wednesday}</td>
+                    </tr>
+                    <tr>
+                      <td>thursday</td>
+                      <td>${ store.hours.thursday}</td>
+                    </tr>
+                    <tr>
+                      <td>friday</td>
+                      <td>${ store.hours.friday}</td>
+                    </tr>
+                    <tr>
+                      <td>saturday</td>
+                      <td>${ store.hours.saturday}</td>
+                    </tr>
+                    <tr>
+                      <td>sunday</td>
+                      <td>${ store.hours.sunday}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="models-compact">
+                    <strong>Models</strong>
+                    <p>${store.models }</p>
+                </div>
       </div>
     `;
 
@@ -150,6 +187,7 @@ function updateStoreCount() {
 }
 
 // Search functionality
+// Search functionality with suggestions
 function performSearch() {
   const searchInput = document.getElementById('store-search');
   const query = searchInput.value.toLowerCase().trim();
@@ -180,6 +218,146 @@ function performSearch() {
   }
 }
 
+// Show search suggestions
+function showSearchSuggestions(query) {
+  const suggestionsContainer = document.getElementById('search-suggestions');
+  
+  if (!query) {
+    suggestionsContainer.classList.remove('active');
+    return;
+  }
+
+  const filteredStores = window.storeLocations.filter(store => {
+    const searchableText = `${store.name} ${store.address} ${store.city} ${store.postcode}`.toLowerCase();
+    return searchableText.includes(query);
+  });
+
+  if (filteredStores.length === 0) {
+    suggestionsContainer.classList.remove('active');
+    return;
+  }
+
+  // Create suggestion items
+  const suggestionsHTML = filteredStores.map(store => `
+    <div class="suggestion-item" data-store-id="${store.id}">
+      <div class="suggestion-name">${store.name}</div>
+      <div class="suggestion-address">${store.address}, ${store.city}, ${store.postcode}</div>
+    </div>
+  `).join('');
+
+  suggestionsContainer.innerHTML = suggestionsHTML;
+  suggestionsContainer.classList.add('active');
+
+  // Add click handlers to suggestions
+  suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const storeId = parseInt(item.getAttribute('data-store-id'));
+      const store = window.storeLocations.find(s => s.id === storeId);
+      
+      if (store) {
+        // Fill search input with selected store
+        document.getElementById('store-search').value = store.name;
+        suggestionsContainer.classList.remove('active');
+        
+        // Highlight and focus on the selected store
+        highlightAndFocusStore(storeId);
+      }
+    });
+  });
+}
+
+// Highlight and focus on a specific store
+function highlightAndFocusStore(storeId) {
+  const store = window.storeLocations.find(s => s.id === storeId);
+  if (!store) return;
+
+  // Hide all cards except the selected one
+  document.querySelectorAll('.store-card').forEach(card => {
+    const cardStoreId = parseInt(card.getAttribute('data-store-id'));
+    if (cardStoreId === storeId) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Update map markers
+  if (map) {
+    updateMapMarkers();
+  }
+
+  // Highlight the store card
+  highlightStoreCard(storeId);
+
+  // Center map on the store
+  if (map && !isNaN(store.lat) && !isNaN(store.lng)) {
+    map.setView([store.lat, store.lng], 14);
+    
+    // Open popup for the store
+    const markerIndex = storeId - 1;
+    if (markers[markerIndex]) {
+      markers.forEach(m => m.closePopup());
+      markers[markerIndex].openPopup();
+    }
+  }
+
+  // Update results count
+  const resultsDiv = document.getElementById('results-count');
+  if (resultsDiv) {
+    resultsDiv.textContent = `1 swyft store found.`;
+    resultsDiv.classList.add('show');
+  }
+}
+
+// Update setupSearch function
+function setupSearch() {
+  console.log('Setting up search with suggestions');
+  const searchInput = document.getElementById('store-search');
+  const findBtn = document.getElementById('find-stores-btn');
+  const suggestionsContainer = document.getElementById('search-suggestions');
+  
+  if (searchInput) {
+    // Show suggestions on input
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      showSearchSuggestions(query);
+      
+      // If input is cleared, show all stores
+      if (!query) {
+        performSearch();
+      }
+    });
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+        suggestionsContainer.classList.remove('active');
+      }
+    });
+    
+    // Search on Enter key
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        suggestionsContainer.classList.remove('active');
+        performSearch();
+      }
+    });
+
+    // Hide suggestions on blur
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        suggestionsContainer.classList.remove('active');
+      }, 200);
+    });
+  }
+  
+  if (findBtn) {
+    findBtn.addEventListener('click', () => {
+      suggestionsContainer.classList.remove('active');
+      performSearch();
+    });
+  }
+}
 // Update map markers based on visible store cards
 function updateMapMarkers() {
   if (!map) return;
@@ -214,28 +392,6 @@ function updateMapMarkers() {
   }
 }
 
-// Setup search functionality
-function setupSearch() {
-  console.log('setupped')
-  const searchInput = document.getElementById('store-search');
-  const findBtn = document.getElementById('find-stores-btn');
-  
-  if (searchInput) {
-    // Search on input
-    searchInput.addEventListener('input', performSearch);
-    
-    // Search on Enter key
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        performSearch();
-      }
-    });
-  }
-  
-  if (findBtn) {
-    findBtn.addEventListener('click', performSearch);
-  }
-}
 
 // Click handlers for store cards
 function setupStoreCardClicks() {

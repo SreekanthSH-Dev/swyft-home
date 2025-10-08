@@ -1,0 +1,36 @@
+{% comment %}
+Section: Visit Us
+{% endcomment %}
+
+<section class="visit-us">
+  <div class="page-width">
+    <h1>{{ page.title }}</h1>
+    <div class="rte">{{ page.content }}</div>
+
+    <div class="visit-details">
+      <p><strong>Address:</strong> 123 Main Street, Copenhagen</p>
+      <p><strong>Opening Hours:</strong> Mon–Fri 9am–5pm</p>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Visit Us Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "123 Main Street, Copenhagen"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Opening Hours",
+      "default": "Mon–Fri 9am–5pm"
+    }
+  ]
+}
+{% endschema %}

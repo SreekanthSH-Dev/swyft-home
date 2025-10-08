@@ -30,6 +30,9 @@
       <button class="find-stores-btn" id="find-stores-btn">Find stores</button>
     </div>
 
+    {%- comment -%} Results Count {%- endcomment -%}
+    <div class="results-count" id="results-count"></div>
+
     {%- comment -%} Store Locator Layout {%- endcomment -%}
     <div class="store-locator-wrapper">
       
@@ -59,137 +62,70 @@
                 
                 <div class="store-hours-preview">
                   <strong>Opening Times</strong>
-                <table class="hours-table">
-                  <tr>
-                    <td>Monday</td>
-                    <td>{{ store.monday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Tuesday</td>
-                    <td>{{ store.tuesday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Wednesday</td>
-                    <td>{{ store.wednesday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Thursday</td>
-                    <td>{{ store.thursday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Friday</td>
-                    <td>{{ store.friday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Saturday</td>
-                    <td>{{ store.saturday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Sunday</td>
-                    <td>{{ store.sunday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                </table>
+                  <table class="hours-table-compact">
+                    <tr>
+                      <td>monday</td>
+                      <td>{{ store.monday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>tuesday</td>
+                      <td>{{ store.tuesday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>wednesday</td>
+                      <td>{{ store.wednesday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>thursday</td>
+                      <td>{{ store.thursday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>friday</td>
+                      <td>{{ store.friday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>saturday</td>
+                      <td>{{ store.saturday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                    <tr>
+                      <td>sunday</td>
+                      <td>{{ store.sunday_hours.value | default: "Closed" }}</td>
+                    </tr>
+                  </table>
                 </div>
                 
                 {%- if store.phone.value != blank -%}
                   <a href="tel:{{ store.phone.value }}" class="store-phone">
-                    {{ store.phone.value }}
-                  </a>
-                {%- endif -%}
-              <a href="https://www.google.com/maps/dir/?api=1&destination={{ store.latitude.value }},{{ store.longitude.value }}" 
-                 target="_blank" 
-                 class="directions-btn">
-                Go To Store
-              </a>                
-                <button class="view-details-btn" data-store="{{ forloop.index }}">
-                  View Details
-                </button>
-              </div>
-            </div>
-          {%- endfor -%}
-          
-        </div>
-      </div>
-
-      {%- comment -%} Right Side: Store Details & Map {%- endcomment -%}
-      <div class="store-details-container">
-        
-        {%- comment -%} Default/Selected Store Details {%- endcomment -%}
-        <div class="store-detail-panel" id="store-detail-panel">
-          
-          {%- for store in store_locations -%}
-            <div class="store-detail-content" 
-                 id="store-detail-{{ forloop.index }}"
-                 style="display: {% if forloop.first %}block{% else %}none{% endif %};">
-              
-              <h2>{{ store.store_name.value }}</h2>
-              <p class="detail-address">{{ store.address.value }}<br>{{ store.city.value }}, {{ store.postcode.value }}</p>
-              
-              <div class="opening-times">
-                <h3>Opening Times</h3>
-                <table class="hours-table">
-                  <tr>
-                    <td>Monday</td>
-                    <td>{{ store.monday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Tuesday</td>
-                    <td>{{ store.tuesday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Wednesday</td>
-                    <td>{{ store.wednesday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Thursday</td>
-                    <td>{{ store.thursday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Friday</td>
-                    <td>{{ store.friday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Saturday</td>
-                    <td>{{ store.saturday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Sunday</td>
-                    <td>{{ store.sunday_hours.value | default: "Closed" }}</td>
-                  </tr>
-                </table>
-              </div>
-              
-              {%- if store.phone.value != blank -%}
-                <div class="contact-info">
-                  <a href="tel:{{ store.phone.value }}" class="phone-link">
                     📞 {{ store.phone.value }}
                   </a>
-                </div>
-              {%- endif -%}
-              
-              {%- if store.models.value != blank -%}
-                <div class="models-section">
-                  <h3>Models</h3>
-                  <p>{{ store.models.value }}</p>
-                </div>
-              {%- endif -%}
-              
-              <a href="https://www.google.com/maps/dir/?api=1&destination={{ store.latitude.value }},{{ store.longitude.value }}" 
-                 target="_blank" 
-                 class="directions-btn">
-                Go To Store
-              </a>
+                {%- endif -%}
+
+                {%- if store.models.value != blank -%}
+                  <div class="models-compact">
+                    <strong>Models</strong>
+                    <p>{{ store.models.value }}</p>
+                  </div>
+                {%- endif -%}
+
+                <a href="https://www.google.com/maps/dir/?api=1&destination={{ store.latitude.value }},{{ store.longitude.value }}" 
+                   target="_blank" 
+                   class="directions-btn">
+                  Go To Store
+                </a>
+              </div>
             </div>
           {%- endfor -%}
           
         </div>
-
-        {%- comment -%} Map Container {%- endcomment -%}
-        <div class="map-container">
-          <div id="store-map" style="width: 100%; height: 500px;"></div>
-        </div>
-        
       </div>
+
+      {%- comment -%} Right Side: Map Only {%- endcomment -%}
+      <div class="map-container-wrapper">
+        <div class="map-container">
+          <div id="store-map"></div>
+        </div>
+      </div>
+      
     </div>
 
   </div>
@@ -223,7 +159,7 @@
   ];
 </script>
 
-{%- comment -%} Google Maps API - Replace YOUR_API_KEY {%- endcomment -%}
+{%- comment -%} Google Maps API {%- endcomment -%}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ section.settings.google_maps_api_key }}&callback=initMap" async defer></script>
 
 <script src="{{ 'visit-us-dynamic.js' | asset_url }}" defer></script>

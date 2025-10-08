@@ -6,7 +6,7 @@
 .store-search-container {
   display: flex;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -53,20 +53,55 @@
   background: #333;
 }
 
-/* Main Layout */
+/* Results Count */
+.results-count {
+  background: #f0ad4e;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 600;
+  color: #000;
+  display: none;
+}
+
+.results-count.show {
+  display: block;
+}
+
+/* Main Layout - Store List Left, Map Right */
 .store-locator-wrapper {
   display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 30px;
-  min-height: 600px;
+  grid-template-columns: 450px 1fr;
+  gap: 20px;
+  min-height: 700px;
 }
 
 /* Store List */
 .store-list-container {
   border-right: 1px solid #e0e0e0;
   padding-right: 20px;
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.store-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.store-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.store-list-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.store-list-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
 
 .store-card {
@@ -78,24 +113,33 @@
   margin-bottom: 15px;
   cursor: pointer;
   transition: all 0.3s;
+  background: white;
 }
 
 .store-card:hover {
   border-color: #E57373;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
 }
 
 .store-card.active {
   border-color: #E57373;
   background: #fff5f5;
+  box-shadow: 0 4px 16px rgba(229, 115, 115, 0.2);
+}
+
+.store-card.hidden {
+  display: none;
 }
 
 .store-icon {
   flex-shrink: 0;
+  margin-top: 5px;
 }
 
 .store-info {
   flex: 1;
+  min-width: 0;
 }
 
 .store-name {
@@ -113,9 +157,38 @@
 }
 
 .store-hours-preview {
+  margin: 15px 0 10px;
+}
+
+.store-hours-preview strong {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.hours-table-compact {
+  width: 100%;
   font-size: 13px;
+  border-collapse: collapse;
+}
+
+.hours-table-compact tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.hours-table-compact td {
+  padding: 4px 0;
+}
+
+.hours-table-compact td:first-child {
   color: #888;
-  margin: 10px 0;
+  width: 90px;
+  text-transform: lowercase;
+}
+
+.hours-table-compact td:last-child {
+  color: #333;
 }
 
 .store-phone {
@@ -123,129 +196,107 @@
   color: #E57373;
   text-decoration: none;
   font-size: 14px;
-  margin: 8px 0;
+  margin: 10px 0;
+  font-weight: 500;
 }
 
-.view-details-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: #fff;
-  border: 1px solid #E57373;
-  color: #E57373;
-  border-radius: 4px;
-  cursor: pointer;
+.models-compact {
+  margin: 10px 0;
+}
+
+.models-compact strong {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.models-compact p {
   font-size: 13px;
-  transition: all 0.3s;
-}
-
-.view-details-btn:hover {
-  background: #E57373;
-  color: white;
-}
-
-/* Store Details and Map */
-.store-details-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.store-detail-panel {
-  background: #f9f9f9;
-  padding: 30px;
-  border-radius: 8px;
-}
-
-.store-detail-content h2 {
-  font-size: 24px;
-  margin: 0 0 15px;
-  color: #333;
-}
-
-.detail-address {
-  font-size: 16px;
   color: #666;
-  margin-bottom: 25px;
-  line-height: 1.6;
-}
-
-.opening-times h3,
-.models-section h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 20px 0 12px;
-  color: #333;
-}
-
-.hours-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.hours-table tr {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.hours-table td {
-  padding: 10px 0;
-  font-size: 14px;
-}
-
-.hours-table td:first-child {
-  color: #666;
-  font-weight: 500;
-  width: 120px;
-}
-
-.hours-table td:last-child {
-  color: #333;
-}
-
-.contact-info {
-  margin: 20px 0;
-}
-
-.phone-link {
-  display: inline-block;
-  color: #E57373;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.models-section p {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .directions-btn {
   display: inline-block;
-  margin-top: 20px;
-  padding: 12px 24px;
-  background: #E57373;
-  color: white;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #fff;
+  color: #E57373;
   text-decoration: none;
+  border: 1px solid #E57373;
   border-radius: 4px;
   font-weight: 600;
-  transition: background 0.3s;
+  font-size: 13px;
+  transition: all 0.3s;
 }
 
 .directions-btn:hover {
-  background: #d16060;
+  background: #E57373;
+  color: white;
+}
+
+/* Map Container */
+.map-container-wrapper {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
 }
 
 .map-container {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  height: 85vh;
 }
 
 #store-map {
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+}
+
+/* Info Window Custom Styles */
+.gm-style-iw {
+  padding: 10px;
+}
+
+.gm-style-iw-d {
+  overflow: auto !important;
+}
+
+.info-window-content {
+  padding: 10px;
+  min-width: 200px;
+}
+
+.info-window-content h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.info-window-content p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.info-window-content .info-phone {
+  color: #E57373;
+  text-decoration: none;
+  display: block;
+  margin-top: 8px;
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  .store-locator-wrapper {
+    grid-template-columns: 400px 1fr;
+  }
+}
+
 @media (max-width: 1024px) {
   .store-locator-wrapper {
     grid-template-columns: 1fr;
@@ -256,7 +307,20 @@
     border-bottom: 1px solid #e0e0e0;
     padding-right: 0;
     padding-bottom: 20px;
-    max-height: 400px;
+    max-height: 500px;
+  }
+
+  .map-container-wrapper {
+    position: relative;
+    top: 0;
+  }
+
+  .map-container {
+    height: 500px;
+  }
+
+  #store-map {
+    min-height: 500px;
   }
 }
 
@@ -269,13 +333,26 @@
   .filter-wrapper,
   .find-stores-btn {
     width: 100%;
+    min-width: 100%;
+  }
+
+  .store-locator-wrapper {
+    gap: 15px;
   }
   
-  .store-detail-panel {
-    padding: 20px;
+  .store-card {
+    padding: 15px;
   }
-  
+
+  .store-name {
+    font-size: 16px;
+  }
+
   .map-container {
     height: 400px;
+  }
+
+  #store-map {
+    min-height: 400px;
   }
 }

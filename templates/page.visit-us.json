@@ -9,13 +9,6 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "visit-us-section",
-      "settings": {
-        "address": "123 Main Street, Copenhagen",
-        "hours": "Mon–Fri 9am–5pm"
-      }
-    },
     "rich_text": {
       "type": "rich-text",
       "blocks": {
@@ -25,23 +18,37 @@
             "heading": "Visit Us",
             "heading_size": "h1"
           }
+        },
+        "text_T7WcCL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We get it—not everyone wants to buy before they try. That’s why we’ve partnered with a few select spaces where you can see (and sit on) our sofas in person. Pop into one of the showrooms below to try out the comfort for yourself.</p>"
+          }
         }
       },
       "block_order": [
-        "heading_ajzm4M"
+        "heading_ajzm4M",
+        "text_T7WcCL"
       ],
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "visit-us-section",
+      "settings": {
+        "address": "123 Main Street, Copenhagen",
+        "hours": "Mon–Fri 9am–5pm"
       }
     }
   },
   "order": [
-  "rich_text",
+    "rich_text",
     "main"
   ]
 }

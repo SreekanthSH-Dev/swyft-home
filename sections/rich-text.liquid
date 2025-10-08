@@ -5,6 +5,9 @@
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
+.rich-text__blocks.full.center {
+    max-width: 100% !important;
+}
 
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
@@ -17,7 +20,7 @@
 <div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
   <div class="rich-text content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} rich-text--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
     <div class="rich-text__wrapper rich-text__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
-      <div class="rich-text__blocks {{ section.settings.content_alignment }}">
+      <div class="rich-text__blocks {{ section.settings.content_width }} {{ section.settings.content_alignment }}">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when 'heading' -%}
@@ -142,6 +145,22 @@
       ],
       "default": "center",
       "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "options": [
+        {
+          "value": "full",
+          "label": "t:sections.rich-text.settings.width.options__1.label"
+        },
+        {
+          "value": "half",
+          "label": "t:sections.rich-text.settings.width.options__2.label"
+        },
+      ],
+      "default": "full",
+      "label": "t:sections.rich-text.settings.width.label"
     },
     {
       "type": "color_scheme",

@@ -1,0 +1,281 @@
+.visit-us-dynamic {
+  padding: 40px 0 80px;
+}
+
+/* Search and Filter Bar */
+.store-search-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  flex: 1;
+  min-width: 250px;
+}
+
+.store-search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter-wrapper {
+  min-width: 150px;
+}
+
+.distance-filter {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.find-stores-btn {
+  padding: 12px 30px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.find-stores-btn:hover {
+  background: #333;
+}
+
+/* Main Layout */
+.store-locator-wrapper {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 30px;
+  min-height: 600px;
+}
+
+/* Store List */
+.store-list-container {
+  border-right: 1px solid #e0e0e0;
+  padding-right: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.store-card {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.store-card:hover {
+  border-color: #E57373;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.store-card.active {
+  border-color: #E57373;
+  background: #fff5f5;
+}
+
+.store-icon {
+  flex-shrink: 0;
+}
+
+.store-info {
+  flex: 1;
+}
+
+.store-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.store-address,
+.store-city {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.store-hours-preview {
+  font-size: 13px;
+  color: #888;
+  margin: 10px 0;
+}
+
+.store-phone {
+  display: inline-block;
+  color: #E57373;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.view-details-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #E57373;
+  color: #E57373;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.view-details-btn:hover {
+  background: #E57373;
+  color: white;
+}
+
+/* Store Details and Map */
+.store-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.store-detail-panel {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 8px;
+}
+
+.store-detail-content h2 {
+  font-size: 24px;
+  margin: 0 0 15px;
+  color: #333;
+}
+
+.detail-address {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.opening-times h3,
+.models-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 20px 0 12px;
+  color: #333;
+}
+
+.hours-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hours-table tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.hours-table td {
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.hours-table td:first-child {
+  color: #666;
+  font-weight: 500;
+  width: 120px;
+}
+
+.hours-table td:last-child {
+  color: #333;
+}
+
+.contact-info {
+  margin: 20px 0;
+}
+
+.phone-link {
+  display: inline-block;
+  color: #E57373;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.models-section p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.directions-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #E57373;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.directions-btn:hover {
+  background: #d16060;
+}
+
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#store-map {
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .store-locator-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .store-list-container {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding-right: 0;
+    padding-bottom: 20px;
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .store-search-container {
+    flex-direction: column;
+  }
+  
+  .search-wrapper,
+  .filter-wrapper,
+  .find-stores-btn {
+    width: 100%;
+  }
+  
+  .store-detail-panel {
+    padding: 20px;
+  }
+  
+  .map-container {
+    height: 400px;
+  }
+}

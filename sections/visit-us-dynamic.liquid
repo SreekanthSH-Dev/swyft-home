@@ -1,0 +1,248 @@
+{% comment %}
+  Dynamic Store Locator Section
+  Displays stores from metaobjects with search, filter, and map
+{% endcomment %}
+
+{{ 'visit-us-dynamic.css' | asset_url | stylesheet_tag }}
+
+<section class="visit-us-dynamic">
+  <div class="page-width">
+    
+    {%- comment -%} Search and Filter Bar {%- endcomment -%}
+    <div class="store-search-container">
+      <div class="search-wrapper">
+        <input 
+          type="text" 
+          id="store-search" 
+          class="store-search-input" 
+          placeholder="Search by city, address or postcode"
+        >
+      </div>
+      <div class="filter-wrapper">
+        <select id="distance-filter" class="distance-filter">
+          <option value="10">10 miles</option>
+          <option value="20">20 miles</option>
+          <option value="30" selected>30 miles</option>
+          <option value="50">50 miles</option>
+          <option value="100">100 miles</option>
+        </select>
+      </div>
+      <button class="find-stores-btn" id="find-stores-btn">Find stores</button>
+    </div>
+
+    {%- comment -%} Store Locator Layout {%- endcomment -%}
+    <div class="store-locator-wrapper">
+      
+      {%- comment -%} Left Side: Store List {%- endcomment -%}
+      <div class="store-list-container">
+        <div class="store-list" id="store-list">
+          
+          {%- assign store_locations = shop.metaobjects.store_location.values -%}
+          
+          {%- for store in store_locations -%}
+            <div class="store-card" 
+                 data-store-id="{{ forloop.index }}"
+                 data-lat="{{ store.latitude.value }}"
+                 data-lng="{{ store.longitude.value }}"
+                 data-search="{{ store.store_name.value | downcase }} {{ store.city.value | downcase }} {{ store.address.value | downcase }} {{ store.postcode.value | downcase }}">
+              
+              <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#E57373"/>
+                </svg>
+              </div>
+              
+              <div class="store-info">
+                <h3 class="store-name">{{ store.store_name.value }}</h3>
+                <p class="store-address">{{ store.address.value }}</p>
+                <p class="store-city">{{ store.city.value }}, {{ store.postcode.value }}</p>
+                
+                <div class="store-hours-preview">
+                  <strong>Opening Times</strong>
+                <table class="hours-table">
+                  <tr>
+                    <td>Monday</td>
+                    <td>{{ store.monday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Tuesday</td>
+                    <td>{{ store.tuesday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Wednesday</td>
+                    <td>{{ store.wednesday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Thursday</td>
+                    <td>{{ store.thursday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Friday</td>
+                    <td>{{ store.friday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Saturday</td>
+                    <td>{{ store.saturday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Sunday</td>
+                    <td>{{ store.sunday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                </table>
+                </div>
+                
+                {%- if store.phone.value != blank -%}
+                  <a href="tel:{{ store.phone.value }}" class="store-phone">
+                    {{ store.phone.value }}
+                  </a>
+                {%- endif -%}
+              <a href="https://www.google.com/maps/dir/?api=1&destination={{ store.latitude.value }},{{ store.longitude.value }}" 
+                 target="_blank" 
+                 class="directions-btn">
+                Go To Store
+              </a>                
+                <button class="view-details-btn" data-store="{{ forloop.index }}">
+                  View Details
+                </button>
+              </div>
+            </div>
+          {%- endfor -%}
+          
+        </div>
+      </div>
+
+      {%- comment -%} Right Side: Store Details & Map {%- endcomment -%}
+      <div class="store-details-container">
+        
+        {%- comment -%} Default/Selected Store Details {%- endcomment -%}
+        <div class="store-detail-panel" id="store-detail-panel">
+          
+          {%- for store in store_locations -%}
+            <div class="store-detail-content" 
+                 id="store-detail-{{ forloop.index }}"
+                 style="display: {% if forloop.first %}block{% else %}none{% endif %};">
+              
+              <h2>{{ store.store_name.value }}</h2>
+              <p class="detail-address">{{ store.address.value }}<br>{{ store.city.value }}, {{ store.postcode.value }}</p>
+              
+              <div class="opening-times">
+                <h3>Opening Times</h3>
+                <table class="hours-table">
+                  <tr>
+                    <td>Monday</td>
+                    <td>{{ store.monday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Tuesday</td>
+                    <td>{{ store.tuesday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Wednesday</td>
+                    <td>{{ store.wednesday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Thursday</td>
+                    <td>{{ store.thursday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Friday</td>
+                    <td>{{ store.friday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Saturday</td>
+                    <td>{{ store.saturday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Sunday</td>
+                    <td>{{ store.sunday_hours.value | default: "Closed" }}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              {%- if store.phone.value != blank -%}
+                <div class="contact-info">
+                  <a href="tel:{{ store.phone.value }}" class="phone-link">
+                    📞 {{ store.phone.value }}
+                  </a>
+                </div>
+              {%- endif -%}
+              
+              {%- if store.models.value != blank -%}
+                <div class="models-section">
+                  <h3>Models</h3>
+                  <p>{{ store.models.value }}</p>
+                </div>
+              {%- endif -%}
+              
+              <a href="https://www.google.com/maps/dir/?api=1&destination={{ store.latitude.value }},{{ store.longitude.value }}" 
+                 target="_blank" 
+                 class="directions-btn">
+                Go To Store
+              </a>
+            </div>
+          {%- endfor -%}
+          
+        </div>
+
+        {%- comment -%} Map Container {%- endcomment -%}
+        <div class="map-container">
+          <div id="store-map" style="width: 100%; height: 500px;"></div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{%- comment -%} Pass store data to JavaScript {%- endcomment -%}
+<script>
+  window.storeLocations = [
+    {%- for store in store_locations -%}
+    {
+      id: {{ forloop.index }},
+      name: {{ store.store_name.value | json }},
+      address: {{ store.address.value | json }},
+      city: {{ store.city.value | json }},
+      postcode: {{ store.postcode.value | json }},
+      lat: parseFloat({{ store.latitude.value | json }}),
+      lng: parseFloat({{ store.longitude.value | json }}),
+      phone: {{ store.phone.value | json }},
+      hours: {
+        monday: {{ store.monday_hours.value | json }},
+        tuesday: {{ store.tuesday_hours.value | json }},
+        wednesday: {{ store.wednesday_hours.value | json }},
+        thursday: {{ store.thursday_hours.value | json }},
+        friday: {{ store.friday_hours.value | json }},
+        saturday: {{ store.saturday_hours.value | json }},
+        sunday: {{ store.sunday_hours.value | json }}
+      },
+      models: {{ store.models.value | json }}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+</script>
+
+{%- comment -%} Google Maps API - Replace YOUR_API_KEY {%- endcomment -%}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ section.settings.google_maps_api_key }}&callback=initMap" async defer></script>
+
+<script src="{{ 'visit-us-dynamic.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Visit Us Dynamic",
+  "settings": [
+    {
+      "type": "text",
+      "id": "google_maps_api_key",
+      "label": "Google Maps API Key",
+      "info": "Get your API key from Google Cloud Console"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Visit Us Dynamic"
+    }
+  ]
+}
+{% endschema %}

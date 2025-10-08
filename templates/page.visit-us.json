@@ -41,7 +41,7 @@
     }
   },
   "order": [
-    "main",
-    "rich_text"
+  "rich_text",
+    "main"
   ]
 }

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "rich_text": {
@@ -24,6 +33,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
+        "content_width": "full",
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
@@ -33,7 +43,7 @@
     "visit_us_dynamic": {
       "type": "visit-us-dynamic",
       "settings": {
-        "google_maps_api_key": "YOUR_GOOGLE_MAPS_API_KEY"
+        "google_maps_api_key": "AIzaSyD4KCFKvz7PdOStQ-b63ogGuksrslAuA74"
       }
     }
   },

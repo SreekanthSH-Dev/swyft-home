@@ -1,11 +1,11 @@
-// Store Locator Functionality
+// Store Locator Functionality with Leaflet
 let map;
 let markers = [];
-let infoWindows = [];
+let popups = [];
 
-// Initialize Google Map - Make it available globally BEFORE Maps loads
+// Initialize Leaflet Map
 window.createStoreMap = async function() {
-  console.log('Initializing map...');
+  console.log('Initializing Leaflet map...');
   
   if (!window.storeLocations || window.storeLocations.length === 0) {
     console.error('No store locations found');
@@ -34,38 +34,24 @@ window.createStoreMap = async function() {
 
   console.log('Valid stores with coordinates:', validStores.length);
 
-  // Calculate center based on valid store locations
-  const bounds = new google.maps.LatLngBounds();
-  
-  // Create map centered on UK
-  map = new google.maps.Map(document.getElementById('store-map'), {
-    zoom: 6,
-    center: { lat: 54.5, lng: -2.0 },
-    mapTypeControl: true,
-    streetViewControl: false,
-    fullscreenControl: true,
-    zoomControl: true,
-    styles: [
-      {
-        featureType: 'poi',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }]
-      }
-    ]
-  });
+  // Create Leaflet map centered on UK
+  map = L.map('store-map').setView([54.5, -2.0], 6);
 
-  console.log('Map created successfully');
+  // Add tile layer (OpenStreetMap)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  console.log('Leaflet map created successfully');
 
   // Add markers for all valid stores
   addMarkers(validStores);
   
   // Fit map to show all markers
-  validStores.forEach(store => {
-    bounds.extend(new google.maps.LatLng(store.lat, store.lng));
-  });
-  
   if (validStores.length > 0) {
-    map.fitBounds(bounds);
+    const group = new L.featureGroup(markers);
+    map.fitBounds(group.getBounds());
     console.log('Map bounds set to fit all markers');
   }
 
@@ -73,13 +59,13 @@ window.createStoreMap = async function() {
   updateStoreCount();
 };
 
-// Add markers to map
+// Add markers to map with Leaflet
 function addMarkers(stores = window.storeLocations) {
-  // Clear existing markers and info windows
-  markers.forEach(marker => marker.setMap(null));
-  infoWindows.forEach(infoWindow => infoWindow.close());
+  // Clear existing markers and popups
+  markers.forEach(marker => map.removeLayer(marker));
+  popups.forEach(popup => map.removeLayer(popup));
   markers = [];
-  infoWindows = [];
+  popups = [];
 
   stores.forEach((store, index) => {
     // Skip if coordinates are invalid
@@ -88,23 +74,26 @@ function addMarkers(stores = window.storeLocations) {
       return;
     }
 
-    // Create marker
-    const marker = new google.maps.Marker({
-      position: { lat: store.lat, lng: store.lng },
-      map: map,
-      title: store.name,
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 12,
-        fillColor: '#E57373',
-        fillOpacity: 1,
-        strokeColor: '#fff',
-        strokeWeight: 3
-      }
+    // Create custom icon (similar to your Google Maps icon)
+    const customIcon = L.divIcon({
+      html: `<div style="background: #E57373; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#E57373"/>
+                </svg>
+      </div>`,
+      className: 'custom-marker',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     });
 
-    // Create info window content
-    const infoContent = `
+    // Create marker
+    const marker = L.marker([store.lat, store.lng], { 
+      icon: customIcon,
+      title: store.name
+    }).addTo(map);
+
+    // Create popup content (similar to your info window)
+    const popupContent = `
       <div class="info-window-content">
         <h3>${store.name}</h3>
         <p>${store.address}<br>${store.city}, ${store.postcode}</p>
@@ -112,24 +101,22 @@ function addMarkers(stores = window.storeLocations) {
       </div>
     `;
 
-    const infoWindow = new google.maps.InfoWindow({
-      content: infoContent
-    });
+    // Bind popup to marker
+    marker.bindPopup(popupContent);
 
-    // Click marker to show info and highlight card
-    marker.addListener('click', () => {
-      // Close all other info windows
-      infoWindows.forEach(iw => iw.close());
+    // Click marker to show popup and highlight card
+    marker.on('click', () => {
+      // Close all other popups
+      markers.forEach(m => m.closePopup());
       
-      // Open this info window
-      infoWindow.open(map, marker);
+      // Open this popup
+      marker.openPopup();
       
       // Highlight corresponding store card
       highlightStoreCard(store.id);
     });
 
     markers.push(marker);
-    infoWindows.push(infoWindow);
   });
 
   console.log('Added', markers.length, 'markers to map');
@@ -206,22 +193,24 @@ function updateMapMarkers() {
   markers.forEach((marker, index) => {
     const storeId = index + 1;
     if (visibleStoreIds.includes(storeId)) {
-      marker.setMap(map);
+      if (!map.hasLayer(marker)) {
+        map.addLayer(marker);
+      }
     } else {
-      marker.setMap(null);
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
     }
   });
 
   // Fit bounds to visible markers
-  if (visibleStoreIds.length > 0) {
-    const bounds = new google.maps.LatLngBounds();
-    visibleStoreIds.forEach(id => {
-      const store = window.storeLocations.find(s => s.id === id);
-      if (store && !isNaN(store.lat) && !isNaN(store.lng)) {
-        bounds.extend(new google.maps.LatLng(store.lat, store.lng));
-      }
-    });
-    map.fitBounds(bounds);
+  const visibleMarkers = markers.filter((marker, index) => 
+    visibleStoreIds.includes(index + 1)
+  );
+  
+  if (visibleMarkers.length > 0) {
+    const group = new L.featureGroup(visibleMarkers);
+    map.fitBounds(group.getBounds());
   }
 }
 
@@ -259,15 +248,14 @@ function setupStoreCardClicks() {
         // Highlight card
         highlightStoreCard(storeId);
         
-        // Pan to marker and zoom
-        map.panTo({ lat: store.lat, lng: store.lng });
-        map.setZoom(14);
+        // Pan to marker and zoom (Leaflet equivalent)
+        map.setView([store.lat, store.lng], 14);
         
-        // Open info window
+        // Open popup for the corresponding marker
         const markerIndex = storeId - 1;
-        if (infoWindows[markerIndex]) {
-          infoWindows.forEach(iw => iw.close());
-          infoWindows[markerIndex].open(map, markers[markerIndex]);
+        if (markers[markerIndex]) {
+          markers.forEach(m => m.closePopup());
+          markers[markerIndex].openPopup();
         }
       }
     });
@@ -344,51 +332,38 @@ function filterByDistance(userLat, userLng, maxDistance) {
   }
 }
 
-// Initialize everything when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-
-// Add this debug function to identify the map loading issue
-// Add this debug function to identify the map loading issue
+// Debug function for Leaflet
 function debugMapLoading() {
-  console.log('=== MAP DEBUGGING ===');
-  
-  // Check if API key is present - removed Liquid syntax
-  const apiKey = window.googleMapsApiKey || '';
-  console.log('1. API Key present:', !!apiKey, '(length:', apiKey?.length + ')');
+  console.log('=== LEAFLET DEBUGGING ===');
   
   // Check if store data is loaded
-  console.log('2. Store locations loaded:', window.storeLocations?.length || 0, 'stores');
+  console.log('1. Store locations loaded:', window.storeLocations?.length || 0, 'stores');
   if (window.storeLocations) {
     window.storeLocations.forEach(store => {
       console.log(`   Store "${store.name}": lat=${store.lat}, lng=${store.lng}`);
     });
   }
   
-  // Check if initMap is defined
-  console.log('3. initMap function defined:', typeof window.initMap === 'function');
+  // Check if createStoreMap is defined
+  console.log('2. createStoreMap function defined:', typeof window.createStoreMap === 'function');
   
   // Check if map container exists
   const mapContainer = document.getElementById('store-map');
-  console.log('4. Map container found:', !!mapContainer);
+  console.log('3. Map container found:', !!mapContainer);
   if (mapContainer) {
     console.log('   Container dimensions:', mapContainer.offsetWidth + 'x' + mapContainer.offsetHeight);
     console.log('   Container styles:', window.getComputedStyle(mapContainer).display, window.getComputedStyle(mapContainer).visibility);
   }
   
-  // Check if Google Maps library is loaded
-  console.log('5. Google Maps loaded:', typeof google !== 'undefined');
-  if (typeof google !== 'undefined') {
-    console.log('   Google Maps version available');
-    console.log('   google.maps.Map:', typeof google.maps.Map);
+  // Check if Leaflet library is loaded
+  console.log('4. Leaflet loaded:', typeof L !== 'undefined');
+  if (typeof L !== 'undefined') {
+    console.log('   Leaflet version available');
+    console.log('   L.map:', typeof L.map);
   }
   
   // Check for any console errors
-  console.log('6. Checking for common issues:');
-  console.log('   - API key format:', apiKey?.startsWith('AIza'));
+  console.log('5. Checking for common issues:');
   console.log('   - Store coordinates valid:', window.storeLocations?.every(store => 
     store && !isNaN(store.lat) && !isNaN(store.lng)
   ));
@@ -396,12 +371,17 @@ function debugMapLoading() {
   console.log('=== END DEBUG ===');
 }
 
-
-// Also add this to your init function
+// Initialize everything when DOM is ready
 function init() {
   console.log('Initializing store locator...');
-  debugMapLoading(); // Add this line
+  debugMapLoading();
   setupSearch();
   setupStoreCardClicks();
   setupDistanceFilter();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
